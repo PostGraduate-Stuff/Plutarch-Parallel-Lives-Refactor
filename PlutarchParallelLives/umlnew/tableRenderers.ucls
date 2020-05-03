@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.2.4" icons="true" automaticImage="PNG" always-add-relationships="true" generalizations="true" 
+  realizations="true" associations="true" dependencies="true" nesting-relationships="true" router="FAN">  
+  <class id="1" language="java" name="gui.tableElements.tableRenderers.IDUHeaderTableRenderer" 
+    project="PlutarchParallelLives" 
+    file="/PlutarchParallelLives/src/gui/tableElements/tableRenderers/IDUHeaderTableRenderer.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="124" width="504" x="159" y="287"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <class id="2" language="java" name="gui.tableElements.tableRenderers.IDUTableRenderer" project="PlutarchParallelLives" 
+    file="/PlutarchParallelLives/src/gui/tableElements/tableRenderers/IDUTableRenderer.java" binary="false" 
+    corner="BOTTOM_RIGHT">    
+    <position height="304" width="504" x="703" y="287"/>    
+    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+    sort-features="false" accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true" static="true"/>    
+    <operations public="true" package="true" protected="true" private="true" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>

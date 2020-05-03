@@ -1,0 +1,458 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<class-diagram version="1.2.4" icons="true" automaticImage="PNG" always-add-relationships="true" generalizations="true" 
+  realizations="true" associations="true" dependencies="true" nesting-relationships="true" router="FAN">  
+  <package id="1" language="java" 
+    name="tableClustering.clusterValidator.clusterValidityMetrics.internalEvaluation.internalClusterMetrics" 
+    project="PlutarchParallelLives" 
+    file="/PlutarchParallelLives/src/tableClustering/clusterValidator/clusterValidityMetrics/internalEvaluation/internalClusterMetrics" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="55" width="697" x="-25" y="464"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="2" language="java" name="phaseAnalyzer.engine" project="PlutarchParallelLives" 
+    file="/PlutarchParallelLives/src/phaseAnalyzer/engine" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="55" width="179" x="3367" y="559"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="3" language="java" name="gui.dialogs" project="PlutarchParallelLives" 
+    file="/PlutarchParallelLives/src/gui/dialogs" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="55" width="122" x="2878" y="369"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="4" language="java" name="data.dataProccessing" project="PlutarchParallelLives" 
+    file="/PlutarchParallelLives/src/data/dataProccessing" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="55" width="176" x="2851" y="749"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="5" language="java" name="gui.tableElements.tableRenderers" project="PlutarchParallelLives" 
+    file="/PlutarchParallelLives/src/gui/tableElements/tableRenderers" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="55" width="266" x="3163" y="179"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="6" language="java" name="phaseAnalyzer.parser" project="PlutarchParallelLives" 
+    file="/PlutarchParallelLives/src/phaseAnalyzer/parser" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="55" width="176" x="3151" y="654"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="7" language="java" name="data.dataSorters" project="PlutarchParallelLives" 
+    file="/PlutarchParallelLives/src/data/dataSorters" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="55" width="141" x="2917" y="559"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="8" language="java" name="tableClustering.clusterExtractor.engine" project="PlutarchParallelLives" 
+    file="/PlutarchParallelLives/src/tableClustering/clusterExtractor/engine" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="55" width="303" x="2514" y="464"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="9" language="java" 
+    name="tableClustering.clusterValidator.clusterValidityMetrics.internalEvaluation.internalTotalMetrics" 
+    project="PlutarchParallelLives" 
+    file="/PlutarchParallelLives/src/tableClustering/clusterValidator/clusterValidityMetrics/internalEvaluation/internalTotalMetrics" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="55" width="680" x="712" y="464"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="10" language="java" name="tableClustering.clusterExtractor.commons" project="PlutarchParallelLives" 
+    file="/PlutarchParallelLives/src/tableClustering/clusterExtractor/commons" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="55" width="321" x="2204" y="749"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="11" language="java" name="tableClustering.clusterValidator.engine" project="PlutarchParallelLives" 
+    file="/PlutarchParallelLives/src/tableClustering/clusterValidator/engine" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="55" width="299" x="2133" y="369"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="12" language="java" name="gui.tableElements.tableConstructors" project="PlutarchParallelLives" 
+    file="/PlutarchParallelLives/src/gui/tableElements/tableConstructors" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="55" width="283" x="2202" y="559"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="13" language="java" 
+    name="tableClustering.clusterValidator.clusterValidityMetrics.externalEvaluation.externalTotalMetrics" 
+    project="PlutarchParallelLives" 
+    file="/PlutarchParallelLives/src/tableClustering/clusterValidator/clusterValidityMetrics/externalEvaluation/externalTotalMetrics" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="55" width="688" x="1432" y="464"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="14" language="java" name="data.dataPPL.pplSQLSchema" project="PlutarchParallelLives" 
+    file="/PlutarchParallelLives/src/data/dataPPL/pplSQLSchema" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="55" width="230" x="2567" y="844"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="15" language="java" name="gui.mainEngine" project="PlutarchParallelLives" 
+    file="/PlutarchParallelLives/src/gui/mainEngine" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="55" width="133" x="3009" y="274"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="16" language="java" name="phaseAnalyzer.analysis" project="PlutarchParallelLives" 
+    file="/PlutarchParallelLives/src/phaseAnalyzer/analysis" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="55" width="186" x="3367" y="654"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="17" language="java" name="gui.tableElements.commons" project="PlutarchParallelLives" 
+    file="/PlutarchParallelLives/src/gui/tableElements/commons" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="55" width="222" x="2878" y="464"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="18" language="java" name="data.dataKeeper" project="PlutarchParallelLives" 
+    file="/PlutarchParallelLives/src/data/dataKeeper" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="55" width="141" x="2879" y="654"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="19" language="java" name="gui.treeElements" project="PlutarchParallelLives" 
+    file="/PlutarchParallelLives/src/gui/treeElements" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="55" width="145" x="3182" y="559"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="20" language="java" name="tableClustering.clusterExtractor.analysis" project="PlutarchParallelLives" 
+    file="/PlutarchParallelLives/src/tableClustering/clusterExtractor/analysis" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="55" width="310" x="2546" y="559"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="21" language="java" name="data.dataPPL.pplTransition" project="PlutarchParallelLives" 
+    file="/PlutarchParallelLives/src/data/dataPPL/pplTransition" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="55" width="214" x="3069" y="939"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="22" language="java" name="phaseAnalyzer.commons" project="PlutarchParallelLives" 
+    file="/PlutarchParallelLives/src/phaseAnalyzer/commons" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="55" width="197" x="3130" y="749"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="23" language="java" name="tableClustering.clusterValidator.commons" project="PlutarchParallelLives" 
+    file="/PlutarchParallelLives/src/tableClustering/clusterValidator/commons" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="55" width="317" x="1432" y="559"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <package id="24" language="java" 
+    name="tableClustering.clusterValidator.clusterValidityMetrics.externalEvaluation.externalClusterMetrics" 
+    project="PlutarchParallelLives" 
+    file="/PlutarchParallelLives/src/tableClustering/clusterValidator/clusterValidityMetrics/externalEvaluation/externalClusterMetrics" 
+    binary="false" corner="BOTTOM_RIGHT">    
+    <position height="55" width="705" x="1415" y="654"/>    
+    <display autosize="true" stereotype="true" sort-features="false" accessors="true"/>  
+  </package>  
+  <dependency id="25">    
+    <bendpoint x="3172" y="274"/>    
+    <bendpoint x="3172" y="369"/>    
+    <bendpoint x="3151" y="464"/>    
+    <bendpoint x="3151" y="559"/>    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="18"/>  
+  </dependency>  
+  <dependency id="26">    
+    <bendpoint x="3030" y="369"/>    
+    <end type="SOURCE" refId="15"/>    
+    <end type="TARGET" refId="17"/>  
+  </dependency>  
+  <dependency id="27">    
+    <bendpoint x="3109" y="559"/>    
+    <end type="SOURCE" refId="17"/>    
+    <end type="TARGET" refId="18"/>  
+  </dependency>  
+  <dependency id="28">    
+    <bendpoint x="2732" y="749"/>    
+    <end type="SOURCE" refId="18"/>    
+    <end type="TARGET" refId="14"/>  
+  </dependency>  
+  <dependency id="29">    
+    <bendpoint x="3151" y="369"/>    
+    <bendpoint x="3172" y="464"/>    
+    <end type="SOURCE" refId="15"/>    
+    <end type="TARGET" refId="19"/>  
+  </dependency>  
+  <dependency id="30">    
+    <end type="SOURCE" refId="19"/>    
+    <end type="TARGET" refId="18"/>  
+  </dependency>  
+  <dependency id="31">    
+    <bendpoint x="3099" y="654"/>    
+    <bendpoint x="3099" y="749"/>    
+    <bendpoint x="3099" y="844"/>    
+    <end type="SOURCE" refId="19"/>    
+    <end type="TARGET" refId="21"/>  
+  </dependency>  
+  <dependency id="32">    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="13"/>  
+  </dependency>  
+  <dependency id="33">    
+    <bendpoint x="3071" y="654"/>    
+    <bendpoint x="3057" y="749"/>    
+    <end type="SOURCE" refId="19"/>    
+    <end type="TARGET" refId="14"/>  
+  </dependency>  
+  <dependency id="34">    
+    <bendpoint x="2171" y="464"/>    
+    <bendpoint x="2171" y="559"/>    
+    <bendpoint x="2171" y="654"/>    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="10"/>  
+  </dependency>  
+  <dependency id="35">    
+    <end type="SOURCE" refId="20"/>    
+    <end type="TARGET" refId="18"/>  
+  </dependency>  
+  <dependency id="36">    
+    <end type="SOURCE" refId="10"/>    
+    <end type="TARGET" refId="14"/>  
+  </dependency>  
+  <dependency id="37">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="6"/>  
+  </dependency>  
+  <dependency id="38">    
+    <bendpoint x="2723" y="654"/>    
+    <end type="SOURCE" refId="12"/>    
+    <end type="TARGET" refId="22"/>  
+  </dependency>  
+  <dependency id="39">    
+    <bendpoint x="1384" y="559"/>    
+    <bendpoint x="1384" y="654"/>    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="10"/>  
+  </dependency>  
+  <dependency id="40">    
+    <end type="SOURCE" refId="18"/>    
+    <end type="TARGET" refId="4"/>  
+  </dependency>  
+  <dependency id="41">    
+    <bendpoint x="1363" y="654"/>    
+    <bendpoint x="1363" y="749"/>    
+    <end type="SOURCE" refId="23"/>    
+    <end type="TARGET" refId="14"/>  
+  </dependency>  
+  <dependency id="42">    
+    <bendpoint x="2576" y="654"/>    
+    <bendpoint x="2576" y="749"/>    
+    <end type="SOURCE" refId="20"/>    
+    <end type="TARGET" refId="14"/>  
+  </dependency>  
+  <dependency id="43">    
+    <bendpoint x="3078" y="749"/>    
+    <bendpoint x="3078" y="844"/>    
+    <end type="SOURCE" refId="18"/>    
+    <end type="TARGET" refId="21"/>  
+  </dependency>  
+  <dependency id="44">    
+    <end type="SOURCE" refId="23"/>    
+    <end type="TARGET" refId="24"/>  
+  </dependency>  
+  <dependency id="45">    
+    <bendpoint x="2192" y="654"/>    
+    <bendpoint x="2173" y="749"/>    
+    <bendpoint x="2173" y="844"/>    
+    <end type="SOURCE" refId="12"/>    
+    <end type="TARGET" refId="21"/>  
+  </dependency>  
+  <dependency id="46">    
+    <bendpoint x="3120" y="654"/>    
+    <end type="SOURCE" refId="19"/>    
+    <end type="TARGET" refId="22"/>  
+  </dependency>  
+  <dependency id="47">    
+    <bendpoint x="-56" y="464"/>    
+    <bendpoint x="-56" y="559"/>    
+    <bendpoint x="-56" y="654"/>    
+    <bendpoint x="-56" y="749"/>    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="14"/>  
+  </dependency>  
+  <dependency id="48">    
+    <end type="SOURCE" refId="9"/>    
+    <end type="TARGET" refId="23"/>  
+  </dependency>  
+  <dependency id="49">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="18"/>  
+  </dependency>  
+  <dependency id="50">    
+    <end type="SOURCE" refId="15"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <dependency id="51">    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="14"/>  
+  </dependency>  
+  <dependency id="52">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="22"/>  
+  </dependency>  
+  <dependency id="53">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="16"/>  
+  </dependency>  
+  <dependency id="54">    
+    <end type="SOURCE" refId="15"/>    
+    <end type="TARGET" refId="3"/>  
+  </dependency>  
+  <dependency id="55">    
+    <end type="SOURCE" refId="15"/>    
+    <end type="TARGET" refId="11"/>  
+  </dependency>  
+  <dependency id="56">    
+    <bendpoint x="2150" y="464"/>    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="23"/>  
+  </dependency>  
+  <dependency id="57">    
+    <bendpoint x="1280" y="559"/>    
+    <bendpoint x="1280" y="654"/>    
+    <bendpoint x="1280" y="749"/>    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="14"/>  
+  </dependency>  
+  <dependency id="58">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="23"/>  
+  </dependency>  
+  <dependency id="59">    
+    <bendpoint x="2213" y="654"/>    
+    <end type="SOURCE" refId="12"/>    
+    <end type="TARGET" refId="10"/>  
+  </dependency>  
+  <dependency id="60">    
+    <end type="SOURCE" refId="12"/>    
+    <end type="TARGET" refId="18"/>  
+  </dependency>  
+  <dependency id="61">    
+    <bendpoint x="3583" y="654"/>    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="22"/>  
+  </dependency>  
+  <dependency id="62">    
+    <bendpoint x="2969" y="844"/>    
+    <end type="SOURCE" refId="4"/>    
+    <end type="TARGET" refId="21"/>  
+  </dependency>  
+  <dependency id="63">    
+    <bendpoint x="2770" y="369"/>    
+    <end type="SOURCE" refId="15"/>    
+    <end type="TARGET" refId="8"/>  
+  </dependency>  
+  <dependency id="64">    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="9"/>  
+  </dependency>  
+  <dependency id="65">    
+    <bendpoint x="2515" y="559"/>    
+    <bendpoint x="2515" y="654"/>    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="10"/>  
+  </dependency>  
+  <dependency id="66">    
+    <bendpoint x="2536" y="654"/>    
+    <end type="SOURCE" refId="20"/>    
+    <end type="TARGET" refId="10"/>  
+  </dependency>  
+  <dependency id="67">    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="20"/>  
+  </dependency>  
+  <dependency id="68">    
+    <end type="SOURCE" refId="18"/>    
+    <end type="TARGET" refId="10"/>  
+  </dependency>  
+  <dependency id="69">    
+    <end type="SOURCE" refId="14"/>    
+    <end type="TARGET" refId="21"/>  
+  </dependency>  
+  <dependency id="70">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="17"/>  
+  </dependency>  
+  <dependency id="71">    
+    <end type="SOURCE" refId="24"/>    
+    <end type="TARGET" refId="10"/>  
+  </dependency>  
+  <dependency id="72">    
+    <bendpoint x="2483" y="464"/>    
+    <bendpoint x="2886" y="559"/>    
+    <end type="SOURCE" refId="11"/>    
+    <end type="TARGET" refId="18"/>  
+  </dependency>  
+  <dependency id="73">    
+    <bendpoint x="3130" y="369"/>    
+    <bendpoint x="3130" y="464"/>    
+    <bendpoint x="3130" y="559"/>    
+    <end type="SOURCE" refId="15"/>    
+    <end type="TARGET" refId="18"/>  
+  </dependency>  
+  <dependency id="74">    
+    <end type="SOURCE" refId="16"/>    
+    <end type="TARGET" refId="22"/>  
+  </dependency>  
+  <dependency id="75">    
+    <bendpoint x="2150" y="654"/>    
+    <end type="SOURCE" refId="23"/>    
+    <end type="TARGET" refId="10"/>  
+  </dependency>  
+  <dependency id="76">    
+    <bendpoint x="3050" y="654"/>    
+    <end type="SOURCE" refId="19"/>    
+    <end type="TARGET" refId="10"/>  
+  </dependency>  
+  <dependency id="77">    
+    <bendpoint x="2847" y="369"/>    
+    <bendpoint x="2847" y="464"/>    
+    <end type="SOURCE" refId="15"/>    
+    <end type="TARGET" refId="7"/>  
+  </dependency>  
+  <dependency id="78">    
+    <bendpoint x="2702" y="654"/>    
+    <bendpoint x="2702" y="749"/>    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="14"/>  
+  </dependency>  
+  <dependency id="79">    
+    <bendpoint x="2494" y="654"/>    
+    <bendpoint x="2555" y="749"/>    
+    <end type="SOURCE" refId="12"/>    
+    <end type="TARGET" refId="14"/>  
+  </dependency>  
+  <dependency id="80">    
+    <end type="SOURCE" refId="18"/>    
+    <end type="TARGET" refId="22"/>  
+  </dependency>  
+  <dependency id="81">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="18"/>  
+  </dependency>  
+  <dependency id="82">    
+    <bendpoint x="3197" y="369"/>    
+    <bendpoint x="3197" y="464"/>    
+    <end type="SOURCE" refId="15"/>    
+    <end type="TARGET" refId="2"/>  
+  </dependency>  
+  <dependency id="83">    
+    <bendpoint x="2462" y="369"/>    
+    <bendpoint x="2462" y="464"/>    
+    <end type="SOURCE" refId="15"/>    
+    <end type="TARGET" refId="12"/>  
+  </dependency>  
+  <dependency id="84">    
+    <bendpoint x="3120" y="844"/>    
+    <end type="SOURCE" refId="22"/>    
+    <end type="TARGET" refId="21"/>  
+  </dependency>  
+  <dependency id="85">    
+    <bendpoint x="3088" y="559"/>    
+    <end type="SOURCE" refId="8"/>    
+    <end type="TARGET" refId="18"/>  
+  </dependency>  
+  <dependency id="86">    
+    <end type="SOURCE" refId="5"/>    
+    <end type="TARGET" refId="15"/>  
+  </dependency>  
+  <dependency id="87">    
+    <end type="SOURCE" refId="13"/>    
+    <end type="TARGET" refId="23"/>  
+  </dependency>  
+  <classifier-display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
+    sort-features="false" accessors="true" visibility="true">    
+    <attributes public="true" package="true" protected="true" private="true" static="true"/>    
+    <operations public="true" package="true" protected="true" private="true" static="true"/>  
+  </classifier-display>  
+  <association-display labels="true" multiplicity="true"/>
+</class-diagram>
