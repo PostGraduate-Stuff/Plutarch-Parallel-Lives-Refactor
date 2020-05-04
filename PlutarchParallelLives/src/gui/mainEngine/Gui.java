@@ -83,91 +83,88 @@ import data.dataSorters.PldRowSorter;
 
 public class Gui extends JFrame implements ActionListener{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
-	private JPanel contentPane;
-	private JPanel lifeTimePanel = new JPanel();
-	private JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
+	protected JPanel contentPane;
+	protected JPanel lifeTimePanel = new JPanel();
+	protected JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 	
-	private MyTableModel detailedModel = null;
-	private MyTableModel generalModel = null;
-	private MyTableModel zoomModel = null;
+	protected MyTableModel detailedModel = null;
+	protected MyTableModel generalModel = null;
+	protected MyTableModel zoomModel = null;
 
-	private JvTable LifeTimeTable=null;
-	private JvTable zoomAreaTable=null;
+	protected JvTable LifeTimeTable=null;
+	protected JvTable zoomAreaTable=null;
 	
 	
 	
-	private JScrollPane tmpScrollPane =new JScrollPane();
-	private JScrollPane treeScrollPane= new JScrollPane();
-	private JScrollPane tmpScrollPaneZoomArea =new JScrollPane();
+	protected JScrollPane tmpScrollPane =new JScrollPane();
+	protected JScrollPane treeScrollPane= new JScrollPane();
+	protected JScrollPane tmpScrollPaneZoomArea =new JScrollPane();
 	
 	
 	
-	private ArrayList<Integer> selectedRows=new ArrayList<Integer>();
-	private GlobalDataKeeper globalDataKeeper=null;
+	//private ArrayList<Integer> selectedRows=new ArrayList<Integer>();
+	//private generalDatakeeper.getGlobalDataKeeper() generalDatakeeper.getGlobalDataKeeper()=null;
 
 	
 	
 	
 	
 	
-	private String[] firstLevelUndoColumnsZoomArea=null;
-	private String[][] firstLevelUndoRowsZoomArea=null;
+	protected String[] firstLevelUndoColumnsZoomArea=null;
+	protected String[][] firstLevelUndoRowsZoomArea=null;
 	//private String currentProject=null; == getFileContent
 	//private String project=null;
 	
 	
 	
-	private Integer[] segmentSizeZoomArea=new Integer[4];
-	private Integer[] segmentSizeDetailedTable=new Integer[3];
+	protected Integer[] segmentSizeZoomArea=new Integer[4];
+	protected Integer[] segmentSizeDetailedTable=new Integer[3];
 
 
-	private Configuration configuration;
+	protected Configuration configuration;
 	
-	private GeneralDatakeeper generalDatakeeper;
+	protected GeneralDatakeeper generalDatakeeper;
 
 
-	
-
-	private ArrayList<String> selectedFromTree=new ArrayList<String>();
-	
-	private JTree tablesTree=new JTree();
-	private JPanel sideMenu=new JPanel();
-	private JPanel tablesTreePanel=new JPanel();
-	private JPanel descriptionPanel=new JPanel();
-	private JLabel treeLabel;
-	private JLabel generalTableLabel;
-	private JLabel zoomAreaLabel;
-	private JLabel descriptionLabel;
-	private JTextArea descriptionText;
-	private JButton zoomInButton;
-	private JButton zoomOutButton;
-	private JButton uniformlyDistributedButton;
-	private JButton notUniformlyDistributedButton;
-	private JButton showThisToPopup;
-
-
-	private int[] selectedRowsFromMouse;
-	private int selectedColumn=-1;
-	private int selectedColumnZoomArea=-1;
-
-	private int wholeColZoomArea=-1;
-	
 	
 
-	private ArrayList<String> tablesSelected = new ArrayList<String>();
+	protected ArrayList<String> selectedFromTree=new ArrayList<String>();
+	
+	protected JTree tablesTree=new JTree();
+	protected JPanel sideMenu=new JPanel();
+	protected JPanel tablesTreePanel=new JPanel();
+	protected JPanel descriptionPanel=new JPanel();
+	protected JLabel treeLabel;
+	protected JLabel generalTableLabel;
+	protected JLabel zoomAreaLabel;
+	protected JLabel descriptionLabel;
+	protected JTextArea descriptionText;
+	protected JButton zoomInButton;
+	protected JButton zoomOutButton;
+	protected JButton uniformlyDistributedButton;
+	protected JButton notUniformlyDistributedButton;
+	protected JButton showThisToPopup;
 
-	private boolean showingPld=false;
+
+	protected int[] selectedRowsFromMouse;
+	protected int selectedColumn=-1;
+	protected int selectedColumnZoomArea=-1;
+
+	protected int wholeColZoomArea=-1;
 	
-	private JButton undoButton;
-	private JMenu mnProject;
-	private JMenuItem mntmInfo;
 	
-	private DataService service;
+
+	protected ArrayList<String> tablesSelected = new ArrayList<String>();
+
+	protected boolean showingPld=false;
+	
+	protected JButton undoButton;
+	protected JMenu mnProject;
+	protected JMenuItem mntmInfo;
+	
+	
 	
 	/**
 	 * Launch the application.
@@ -193,7 +190,7 @@ public class Gui extends JFrame implements ActionListener{
 	 * Create the frame.
 	 */
 	public Gui() {
-		service = new DataService();
+		
 		configuration = new Configuration();
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -246,6 +243,8 @@ public class Gui extends JFrame implements ActionListener{
 		//LoadProject loadProject = new LoadProject();
 		//loadProject.initialize(this);
 		//mnFile.add(loadProject.getLoadProject());
+		
+		
 		JMenuItem mntmLoadProject = new JMenuItem("Load Project");
 		mntmLoadProject.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
@@ -281,7 +280,7 @@ public class Gui extends JFrame implements ActionListener{
 				}
 					
 	            File file = fcOpen1.getSelectedFile();
-	            PPLFile pplFile = service.readFile(file);
+	            PPLFile pplFile = generalDatakeeper.readFile(file);
 
 				System.out.println(pplFile.getProjectName());
 				
@@ -334,7 +333,7 @@ public class Gui extends JFrame implements ActionListener{
 					return;
 				}
 				
-				TableConstructionAllSquaresIncluded table=new TableConstructionAllSquaresIncluded(globalDataKeeper);
+				TableConstructionAllSquaresIncluded table=new TableConstructionAllSquaresIncluded(generalDatakeeper.getGlobalDataKeeper());
 				//TODO in service
 				table.constructColumns();
 				table.constructRows();
@@ -358,9 +357,10 @@ public class Gui extends JFrame implements ActionListener{
 				
 				zoomInButton.setVisible(true);
 				zoomOutButton.setVisible(true);
-				TableConstructionIDU table=service.createTableConstructionIDU(globalDataKeeper.getAllPPLSchemas(), globalDataKeeper.getAllPPLTransitions());
+				generalDatakeeper.createTableConstructionIDU();
+				TableConstructionIDU table=generalDatakeeper.getTableConstructionIDU();
 				segmentSizeZoomArea = table.getSegmentSize();
-				System.out.println("Schemas: "+globalDataKeeper.getAllPPLSchemas().size());
+				System.out.println("Schemas: "+generalDatakeeper.getGlobalDataKeeper().getAllPPLSchemas().size());
 				System.out.println("C: "+table.getConstructedColumns().length+" R: "+table.getConstructedRows().length);
 
 				configuration.setFinalColumnsZoomArea(table.getConstructedColumns());
@@ -405,25 +405,22 @@ public class Gui extends JFrame implements ActionListener{
 			            System.out.println(configuration.getTimeWeight()+" "+configuration.getChangeWeight());
 			            
 			            
-			            PhaseAnalyzerMainEngine mainPhaseEngine= service.createPhaseAnalyserEngine(configuration,globalDataKeeper,generalDatakeeper.getPPLFile());
-			    		service.connectTransitionsWithPhases(mainPhaseEngine, globalDataKeeper.getAllPPLTransitions());
-			    		
-			    		globalDataKeeper.setPhaseCollectors(mainPhaseEngine.getPhaseCollectors());
+			            generalDatakeeper.createPhaseAnalyserEngine(configuration);
 						
 			    		
-						if(globalDataKeeper.getPhaseCollectors().size() == 0){
+						if(generalDatakeeper.getGlobalDataKeeper().getPhaseCollectors().size() == 0){
 							JOptionPane.showMessageDialog(null, "Extract Phases first");
 							return;
 						}
 						
-						TableConstructionPhases table=new TableConstructionPhases(globalDataKeeper);
+						TableConstructionPhases table=new TableConstructionPhases(generalDatakeeper.getGlobalDataKeeper());
 						//TODO in service
 						table.constructColumns();
 						table.constructRows();
 						final String[] columns= table.getConstructedColumns();
 						final String[][] rows= table.getConstructedRows();
 						configuration.setSegmentSize(table.getSegmentSize());
-						System.out.println("Schemas: "+globalDataKeeper.getAllPPLSchemas().size());
+						System.out.println("Schemas: "+generalDatakeeper.getGlobalDataKeeper().getAllPPLSchemas().size());
 						System.out.println("C: "+columns.length+" R: "+rows.length);
 	
 						configuration.setFinalColumns(columns);
@@ -470,34 +467,38 @@ public class Gui extends JFrame implements ActionListener{
 			            
 			            System.out.println(configuration.getTimeWeight()+" "+configuration.getChangeWeight());
 			            
-			            PhaseAnalyzerMainEngine mainPhaseEngine= service.createPhaseAnalyserEngine(configuration,globalDataKeeper,generalDatakeeper.getPPLFile());
-			    		service.connectTransitionsWithPhases(mainPhaseEngine, globalDataKeeper.getAllPPLTransitions());
+			            /*PhaseAnalyzerMainEngine mainPhaseEngine= service.createPhaseAnalyserEngine(configuration,generalDatakeeper.getGlobalDataKeeper(),generalDatakeeper.getPPLFile());
+			    		service.connectTransitionsWithPhases(mainPhaseEngine, generalDatakeeper.getGlobalDataKeeper().getAllPPLTransitions());
 			    		
-			    		globalDataKeeper.setPhaseCollectors(mainPhaseEngine.getPhaseCollectors());
+			    		generalDatakeeper.getGlobalDataKeeper().setPhaseCollectors(mainPhaseEngine.getPhaseCollectors());*/
 			            
-			    		TableClusteringMainEngine mainClusterEngine = service.createTableClusteringMainEngine(globalDataKeeper, configuration.getNumberOfClusters());
-			    		globalDataKeeper.setClusterCollectors(mainClusterEngine.getClusterCollectors());
+			    		generalDatakeeper.createPhaseAnalyserEngine(configuration);
 			    		
-						if(globalDataKeeper.getPhaseCollectors().size()==0)
+			    		
+			    		generalDatakeeper.createTableClusteringMainEngine(configuration.getNumberOfClusters());
+			    		/*TableClusteringMainEngine mainClusterEngine = service.createTableClusteringMainEngine(generalDatakeeper.getGlobalDataKeeper(), configuration.getNumberOfClusters());
+			    		generalDatakeeper.getGlobalDataKeeper().setClusterCollectors(mainClusterEngine.getClusterCollectors());
+			    		*/
+						if(generalDatakeeper.getGlobalDataKeeper().getPhaseCollectors().size()==0)
 						{
 							JOptionPane.showMessageDialog(null, "Extract Phases first");
 							return;
 						}
-						TableConstructionWithClusters table=new TableConstructionWithClusters(globalDataKeeper);
+						TableConstructionWithClusters table=new TableConstructionWithClusters(generalDatakeeper.getGlobalDataKeeper());
 						//TODO in service
 						table.constructColumns();
 						table.constructRows();
 						final String[] columns= table.getConstructedColumns();
 						final String[][] rows= table.getConstructedRows();
 						configuration.setSegmentSize(table.getSegmentSize());
-						System.out.println("Schemas: "+globalDataKeeper.getAllPPLSchemas().size());
+						System.out.println("Schemas: "+generalDatakeeper.getGlobalDataKeeper().getAllPPLSchemas().size());
 						System.out.println("C: "+columns.length+" R: "+rows.length);
 	
 						configuration.setFinalColumns(columns);
 						configuration.setFinalRows(rows);
 						tabbedPane.setSelectedIndex(0);
 						makeGeneralTablePhases();
-						fillClustersTree(globalDataKeeper.getClusterCollectors().get(0).getClusters());
+						fillClustersTree(generalDatakeeper.getGlobalDataKeeper().getClusterCollectors().get(0).getClusters());
 							
 					}
 				
@@ -608,18 +609,18 @@ public class Gui extends JFrame implements ActionListener{
 					System.out.println("Output Assessment2:"+generalDatakeeper.getPplFile().getOutputAssessment2());
 					System.out.println("Transitions File:"+generalDatakeeper.getPplFile().getTransitionsFile());
 					
-					System.out.println("Schemas:"+globalDataKeeper.getAllPPLSchemas().size());
-					System.out.println("Transitions:"+globalDataKeeper.getAllPPLTransitions().size());
-					System.out.println("Tables:"+globalDataKeeper.getAllPPLTables().size());
+					System.out.println("Schemas:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLSchemas().size());
+					System.out.println("Transitions:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTransitions().size());
+					System.out.println("Tables:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTables().size());
 					
 					
 					ProjectInfoDialog infoDialog = new ProjectInfoDialog(generalDatakeeper.getPplFile().getProjectName(),
 																		 generalDatakeeper.getPplFile().getDatasetTxt(),
 																		 generalDatakeeper.getPplFile().getInputCsv(),
 																		 generalDatakeeper.getPplFile().getTransitionsFile(),
-																		 globalDataKeeper.getAllPPLSchemas().size(),
-																		 globalDataKeeper.getAllPPLTransitions().size(), 
-																		 globalDataKeeper.getAllPPLTables().size());
+																		 generalDatakeeper.getGlobalDataKeeper().getAllPPLSchemas().size(),
+																		 generalDatakeeper.getGlobalDataKeeper().getAllPPLTransitions().size(), 
+																		 generalDatakeeper.getGlobalDataKeeper().getAllPPLTables().size());
 					
 					infoDialog.setVisible(true);
 				}
@@ -780,7 +781,7 @@ public class Gui extends JFrame implements ActionListener{
 		notUniformlyDistributedButton.addMouseListener(new MouseAdapter() {
 			@Override
 			   public void mouseClicked(MouseEvent e) {
-			    LifeTimeTable.notUniformlyDistributed(globalDataKeeper);
+			    LifeTimeTable.notUniformlyDistributed(generalDatakeeper.getGlobalDataKeeper());
 			    
 			  } 
 		});
@@ -809,16 +810,16 @@ public class Gui extends JFrame implements ActionListener{
 	
 	
 
-private void showSelectionToZoomArea(int selectedColumn){
+protected void showSelectionToZoomArea(int selectedColumn){
 	
-	TableConstructionZoomArea table=new TableConstructionZoomArea(globalDataKeeper,tablesSelected,selectedColumn);
+	TableConstructionZoomArea table=new TableConstructionZoomArea(generalDatakeeper.getGlobalDataKeeper(),tablesSelected,selectedColumn);
 	table.constructColumns();
 	table.constructRows();
 	final String[] columns= table.getConstructedColumns();
 	final String[][] rows= table.getConstructedRows();
 	segmentSizeZoomArea = table.getSegmentSize();
 
-	System.out.println("Schemas: "+globalDataKeeper.getAllPPLSchemas().size());
+	System.out.println("Schemas: "+generalDatakeeper.getGlobalDataKeeper().getAllPPLSchemas().size());
 	System.out.println("C: "+columns.length+" R: "+rows.length);
 
 	configuration.setFinalColumnsZoomArea(columns);
@@ -830,14 +831,14 @@ private void showSelectionToZoomArea(int selectedColumn){
 	
 }
 
-private void showClusterSelectionToZoomArea(int selectedColumn,String selectedCluster){
+protected void showClusterSelectionToZoomArea(int selectedColumn,String selectedCluster){
 
 	
 	ArrayList<String> tablesOfCluster=new ArrayList<String>();
 	for(int i=0; i <tablesSelected.size(); i++){
 		String[] selectedClusterSplit= tablesSelected.get(i).split(" ");
 		int cluster=Integer.parseInt(selectedClusterSplit[1]);
-		ArrayList<String> namesOfTables=globalDataKeeper.getClusterCollectors().get(0).getClusters().get(cluster).getNamesOfTables();
+		ArrayList<String> namesOfTables=generalDatakeeper.getGlobalDataKeeper().getClusterCollectors().get(0).getClusters().get(cluster).getNamesOfTables();
 		for(int j=0; j<namesOfTables.size(); j++){
 			tablesOfCluster.add(namesOfTables.get(j));
 		}
@@ -846,10 +847,10 @@ private void showClusterSelectionToZoomArea(int selectedColumn,String selectedCl
 	
 	PldConstruction table;
 	if (selectedColumn==0) {
-		table= new TableConstructionClusterTablesPhasesZoomA(globalDataKeeper,tablesOfCluster);
+		table= new TableConstructionClusterTablesPhasesZoomA(generalDatakeeper.getGlobalDataKeeper(),tablesOfCluster);
 	}
 	else{
-		table= new TableConstructionZoomArea(globalDataKeeper,tablesOfCluster,selectedColumn);
+		table= new TableConstructionZoomArea(generalDatakeeper.getGlobalDataKeeper(),tablesOfCluster,selectedColumn);
 	}
 	//TODO in service
 	table.constructColumns();
@@ -857,7 +858,7 @@ private void showClusterSelectionToZoomArea(int selectedColumn,String selectedCl
 	final String[] columns= table.getConstructedColumns();
 	final String[][] rows= table.getConstructedRows();
 	segmentSizeZoomArea = table.getSegmentSize();
-	System.out.println("Schemas: "+globalDataKeeper.getAllPPLSchemas().size());
+	System.out.println("Schemas: "+generalDatakeeper.getGlobalDataKeeper().getAllPPLSchemas().size());
 	System.out.println("C: "+columns.length+" R: "+rows.length);
 
 	configuration.setFinalColumnsZoomArea(columns);
@@ -927,15 +928,15 @@ private void makeZoomAreaTable() {
 	        if(column==wholeColZoomArea){
 	        	
 	        	String description="Transition ID:"+table.getColumnName(column)+"\n";
-	        	description=description+"Old Version Name:"+globalDataKeeper.getAllPPLTransitions().
+	        	description=description+"Old Version Name:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTransitions().
         				get(Integer.parseInt(table.getColumnName(column))).getOldVersionName()+"\n";
-        		description=description+"New Version Name:"+globalDataKeeper.getAllPPLTransitions().
+        		description=description+"New Version Name:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTransitions().
         				get(Integer.parseInt(table.getColumnName(column))).getNewVersionName()+"\n";		        		
         		
-    			description=description+"Transition Changes:"+globalDataKeeper.getAllPPLTransitions().get(Integer.parseInt(table.getColumnName(column))).getNumberOfClusterChangesForOneTr(rowsZoom)+"\n";
-    			description=description+"Additions:"+globalDataKeeper.getAllPPLTransitions().get(Integer.parseInt(table.getColumnName(column))).getNumberOfClusterAdditionsForOneTr(rowsZoom)+"\n";
-    			description=description+"Deletions:"+globalDataKeeper.getAllPPLTransitions().get(Integer.parseInt(table.getColumnName(column))).getNumberOfClusterDeletionsForOneTr(rowsZoom)+"\n";
-    			description=description+"Updates:"+globalDataKeeper.getAllPPLTransitions().get(Integer.parseInt(table.getColumnName(column))).getNumberOfClusterUpdatesForOneTr(rowsZoom)+"\n";
+    			description=description+"Transition Changes:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTransitions().get(Integer.parseInt(table.getColumnName(column))).getNumberOfClusterChangesForOneTr(rowsZoom)+"\n";
+    			description=description+"Additions:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTransitions().get(Integer.parseInt(table.getColumnName(column))).getNumberOfClusterAdditionsForOneTr(rowsZoom)+"\n";
+    			description=description+"Deletions:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTransitions().get(Integer.parseInt(table.getColumnName(column))).getNumberOfClusterDeletionsForOneTr(rowsZoom)+"\n";
+    			description=description+"Updates:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTransitions().get(Integer.parseInt(table.getColumnName(column))).getNumberOfClusterUpdatesForOneTr(rowsZoom)+"\n";
 
     		
 	        	
@@ -948,11 +949,11 @@ private void makeZoomAreaTable() {
 	        else if(selectedColumnZoomArea==0){
 	        	if (isSelected){
 	        		String description="Table:"+configuration.getFinalRowsZoomArea()[row][0]+"\n";
-	        		description=description+"Birth Version Name:"+globalDataKeeper.getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).getBirth()+"\n";
-	        		description=description+"Birth Version ID:"+globalDataKeeper.getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).getBirthVersionID()+"\n";
-	        		description=description+"Death Version Name:"+globalDataKeeper.getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).getDeath()+"\n";
-	        		description=description+"Death Version ID:"+globalDataKeeper.getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).getDeathVersionID()+"\n";
-	        		description=description+"Total Changes:"+globalDataKeeper.getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).
+	        		description=description+"Birth Version Name:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).getBirth()+"\n";
+	        		description=description+"Birth Version ID:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).getBirthVersionID()+"\n";
+	        		description=description+"Death Version Name:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).getDeath()+"\n";
+	        		description=description+"Death Version ID:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).getDeathVersionID()+"\n";
+	        		description=description+"Total Changes:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).
 	        				getTotalChangesForOnePhase(Integer.parseInt(table.getColumnName(1)), Integer.parseInt(table.getColumnName(table.getColumnCount()-1)))+"\n";
 	        		descriptionText.setText(description);
 	        		
@@ -969,19 +970,19 @@ private void makeZoomAreaTable() {
 	        		if(!table.getColumnName(column).contains("Table name")){
 		        		description="Table:"+configuration.getFinalRowsZoomArea()[row][0]+"\n";
 		        		
-		        		description=description+"Old Version Name:"+globalDataKeeper.getAllPPLTransitions().
+		        		description=description+"Old Version Name:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTransitions().
 		        				get(Integer.parseInt(table.getColumnName(column))).getOldVersionName()+"\n";
-		        		description=description+"New Version Name:"+globalDataKeeper.getAllPPLTransitions().
+		        		description=description+"New Version Name:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTransitions().
 		        				get(Integer.parseInt(table.getColumnName(column))).getNewVersionName()+"\n";		        		
-		        		if(globalDataKeeper.getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).
+		        		if(generalDatakeeper.getGlobalDataKeeper().getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).
 		        				getTableChanges().getTableAtChForOneTransition(Integer.parseInt(table.getColumnName(column)))!=null){
-		        			description=description+"Transition Changes:"+globalDataKeeper.getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).
+		        			description=description+"Transition Changes:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).
 		        				getTableChanges().getTableAtChForOneTransition(Integer.parseInt(table.getColumnName(column))).size()+"\n";
-		        			description=description+"Additions:"+globalDataKeeper.getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).
+		        			description=description+"Additions:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).
 		        					getNumberOfAdditionsForOneTr(Integer.parseInt(table.getColumnName(column)))+"\n";
-		        			description=description+"Deletions:"+globalDataKeeper.getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).
+		        			description=description+"Deletions:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).
 		        					getNumberOfDeletionsForOneTr(Integer.parseInt(table.getColumnName(column)))+"\n";
-		        			description=description+"Updates:"+globalDataKeeper.getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).
+		        			description=description+"Updates:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).
 		        					getNumberOfUpdatesForOneTr(Integer.parseInt(table.getColumnName(column)))+"\n";
 		        			
 		        		}
@@ -1209,17 +1210,17 @@ private void makeZoomAreaTableForCluster() {
 	        if(column==wholeColZoomArea && wholeColZoomArea!=0){
 	        	
 	        	String description=table.getColumnName(column)+"\n";
-	          	description=description+"First Transition ID:"+globalDataKeeper.getPhaseCollectors().get(0).getPhases().
+	          	description=description+"First Transition ID:"+generalDatakeeper.getGlobalDataKeeper().getPhaseCollectors().get(0).getPhases().
         				get(column-1).getStartPos()+"\n";
-        		description=description+"Last Transition ID:"+globalDataKeeper.getPhaseCollectors().get(0).getPhases().
+        		description=description+"Last Transition ID:"+generalDatakeeper.getGlobalDataKeeper().getPhaseCollectors().get(0).getPhases().
         				get(column-1).getEndPos()+"\n";
-        		description=description+"Total Changes For This Phase:"+globalDataKeeper.getPhaseCollectors().get(0).getPhases().
+        		description=description+"Total Changes For This Phase:"+generalDatakeeper.getGlobalDataKeeper().getPhaseCollectors().get(0).getPhases().
         				get(column-1).getTotalUpdates()+"\n";
-        		description=description+"Additions For This Phase:"+globalDataKeeper.getPhaseCollectors().get(0).getPhases().
+        		description=description+"Additions For This Phase:"+generalDatakeeper.getGlobalDataKeeper().getPhaseCollectors().get(0).getPhases().
         				get(column-1).getTotalAdditionsOfPhase()+"\n";
-        		description=description+"Deletions For This Phase:"+globalDataKeeper.getPhaseCollectors().get(0).getPhases().
+        		description=description+"Deletions For This Phase:"+generalDatakeeper.getGlobalDataKeeper().getPhaseCollectors().get(0).getPhases().
         				get(column-1).getTotalDeletionsOfPhase()+"\n";
-        		description=description+"Updates For This Phase:"+globalDataKeeper.getPhaseCollectors().get(0).getPhases().
+        		description=description+"Updates For This Phase:"+generalDatakeeper.getGlobalDataKeeper().getPhaseCollectors().get(0).getPhases().
         				get(column-1).getTotalUpdatesOfPhase()+"\n";
 	        	
         		descriptionText.setText(description);
@@ -1234,11 +1235,11 @@ private void makeZoomAreaTableForCluster() {
 	        		
 	        		
 		        		String description="Table:"+configuration.getFinalRowsZoomArea()[row][0]+"\n";
-		        		description=description+"Birth Version Name:"+globalDataKeeper.getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).getBirth()+"\n";
-		        		description=description+"Birth Version ID:"+globalDataKeeper.getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).getBirthVersionID()+"\n";
-		        		description=description+"Death Version Name:"+globalDataKeeper.getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).getDeath()+"\n";
-		        		description=description+"Death Version ID:"+globalDataKeeper.getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).getDeathVersionID()+"\n";
-		        		description=description+"Total Changes:"+globalDataKeeper.getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).getTotalChanges()+"\n";
+		        		description=description+"Birth Version Name:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).getBirth()+"\n";
+		        		description=description+"Birth Version ID:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).getBirthVersionID()+"\n";
+		        		description=description+"Death Version Name:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).getDeath()+"\n";
+		        		description=description+"Death Version ID:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).getDeathVersionID()+"\n";
+		        		description=description+"Total Changes:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).getTotalChanges()+"\n";
 		        		descriptionText.setText(description);
 
 	        	
@@ -1260,18 +1261,18 @@ private void makeZoomAreaTableForCluster() {
 		        		
 	        			description="Transition "+table.getColumnName(column)+"\n";
 		        		
-	        			description=description+"Old Version:"+globalDataKeeper.getAllPPLTransitions().get(Integer.parseInt(table.getColumnName(column))).getOldVersionName()+"\n";
-		        		description=description+"New Version:"+globalDataKeeper.getAllPPLTransitions().get(Integer.parseInt(table.getColumnName(column))).getNewVersionName()+"\n\n";
+	        			description=description+"Old Version:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTransitions().get(Integer.parseInt(table.getColumnName(column))).getOldVersionName()+"\n";
+		        		description=description+"New Version:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTransitions().get(Integer.parseInt(table.getColumnName(column))).getNewVersionName()+"\n\n";
 		
-	        			//description=description+"First Transition ID:"+globalDataKeeper.getPhaseCollectors().get(0).getPhases().
+	        			//description=description+"First Transition ID:"+generalDatakeeper.getGlobalDataKeeper().getPhaseCollectors().get(0).getPhases().
 		        				//get(column-1).getStartPos()+"\n";
-		        		//description=description+"Last Transition ID:"+globalDataKeeper.getPhaseCollectors().get(0).getPhases().
+		        		//description=description+"Last Transition ID:"+generalDatakeeper.getGlobalDataKeeper().getPhaseCollectors().get(0).getPhases().
 		        			//	get(column-1).getEndPos()+"\n\n";
 	        			description=description+"Table:"+configuration.getFinalRowsZoomArea()[row][0]+"\n";
-		        		description=description+"Birth Version Name:"+globalDataKeeper.getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).getBirth()+"\n";
-		        		description=description+"Birth Version ID:"+globalDataKeeper.getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).getBirthVersionID()+"\n";
-		        		description=description+"Death Version Name:"+globalDataKeeper.getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).getDeath()+"\n";
-		        		description=description+"Death Version ID:"+globalDataKeeper.getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).getDeathVersionID()+"\n";
+		        		description=description+"Birth Version Name:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).getBirth()+"\n";
+		        		description=description+"Birth Version ID:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).getBirthVersionID()+"\n";
+		        		description=description+"Death Version Name:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).getDeath()+"\n";
+		        		description=description+"Death Version ID:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).getDeathVersionID()+"\n";
 		        		description=description+"Total Changes For This Phase:"+tmpValue+"\n";
 		        		
 		        		descriptionText.setText(description);
@@ -1675,8 +1676,8 @@ private void makeZoomAreaTableForCluster() {
             }
             
             int selectedRow=LifeTimeTable.getSelectedRow();
-            
-            selectedRows.add(selectedRow);
+            configuration.getSelectedRows().add(selectedRow);
+           
      
         }
     }
@@ -1702,11 +1703,11 @@ private void makeZoomAreaTableForCluster() {
 			for(double wd=(1.0-wb); wd>=0.0; wd=wd-0.01){
 				
 					double wc=1.0-(wb+wd);
-					TableClusteringMainEngine mainEngine2 = new TableClusteringMainEngine(globalDataKeeper,wb,wd,wc);
+					TableClusteringMainEngine mainEngine2 = new TableClusteringMainEngine(generalDatakeeper.getGlobalDataKeeper(),wb,wd,wc);
 					mainEngine2.extractClusters(configuration.getNumberOfClusters());
-					globalDataKeeper.setClusterCollectors(mainEngine2.getClusterCollectors());
+					generalDatakeeper.getGlobalDataKeeper().setClusterCollectors(mainEngine2.getClusterCollectors());
 					
-					ClusterValidatorMainEngine lala = new ClusterValidatorMainEngine(globalDataKeeper);
+					ClusterValidatorMainEngine lala = new ClusterValidatorMainEngine(generalDatakeeper.getGlobalDataKeeper());
 					lala.run();
 					
 					lalaString=lalaString+wb+"\t"+wd+"\t"+wc
@@ -1746,11 +1747,11 @@ private void makeZoomAreaTableForCluster() {
 		String lalaString="Birth Weight:"+"\tDeath Weight:"+"\tChange Weight:"+"\n";
 		int counter=0;
 		
-		TableClusteringMainEngine mainEngine2 = new TableClusteringMainEngine(globalDataKeeper,0.333,0.333,0.333);
+		TableClusteringMainEngine mainEngine2 = new TableClusteringMainEngine(generalDatakeeper.getGlobalDataKeeper(),0.333,0.333,0.333);
 		mainEngine2.extractClusters(4);
-		globalDataKeeper.setClusterCollectors(mainEngine2.getClusterCollectors());
+		generalDatakeeper.getGlobalDataKeeper().setClusterCollectors(mainEngine2.getClusterCollectors());
 		
-		ClusterValidatorMainEngine lala = new ClusterValidatorMainEngine(globalDataKeeper);
+		ClusterValidatorMainEngine lala = new ClusterValidatorMainEngine(generalDatakeeper.getGlobalDataKeeper());
 		lala.run();
 		
 		lalaString=lalaString+"\n"+"0.333"+"\t"+"0.333"+"\t"+"0.333"
@@ -1761,11 +1762,11 @@ private void makeZoomAreaTableForCluster() {
 			for(double wd=(1.0-wb); wd>=0.0; wd=wd-0.5){
 				
 					double wc=1.0-(wb+wd);
-					mainEngine2 = new TableClusteringMainEngine(globalDataKeeper,wb,wd,wc);
+					mainEngine2 = new TableClusteringMainEngine(generalDatakeeper.getGlobalDataKeeper(),wb,wd,wc);
 					mainEngine2.extractClusters(4);
-					globalDataKeeper.setClusterCollectors(mainEngine2.getClusterCollectors());
+					generalDatakeeper.getGlobalDataKeeper().setClusterCollectors(mainEngine2.getClusterCollectors());
 					
-					lala = new ClusterValidatorMainEngine(globalDataKeeper);
+					lala = new ClusterValidatorMainEngine(generalDatakeeper.getGlobalDataKeeper());
 					lala.run();
 					
 					lalaString=lalaString+"\n"+wb+"\t"+wd+"\t"+wc
@@ -1804,7 +1805,7 @@ private void makeZoomAreaTableForCluster() {
 	
 	public void fillPhasesTree(){
 		
-		 TreeConstructionPhases tc=new TreeConstructionPhases(globalDataKeeper);
+		 TreeConstructionPhases tc=new TreeConstructionPhases(generalDatakeeper.getGlobalDataKeeper());
 		 tablesTree=tc.constructTree();
 		 
 		 tablesTree.addTreeSelectionListener(new TreeSelectionListener () {
@@ -1917,7 +1918,7 @@ private void makeZoomAreaTableForCluster() {
 	}
 	
 	
-	private void initiateLoadState()
+	public void initiateLoadState()
 	{
 		configuration.setTimeWeight((float)0.5); 
 		configuration.setChangeWeight((float)0.5);
@@ -1926,110 +1927,117 @@ private void makeZoomAreaTableForCluster() {
 		
 		generalDatakeeper = new GeneralDatakeeper(); 
 		
-		//finalColumnsZoomArea=generalDatakeeper.getTableConstructionIDU().getConstructedColumns();
-		//finalRowsZoomArea=generalDatakeeper.getTableConstructionIDU().getConstructedRows();
-		//tabbedPane.setSelectedIndex(0);
-		//segmentSizeZoomArea = generalDatakeeper.getTableConstructionIDU().getSegmentSize();
+	}
+	public void makeGeneralTableIDU()
+	{
+		String[][] sortedRows = generalDatakeeper.sortRows(configuration.getFinalRowsZoomArea());
+		
+		setSortedRows(sortedRows);
+		setPLDVisibility(true);
+		
+		setGeneralTablesListeners(generalDatakeeper.makeGeneralTableIDU(configuration));
 	}
 	
-	private void importData(File file)
+	
+	public void importData(File file)
 	{
+		this.generalDatakeeper = new GeneralDatakeeper();
+		generalDatakeeper.importDataFromFile(file);
+		generalDatakeeper.createTableConstructionIDU();
 		
-		PPLFile pplFile = service.readFile(file);
-		generalDatakeeper.setPplFile(pplFile);
+		setIDUPanel();
+			
+		makeGeneralTableIDU();
 		
-		globalDataKeeper= service.setGlobalData(pplFile.getDatasetTxt(), pplFile.getTransitionsFile());
-		generalDatakeeper.setGlobalDataKeeper(globalDataKeeper);
-		TableConstructionIDU constructedTable = service.createTableConstructionIDU(globalDataKeeper.getAllPPLSchemas(),globalDataKeeper.getAllPPLTransitions());
-		generalDatakeeper.setTableConstructionIDU(constructedTable);
+		generalDatakeeper.createPhaseAnalyserEngine(configuration);
 		
-		//
+		configuration.setNumberOfClusters(14);
+		generalDatakeeper.createTableClusteringMainEngine(configuration.getNumberOfClusters());
+		
+		fillTable();
+		printPPLData();
+		fillTree();
+	}
+	
+	
+	
+	
+	public void setIDUPanel()
+	{
 		configuration.setFinalColumnsZoomArea(generalDatakeeper.getTableConstructionIDU().getConstructedColumns());
 		configuration.setFinalRowsZoomArea(generalDatakeeper.getTableConstructionIDU().getConstructedRows());
 		tabbedPane.setSelectedIndex(0);
 		segmentSizeZoomArea = generalDatakeeper.getTableConstructionIDU().getSegmentSize();
-		//
+	}
+	
+	public void setSortedRows(String[][] sortedRows)
+	{
+		//makeGeneralTableIDU
 		
-		PldRowSorter sorter=new PldRowSorter();
-		
-		configuration.setFinalRowsZoomArea(sorter.sortRows(configuration.getFinalRowsZoomArea(), globalDataKeeper.getAllPPLTables()));
-		
-		  
-		showingPld=true;
-		zoomInButton.setVisible(true);
-		zoomOutButton.setVisible(true);
-		
-		showThisToPopup.setVisible(true);  
-		
-		//filltable
-		makeGeneralTableIDU();
-		
-		
-		PhaseAnalyzerMainEngine mainPhaseEngine= service.createPhaseAnalyserEngine(configuration,globalDataKeeper,generalDatakeeper.getPPLFile());
-		service.connectTransitionsWithPhases(mainPhaseEngine, globalDataKeeper.getAllPPLTransitions());
-		
-		globalDataKeeper.setPhaseCollectors(mainPhaseEngine.getPhaseCollectors());
-		configuration.setNumberOfClusters(14);
-		TableClusteringMainEngine mainClusterEngine = service.createTableClusteringMainEngine(globalDataKeeper, configuration.getNumberOfClusters());
-		globalDataKeeper.setClusterCollectors(mainClusterEngine.getClusterCollectors());
-		fillTable(configuration);
-		fillTree();
-		
+		configuration.setFinalRowsZoomArea(sortedRows);
+		configuration.setSelectedRows(new ArrayList<Integer>());
+	}
+	
+	public void setPLDVisibility(boolean action)
+	{
+		showingPld=action;
+		zoomInButton.setVisible(action);
+		zoomOutButton.setVisible(action);
+		showThisToPopup.setVisible(action); 
 		
 	}
 	
-	public void makeGeneralTableIDU() 
+	
+	
+	
+	public void fillTable() 
 	{
-		ArrayList<Phase> initialPhases = new ArrayList<>();
-		if(globalDataKeeper.getPhaseCollectors() != null  && globalDataKeeper.getPhaseCollectors().size() >0 && globalDataKeeper.getPhaseCollectors().get(0) != null)
+		if(generalDatakeeper.getGlobalDataKeeper().getPhaseCollectors().size()==0)
 		{
-			initialPhases = globalDataKeeper.getPhaseCollectors().get(0).getPhases();
-
+			return;
 		}
-		final JvTable generalTable = service.makeGeneralTableIDU(configuration, initialPhases);
-		setGeneralTablesListeners(generalTable);	
+		constructTableWithClusters();
+		
+		tabbedPane.setSelectedIndex(0);
+		uniformlyDistributedButton.setVisible(true);
+		notUniformlyDistributedButton.setVisible(true);
+		
+		makeGeneralTablePhases();
+		
+		fillClustersTree(generalDatakeeper.getGlobalDataKeeper().getClusterCollectors().get(0).getClusters());
 	}
 	
-	public void fillTable(Configuration configuration) 
+	public void constructTableWithClusters() 
 	{
+		TableConstructionWithClusters table = generalDatakeeper.constructTableWithClusters();
 		
-		if(globalDataKeeper.getPhaseCollectors().size()!=0){
-			TableConstructionWithClusters table=new TableConstructionWithClusters(globalDataKeeper);
-			//TODO AYRIO
-			table.constructColumns();
-			table.constructRows();
-			final String[] columns= table.getConstructedColumns();
-			final String[][] rows= table.getConstructedRows();
-			
-			configuration.setSegmentSize(table.getSegmentSize());
-			configuration.setFinalColumns(columns);
-			configuration.setFinalRows(rows);
-			tabbedPane.setSelectedIndex(0);
-			
-			uniformlyDistributedButton.setVisible(true);
-			notUniformlyDistributedButton.setVisible(true);
-			selectedRows=new ArrayList<Integer>();
-			
-			makeGeneralTablePhases();
-			
-			fillClustersTree(globalDataKeeper.getClusterCollectors().get(0).getClusters());
-		}
-		System.out.println("Schemas:"+globalDataKeeper.getAllPPLSchemas().size());
-		System.out.println("Transitions:"+globalDataKeeper.getAllPPLTransitions().size());
-		System.out.println("Tables:"+globalDataKeeper.getAllPPLTables().size());
-
+		final String[] columns= table.getConstructedColumns();
+		final String[][] rows= table.getConstructedRows();
 		
-
+		configuration.setSegmentSize(table.getSegmentSize());
+		configuration.setFinalColumns(columns);
+		configuration.setFinalRows(rows);
+		configuration.setSelectedRows(new ArrayList<Integer>());
 	}
 	
 	private void makeGeneralTablePhases(){
-		service.makeGeneralTablePhases(configuration);
-		final JvTable generalTable = service.makeGeneralTablePhases(configuration);
+		JvTable generalTable = generalDatakeeper.makeGeneralTablePhases(configuration);
 		setMoreTableListeners(generalTable);
 	}
 	
+	
+	public void printPPLData() 
+	{
+		System.out.println("Schemas:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLSchemas().size());
+		System.out.println("Transitions:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTransitions().size());
+		System.out.println("Tables:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTables().size());
+	}
+	
+	
 	private void setGeneralTablesListeners(final JvTable generalTable){
-		final IDUTableRenderer renderer = new IDUTableRenderer(Gui.this,configuration.getFinalRowsZoomArea(), globalDataKeeper, configuration.getSegmentSize());
+		final IDUTableRenderer renderer = new IDUTableRenderer(Gui.this,configuration.getFinalRowsZoomArea(), 
+				generalDatakeeper.getGlobalDataKeeper(), 
+				configuration.getSegmentSize());
 		//generalTable.setDefaultRenderer(Object.class, renderer);
 		
 		
@@ -2054,15 +2062,15 @@ private void makeZoomAreaTableForCluster() {
 		        if(column==wholeColZoomArea && wholeColZoomArea!=0){
 		        	
 		        	String description="Transition ID:"+table.getColumnName(column)+"\n";
-		        	description=description+"Old Version Name:"+globalDataKeeper.getAllPPLTransitions().
+		        	description=description+"Old Version Name:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTransitions().
 	        				get(Integer.parseInt(table.getColumnName(column))).getOldVersionName()+"\n";
-	        		description=description+"New Version Name:"+globalDataKeeper.getAllPPLTransitions().
+	        		description=description+"New Version Name:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTransitions().
 	        				get(Integer.parseInt(table.getColumnName(column))).getNewVersionName()+"\n";		        		
 	        		
-        			description=description+"Transition Changes:"+globalDataKeeper.getAllPPLTransitions().get(Integer.parseInt(table.getColumnName(column))).getNumberOfChangesForOneTr()+"\n";
-        			description=description+"Additions:"+globalDataKeeper.getAllPPLTransitions().get(Integer.parseInt(table.getColumnName(column))).getNumberOfAdditionsForOneTr()+"\n";
-        			description=description+"Deletions:"+globalDataKeeper.getAllPPLTransitions().get(Integer.parseInt(table.getColumnName(column))).getNumberOfDeletionsForOneTr()+"\n";
-        			description=description+"Updates:"+globalDataKeeper.getAllPPLTransitions().get(Integer.parseInt(table.getColumnName(column))).getNumberOfUpdatesForOneTr()+"\n";
+        			description=description+"Transition Changes:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTransitions().get(Integer.parseInt(table.getColumnName(column))).getNumberOfChangesForOneTr()+"\n";
+        			description=description+"Additions:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTransitions().get(Integer.parseInt(table.getColumnName(column))).getNumberOfAdditionsForOneTr()+"\n";
+        			description=description+"Deletions:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTransitions().get(Integer.parseInt(table.getColumnName(column))).getNumberOfDeletionsForOneTr()+"\n";
+        			description=description+"Updates:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTransitions().get(Integer.parseInt(table.getColumnName(column))).getNumberOfUpdatesForOneTr()+"\n";
 
         			
 	        		descriptionText.setText(description);
@@ -2079,11 +2087,11 @@ private void makeZoomAreaTableForCluster() {
 		        		c.setBackground(cl);
 		        		
 		        		String description="Table:"+configuration.getFinalRowsZoomArea()[row][0]+"\n";
-		        		description=description+"Birth Version Name:"+globalDataKeeper.getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).getBirth()+"\n";
-		        		description=description+"Birth Version ID:"+globalDataKeeper.getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).getBirthVersionID()+"\n";
-		        		description=description+"Death Version Name:"+globalDataKeeper.getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).getDeath()+"\n";
-		        		description=description+"Death Version ID:"+globalDataKeeper.getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).getDeathVersionID()+"\n";
-		        		description=description+"Total Changes:"+globalDataKeeper.getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).getTotalChanges()+"\n";
+		        		description=description+"Birth Version Name:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).getBirth()+"\n";
+		        		description=description+"Birth Version ID:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).getBirthVersionID()+"\n";
+		        		description=description+"Death Version Name:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).getDeath()+"\n";
+		        		description=description+"Death Version ID:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).getDeathVersionID()+"\n";
+		        		description=description+"Total Changes:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).getTotalChanges()+"\n";
 
 		        		
 		        		descriptionText.setText(description);
@@ -2114,19 +2122,19 @@ private void makeZoomAreaTableForCluster() {
 		        		if(!table.getColumnName(column).contains("Table name")){
 			        		description="Table:"+configuration.getFinalRowsZoomArea()[row][0]+"\n";
 			        		
-			        		description=description+"Old Version Name:"+globalDataKeeper.getAllPPLTransitions().
+			        		description=description+"Old Version Name:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTransitions().
 			        				get(Integer.parseInt(table.getColumnName(column))).getOldVersionName()+"\n";
-			        		description=description+"New Version Name:"+globalDataKeeper.getAllPPLTransitions().
+			        		description=description+"New Version Name:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTransitions().
 			        				get(Integer.parseInt(table.getColumnName(column))).getNewVersionName()+"\n";		        		
-			        		if(globalDataKeeper.getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).
+			        		if(generalDatakeeper.getGlobalDataKeeper().getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).
 			        				getTableChanges().getTableAtChForOneTransition(Integer.parseInt(table.getColumnName(column)))!=null){
-			        			description=description+"Transition Changes:"+globalDataKeeper.getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).
+			        			description=description+"Transition Changes:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).
 			        				getTableChanges().getTableAtChForOneTransition(Integer.parseInt(table.getColumnName(column))).size()+"\n";
-			        			description=description+"Additions:"+globalDataKeeper.getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).
+			        			description=description+"Additions:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).
 			        					getNumberOfAdditionsForOneTr(Integer.parseInt(table.getColumnName(column)))+"\n";
-			        			description=description+"Deletions:"+globalDataKeeper.getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).
+			        			description=description+"Deletions:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).
 			        					getNumberOfDeletionsForOneTr(Integer.parseInt(table.getColumnName(column)))+"\n";
-			        			description=description+"Updates:"+globalDataKeeper.getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).
+			        			description=description+"Updates:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).
 			        					getNumberOfUpdatesForOneTr(Integer.parseInt(table.getColumnName(column)))+"\n";
 			        			
 			        		}
@@ -2327,17 +2335,17 @@ private void makeZoomAreaTableForCluster() {
 		        if(column==configuration.getWholeCol() && configuration.getWholeCol()!=0){
 		        	
 		        	String description=table.getColumnName(column)+"\n";
-		          	description=description+"First Transition ID:"+globalDataKeeper.getPhaseCollectors().get(0).getPhases().
+		          	description=description+"First Transition ID:"+generalDatakeeper.getGlobalDataKeeper().getPhaseCollectors().get(0).getPhases().
 	        				get(column-1).getStartPos()+"\n";
-	        		description=description+"Last Transition ID:"+globalDataKeeper.getPhaseCollectors().get(0).getPhases().
+	        		description=description+"Last Transition ID:"+generalDatakeeper.getGlobalDataKeeper().getPhaseCollectors().get(0).getPhases().
 	        				get(column-1).getEndPos()+"\n";
-	        		description=description+"Total Changes For This Phase:"+globalDataKeeper.getPhaseCollectors().get(0).getPhases().
+	        		description=description+"Total Changes For This Phase:"+generalDatakeeper.getGlobalDataKeeper().getPhaseCollectors().get(0).getPhases().
 	        				get(column-1).getTotalUpdates()+"\n";
-	        		description=description+"Additions For This Phase:"+globalDataKeeper.getPhaseCollectors().get(0).getPhases().
+	        		description=description+"Additions For This Phase:"+generalDatakeeper.getGlobalDataKeeper().getPhaseCollectors().get(0).getPhases().
 	        				get(column-1).getTotalAdditionsOfPhase()+"\n";
-	        		description=description+"Deletions For This Phase:"+globalDataKeeper.getPhaseCollectors().get(0).getPhases().
+	        		description=description+"Deletions For This Phase:"+generalDatakeeper.getGlobalDataKeeper().getPhaseCollectors().get(0).getPhases().
 	        				get(column-1).getTotalDeletionsOfPhase()+"\n";
-	        		description=description+"Updates For This Phase:"+globalDataKeeper.getPhaseCollectors().get(0).getPhases().
+	        		description=description+"Updates For This Phase:"+generalDatakeeper.getGlobalDataKeeper().getPhaseCollectors().get(0).getPhases().
 	        				get(column-1).getTotalUpdatesOfPhase()+"\n";
 		        	
 	        		descriptionText.setText(description);
@@ -2352,22 +2360,22 @@ private void makeZoomAreaTableForCluster() {
 		        		
 		        		if(configuration.getFinalRows()[row][0].contains("Cluster")){
 			        		String description="Cluster:"+configuration.getFinalRows()[row][0]+"\n";
-			        		description=description+"Birth Version Name:"+globalDataKeeper.getClusterCollectors().get(0).getClusters().get(row).getBirthSqlFile()+"\n";
-			        		description=description+"Birth Version ID:"+globalDataKeeper.getClusterCollectors().get(0).getClusters().get(row).getBirth()+"\n";
-			        		description=description+"Death Version Name:"+globalDataKeeper.getClusterCollectors().get(0).getClusters().get(row).getDeathSqlFile()+"\n";
-			        		description=description+"Death Version ID:"+globalDataKeeper.getClusterCollectors().get(0).getClusters().get(row).getDeath()+"\n";
-			        		description=description+"Tables:"+globalDataKeeper.getClusterCollectors().get(0).getClusters().get(row).getNamesOfTables().size()+"\n";
-			        		description=description+"Total Changes:"+globalDataKeeper.getClusterCollectors().get(0).getClusters().get(row).getTotalChanges()+"\n";
+			        		description=description+"Birth Version Name:"+generalDatakeeper.getGlobalDataKeeper().getClusterCollectors().get(0).getClusters().get(row).getBirthSqlFile()+"\n";
+			        		description=description+"Birth Version ID:"+generalDatakeeper.getGlobalDataKeeper().getClusterCollectors().get(0).getClusters().get(row).getBirth()+"\n";
+			        		description=description+"Death Version Name:"+generalDatakeeper.getGlobalDataKeeper().getClusterCollectors().get(0).getClusters().get(row).getDeathSqlFile()+"\n";
+			        		description=description+"Death Version ID:"+generalDatakeeper.getGlobalDataKeeper().getClusterCollectors().get(0).getClusters().get(row).getDeath()+"\n";
+			        		description=description+"Tables:"+generalDatakeeper.getGlobalDataKeeper().getClusterCollectors().get(0).getClusters().get(row).getNamesOfTables().size()+"\n";
+			        		description=description+"Total Changes:"+generalDatakeeper.getGlobalDataKeeper().getClusterCollectors().get(0).getClusters().get(row).getTotalChanges()+"\n";
 			        		
 			        		descriptionText.setText(description);
 		        		}
 		        		else{
 			        		String description="Table:"+configuration.getFinalRows()[row][0]+"\n";
-			        		description=description+"Birth Version Name:"+globalDataKeeper.getAllPPLTables().get(configuration.getFinalRows()[row][0]).getBirth()+"\n";
-			        		description=description+"Birth Version ID:"+globalDataKeeper.getAllPPLTables().get(configuration.getFinalRows()[row][0]).getBirthVersionID()+"\n";
-			        		description=description+"Death Version Name:"+globalDataKeeper.getAllPPLTables().get(configuration.getFinalRows()[row][0]).getDeath()+"\n";
-			        		description=description+"Death Version ID:"+globalDataKeeper.getAllPPLTables().get(configuration.getFinalRows()[row][0]).getDeathVersionID()+"\n";
-			        		description=description+"Total Changes:"+globalDataKeeper.getAllPPLTables().get(configuration.getFinalRows()[row][0]).getTotalChanges()+"\n";
+			        		description=description+"Birth Version Name:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTables().get(configuration.getFinalRows()[row][0]).getBirth()+"\n";
+			        		description=description+"Birth Version ID:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTables().get(configuration.getFinalRows()[row][0]).getBirthVersionID()+"\n";
+			        		description=description+"Death Version Name:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTables().get(configuration.getFinalRows()[row][0]).getDeath()+"\n";
+			        		description=description+"Death Version ID:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTables().get(configuration.getFinalRows()[row][0]).getDeathVersionID()+"\n";
+			        		description=description+"Total Changes:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTables().get(configuration.getFinalRows()[row][0]).getTotalChanges()+"\n";
 			        		descriptionText.setText(description);
 
 		        		}
@@ -2399,27 +2407,27 @@ private void makeZoomAreaTableForCluster() {
 			        		if(configuration.getFinalRows()[row][0].contains("Cluster")){
 
 				        		description=configuration.getFinalRows()[row][0]+"\n";
-				        		description=description+"Tables:"+globalDataKeeper.getClusterCollectors().get(0).getClusters().get(row).getNamesOfTables().size()+"\n\n";
+				        		description=description+"Tables:"+generalDatakeeper.getGlobalDataKeeper().getClusterCollectors().get(0).getClusters().get(row).getNamesOfTables().size()+"\n\n";
 
 				        		description=description+table.getColumnName(column)+"\n";
-				        		description=description+"First Transition ID:"+globalDataKeeper.getPhaseCollectors().get(0).getPhases().
+				        		description=description+"First Transition ID:"+generalDatakeeper.getGlobalDataKeeper().getPhaseCollectors().get(0).getPhases().
 				        				get(column-1).getStartPos()+"\n";
-				        		description=description+"Last Transition ID:"+globalDataKeeper.getPhaseCollectors().get(0).getPhases().
+				        		description=description+"Last Transition ID:"+generalDatakeeper.getGlobalDataKeeper().getPhaseCollectors().get(0).getPhases().
 				        				get(column-1).getEndPos()+"\n\n";
 				        		description=description+"Total Changes For This Phase:"+tmpValue+"\n";
 				        		
 			        		}
 			        		else{
 			        			description=table.getColumnName(column)+"\n";
-				        		description=description+"First Transition ID:"+globalDataKeeper.getPhaseCollectors().get(0).getPhases().
+				        		description=description+"First Transition ID:"+generalDatakeeper.getGlobalDataKeeper().getPhaseCollectors().get(0).getPhases().
 				        				get(column-1).getStartPos()+"\n";
-				        		description=description+"Last Transition ID:"+globalDataKeeper.getPhaseCollectors().get(0).getPhases().
+				        		description=description+"Last Transition ID:"+generalDatakeeper.getGlobalDataKeeper().getPhaseCollectors().get(0).getPhases().
 				        				get(column-1).getEndPos()+"\n\n";
 			        			description=description+"Table:"+configuration.getFinalRows()[row][0]+"\n";
-				        		description=description+"Birth Version Name:"+globalDataKeeper.getAllPPLTables().get(configuration.getFinalRows()[row][0]).getBirth()+"\n";
-				        		description=description+"Birth Version ID:"+globalDataKeeper.getAllPPLTables().get(configuration.getFinalRows()[row][0]).getBirthVersionID()+"\n";
-				        		description=description+"Death Version Name:"+globalDataKeeper.getAllPPLTables().get(configuration.getFinalRows()[row][0]).getDeath()+"\n";
-				        		description=description+"Death Version ID:"+globalDataKeeper.getAllPPLTables().get(configuration.getFinalRows()[row][0]).getDeathVersionID()+"\n";
+				        		description=description+"Birth Version Name:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTables().get(configuration.getFinalRows()[row][0]).getBirth()+"\n";
+				        		description=description+"Birth Version ID:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTables().get(configuration.getFinalRows()[row][0]).getBirthVersionID()+"\n";
+				        		description=description+"Death Version Name:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTables().get(configuration.getFinalRows()[row][0]).getDeath()+"\n";
+				        		description=description+"Death Version ID:"+generalDatakeeper.getGlobalDataKeeper().getAllPPLTables().get(configuration.getFinalRows()[row][0]).getDeathVersionID()+"\n";
 				        		description=description+"Total Changes For This Phase:"+tmpValue+"\n";
 				        		
 			        		}
@@ -2634,7 +2642,7 @@ private void makeZoomAreaTableForCluster() {
 	}
 	public void fillTree(){
 		
-		 TreeConstructionGeneral treeConstruction=new TreeConstructionGeneral(globalDataKeeper.getAllPPLSchemas());
+		 TreeConstructionGeneral treeConstruction=new TreeConstructionGeneral(generalDatakeeper.getGlobalDataKeeper().getAllPPLSchemas());
 		 tablesTree=new JTree();
 		 tablesTree=treeConstruction.constructTree();
 		 tablesTree.addTreeSelectionListener(new TreeSelectionListener () {
@@ -2696,7 +2704,5 @@ private void makeZoomAreaTableForCluster() {
 		
 	}
 
-	
-	
 	
 }

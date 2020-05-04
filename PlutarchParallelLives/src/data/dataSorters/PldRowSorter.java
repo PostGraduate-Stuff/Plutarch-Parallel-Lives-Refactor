@@ -25,6 +25,7 @@ public class PldRowSorter {
 				if (finalRows[i][0].equals(ppl.getKey())) {
 					for(int j=0;j<finalRows[0].length; j++){
 						sortedRows[counter][j]=finalRows[i][j];
+						
 					}                               
 				}
 			}

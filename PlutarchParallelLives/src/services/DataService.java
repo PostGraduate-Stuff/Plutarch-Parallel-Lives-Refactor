@@ -75,7 +75,7 @@ public class DataService implements IDataService
 		}	
 		return globalDataKeeper;
 	}
-	
+	@Override
 	public TableConstructionIDU createTableConstructionIDU(TreeMap<String,PPLSchema> AllPPLSchemas, TreeMap<Integer,PPLTransition> AllPPLTransitions)
 	{
 		TableConstructionIDU constructedTable=new TableConstructionIDU(AllPPLSchemas,AllPPLTransitions);
@@ -83,7 +83,8 @@ public class DataService implements IDataService
 		constructedTable.constructRows();
 		return constructedTable;
 	}
-
+	
+	@Override
 	public PhaseAnalyzerMainEngine createPhaseAnalyserEngine(Configuration configuration,
 									GlobalDataKeeper globalDataKeeper,
 									PPLFile pplFile) 
@@ -98,7 +99,8 @@ public class DataService implements IDataService
 		return mainEngine;
 	
 	}
-	
+
+	@Override
 	public void connectTransitionsWithPhases(PhaseAnalyzerMainEngine mainEngine,
 											TreeMap<Integer,PPLTransition> allPPLTransitions) 
 	{
@@ -114,7 +116,7 @@ public class DataService implements IDataService
 		
 	}
 	
-	
+	@Override
 	public TableClusteringMainEngine createTableClusteringMainEngine(GlobalDataKeeper globalDataKeeper, int numberOfClusters) 
 	{
 		Double birthWeight = new Double(0.3);
@@ -131,13 +133,25 @@ public class DataService implements IDataService
 	
 	
 	
-	
+	@Override
 	public JvTable makeGeneralTableIDU(Configuration configuration,
 									 ArrayList<Phase> initialPhases) 
 	{
+		int numberOfColumns=configuration.getFinalRowsZoomArea()[0].length;
+		int numberOfRows=configuration.getFinalRowsZoomArea().length;
+		
+		//selectedRows=new ArrayList<Integer>();
+		
+		String[][] rows=new String[numberOfRows][numberOfColumns];
+		
+		for(int i=0; i<numberOfRows; i++){
+			
+			rows[i][0]=configuration.getFinalRowsZoomArea()[i][0];
+			
+		}
 		
 		MyTableModel zoomModel= new MyTableModel();
-		zoomModel.initializeZoomModel(configuration.getFinalColumnsZoomArea(), configuration.getFinalRowsZoomArea());
+		zoomModel.initializeZoomModel(configuration.getFinalColumnsZoomArea(), rows);
 		
 		final JvTable generalTable=new JvTable(zoomModel);
 		
@@ -192,19 +206,21 @@ public class DataService implements IDataService
 		return generalTable;
 	}
 
+	@Override
 	public JvTable makeGeneralTablePhases(Configuration configuration) {
 		
-		
+		System.out.println("GeneralTable Phases Rows");
 		int numberOfColumns=configuration.getFinalRows()[0].length;
 		int numberOfRows=configuration.getFinalRows().length;
-		
+		System.out.println("numberOfColumns:  "+ numberOfColumns);
+		System.out.println("numberOfRows:  "+ numberOfRows);
 		
 		String[][] rows=new String[numberOfRows][numberOfColumns];
 		
 		for(int i=0; i<numberOfRows; i++){
 			
 			rows[i][0]=configuration.getFinalRows()[i][0];
-			
+			System.out.println(rows[i][0]);
 		}
 		
 		MyTableModel generalModel=new MyTableModel(configuration.getFinalColumns(), rows);

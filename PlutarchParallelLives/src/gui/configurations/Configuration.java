@@ -1,5 +1,7 @@
 package gui.configurations;
 
+import java.util.ArrayList;
+
 public class Configuration 
 {
 	private Float timeWeight=null;
@@ -20,6 +22,8 @@ public class Configuration
 	private String[][] finalRows=null;
 	private String[] finalColumnsZoomArea = null; 
 	private String[][] finalRowsZoomArea =null;
+	
+	private ArrayList<Integer> selectedRows=new ArrayList<Integer>();
 
 	public Configuration(Float timeWeight,
 						 Float changeWeight,
@@ -171,4 +175,13 @@ public class Configuration
 	public void setFinalRowsZoomArea(String[][] finalRowsZoomArea) {
 		this.finalRowsZoomArea = finalRowsZoomArea;
 	}
+	
+	public void setSelectedRows(ArrayList<Integer> selectedRows) {
+		this.selectedRows = selectedRows;
+	}
+
+	public ArrayList<Integer> getSelectedRows() {
+		return this.selectedRows;
+	}
+	
 }

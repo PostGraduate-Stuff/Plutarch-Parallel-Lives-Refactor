@@ -8,10 +8,12 @@ import java.util.TreeMap;
 import javax.swing.JTable;
 
 import data.dataKeeper.GlobalDataKeeper;
+import data.dataPPL.pplSQLSchema.PPLSchema;
 import data.dataPPL.pplTransition.PPLTransition;
 import gui.configurations.Configuration;
 import gui.tableElements.commons.JvTable;
 import gui.tableElements.commons.MyTableModel;
+import gui.tableElements.tableConstructors.TableConstructionIDU;
 import gui.tableElements.tableRenderers.IDUHeaderTableRenderer;
 import phaseAnalyzer.commons.Phase;
 import phaseAnalyzer.engine.PhaseAnalyzerMainEngine;
@@ -34,5 +36,7 @@ public interface IDataService {
 				 ArrayList<Phase> initialPhases) ;
 	
 	public JvTable makeGeneralTablePhases(Configuration configuration);
+	
+	public TableConstructionIDU createTableConstructionIDU(TreeMap<String,PPLSchema> AllPPLSchemas, TreeMap<Integer,PPLTransition> AllPPLTransitions);
 
 }

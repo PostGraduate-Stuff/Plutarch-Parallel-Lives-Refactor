@@ -13,7 +13,7 @@ import data.dataPPL.pplTransition.TableChange;
 
 public class TableConstructionIDU implements PldConstruction {
 
-	private static TreeMap<String,PPLSchema> allPPLSchemas=new TreeMap<String,PPLSchema>();
+	private TreeMap<String,PPLSchema> allPPLSchemas=new TreeMap<String,PPLSchema>();
 	private ArrayList<PPLTable>	tables=new ArrayList<PPLTable>();
 	private TreeMap<Integer,PPLTransition> allPPLTransitions = new TreeMap<Integer,PPLTransition>();
 	
@@ -76,7 +76,11 @@ public class TableConstructionIDU implements PldConstruction {
 		{
 			this.constructedColumns[j]=columnsList.get(j);
 		}	
+		
 	}
+	
+
+	
 	
 	public void constructRows(){
 		
@@ -85,8 +89,8 @@ public class TableConstructionIDU implements PldConstruction {
 		String[][] tmpRows =  getRows(allRows);
 		
 		calculateSegmentSize();
-		this.constructedRows = tmpRows;
 		
+		this.constructedRows = tmpRows;
 	}
 	
 	public String[][] getRows(ArrayList<String[]> allRows){
@@ -179,8 +183,177 @@ public class TableConstructionIDU implements PldConstruction {
 		}
 		return toReturn;
 	}
+private String[] constructOneRow(PPLTable oneTable,int schemaVersion){
+		
+		String[] oneRow=new String[columnsNumber];
+		int deletedAllTable=0;
+		int pointerCell=0;
+		int updn=0;
+		int deln=0;
+		int insn=0;
+		int totalChangesForOneTransition=0;
+		boolean reborn = true;
+		oneRow[pointerCell]=oneTable.getName();
+		
+		if(schemaVersion==-1){
+			pointerCell++;
+			
+			
+		}
+		else{
+			
+			for(int i=0; i<schemaColumnId.length; i++){
+				
+				if(schemaVersion == schemaColumnId[i][0]){
+					pointerCell=schemaColumnId[i][1];
+					break;
+				}
+				
+			}
+			
+		}
+		
+		
+		int initialization=0;
+		if(schemaVersion>0){
+			initialization=schemaVersion;
+		}
+		
+		Integer[] mapKeys = new Integer[allPPLTransitions.size()];
+		int pos2 = 0;
+		for (Integer key : allPPLTransitions.keySet()) {
+		    mapKeys[pos2++] = key;
+		}
+		
+		Integer pos3=null;
+
+		for(int i=initialization; i<allPPLTransitions.size(); i++){
+			
+			pos3=mapKeys[i];
+			
+			PPLTransition  tmpTL=allPPLTransitions.get(pos3);
+			
+			String sc=tmpTL.getNewVersionName();
+			
+			
+			ArrayList<TableChange> tmpTR=tmpTL.getTableChanges();
+			
+			updn=0;
+			deln=0;
+			insn=0;
+			
+			if(tmpTR!=null){
+				totalChangesForOneTransition=-1;
+				
+				for(int j=0; j<tmpTR.size(); j++){
+					
+					TableChange tableChange=tmpTR.get(j);
+					if(tableChange.getAffectedTableName().equals(oneTable.getName())){
+						if(deletedAllTable==1){
+							reborn=true;
+						}
+						deletedAllTable=0;
+						
+						ArrayList<AtomicChange> atChs = tableChange.getTableAtChForOneTransition();
+
+						for(int k=0; k<atChs.size(); k++){
+							
+							
+							if (atChs.get(k).getType().contains("Addition")){
+								deletedAllTable=0;
+								insn++;
+								
+								if(insn>maxInsersions){
+									maxInsersions=insn;
+								}
+								
+							}
+							else if(atChs.get(k).getType().contains("Deletion")){
+
+								deln++;
+								
+								 if(deln>maxDeletions){
+										maxDeletions=deln;
+										
+								 }
+								 								 
+								 int num=getNumOfAttributesOfNextSchema(sc, oneTable.getName());
+								 if(num==0){
+									 
+									 deletedAllTable=1;
+									 
+								 }
+								 
+							}
+							else{
+
+								updn++;
+								
+								if(updn>maxUpdates){
+									maxUpdates=updn;
+								}
+																
+							}
+							
+						}
+					}
+					 
+					 
+				}
+				
+				
+			}
+			if(pointerCell>=columnsNumber){
+				
+				break;
+			}
+			totalChangesForOneTransition=insn+updn+deln;
+			if(totalChangesForOneTransition>=0 && reborn){
+
+				oneRow[pointerCell]=Integer.toString(totalChangesForOneTransition);
+				
+			}
+			
+			pointerCell++;
+			if(deletedAllTable==1){
+				if(pointerCell>=columnsNumber){
+					break;
+				}
+				if(!reborn){
+					oneRow[pointerCell]="";
+					pointerCell++;
+				}
+				reborn=false;
+				
+				
+			}
+			
+			if (totalChangesForOneTransition>maxTotalChangesForOneTr) {
+				maxTotalChangesForOneTr=totalChangesForOneTransition;
+			}
+			
+			insn=0;
+			updn=0;
+			deln=0;
+			
+			
+		}
+		
+		for(int i=0; i<oneRow.length; i++){
+			if(oneRow[i]==null){
+				oneRow[i]="";
+			}
+		}
+		String lala="";
+		for (int i = 0; i < oneRow.length; i++) {
+			lala=lala+oneRow[i]+",";
+		}	
 	
+		return oneRow;
+		
+	}
 	
+	/*
 	private String[] constructOneRow(PPLTable oneTable,int schemaVersion){
 		
 		String[] oneRow=new String[columnsNumber];
@@ -264,7 +437,7 @@ public class TableConstructionIDU implements PldConstruction {
 		return oneRow;
 		
 	}
-	
+	*/
 	public int calculateTotalChanges(PPLTransition tempTransition, PPLTable oneTable){
 		
 		String newVersionName=tempTransition.getNewVersionName();
