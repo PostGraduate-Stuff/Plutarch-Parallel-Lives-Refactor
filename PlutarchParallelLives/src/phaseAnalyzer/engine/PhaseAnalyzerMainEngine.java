@@ -227,10 +227,10 @@ public class PhaseAnalyzerMainEngine {
 		phaseCollectors.get(0).connectPhasesWithTransitions(allPPLTransitions);
 	}
 	
-	public void parseInput(){
+	public String parseInput(){
 
 		this.transitionHistory = parser.parse(inputCsv, ";"); 
-		this.transitionHistory.consoleVerticalReport();
+		return this.transitionHistory.consoleVerticalReport();
 	}
 	
 	private ParserFactory parserFactory;

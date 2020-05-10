@@ -1,5 +1,6 @@
 package gui.tableElements.tableRenderers;
 
+import gui.configurations.Configuration;
 import gui.mainEngine.Gui;
 
 import java.awt.Color;
@@ -20,17 +21,17 @@ public class IDUTableRenderer extends DefaultTableCellRenderer{
 	private int selectedColumn;
 	//private ArrayList<String> selectedFromTree = new ArrayList<String>();
 	private Integer[] segmentSize=new Integer[3];
-	private Gui gui;
+	private Configuration configuration;
 
 	
-	public IDUTableRenderer(Gui gui,String[][] finalRows , GlobalDataKeeper globalDataKeeper,Integer[] segmentSize){
+	public IDUTableRenderer(Configuration configuration ,String[][] finalRows , GlobalDataKeeper globalDataKeeper,Integer[] segmentSize){
 		this.finalRows=finalRows;
 		//this.wholeCol = wholeCol;
 		this.globalDataKeeper = globalDataKeeper;
 		//this.selectedColumn=selectedColumn;
 		//this.selectedFromTree = selectedFromTree;
 		this.segmentSize=segmentSize;
-		this.gui=gui;
+		this.configuration=configuration;
 	}
 	
 	@Override
@@ -59,7 +60,7 @@ public class IDUTableRenderer extends DefaultTableCellRenderer{
 			description=description+"Updates:"+globalDataKeeper.getAllPPLTransitions().get(Integer.parseInt(table.getColumnName(column))).getNumberOfUpdatesForOneTr()+"\n";
 
 			
-    		gui.setDescription(description);
+			configuration.getDescriptionText().setText(description);
         	
         	Color cl = new Color(255,69,0,100);
 
@@ -80,7 +81,7 @@ public class IDUTableRenderer extends DefaultTableCellRenderer{
         		description=description+"Total Changes:"+globalDataKeeper.getAllPPLTables().get(finalRows[row][0]).getTotalChanges()+"\n";
 
         		
-        		gui.setDescription(description);
+        		configuration.getDescriptionText().setText(description);
         		
         		return c;
         		
@@ -105,15 +106,18 @@ public class IDUTableRenderer extends DefaultTableCellRenderer{
         	if (isSelected && hasFocus){
 
         		String description="";
-        		if(!table.getColumnName(column).contains("Table name")){
+        		if(!table.getColumnName(column).contains("Table name"))
+        		{
 	        		description="Table:"+finalRows[row][0]+"\n";
 	        		
 	        		description=description+"Old Version Name:"+globalDataKeeper.getAllPPLTransitions().
 	        				get(Integer.parseInt(table.getColumnName(column))).getOldVersionName()+"\n";
 	        		description=description+"New Version Name:"+globalDataKeeper.getAllPPLTransitions().
-	        				get(Integer.parseInt(table.getColumnName(column))).getNewVersionName()+"\n";		        		
+	        				get(Integer.parseInt(table.getColumnName(column))).getNewVersionName()+"\n";	
+	        		
 	        		if(globalDataKeeper.getAllPPLTables().get(finalRows[row][0]).
-	        				getTableChanges().getTableAtChForOneTransition(Integer.parseInt(table.getColumnName(column)))!=null){
+	        				getTableChanges().getTableAtChForOneTransition(Integer.parseInt(table.getColumnName(column)))!=null)
+	        		{
 	        			description=description+"Transition Changes:"+globalDataKeeper.getAllPPLTables().get(finalRows[row][0]).
 	        				getTableChanges().getTableAtChForOneTransition(Integer.parseInt(table.getColumnName(column))).size()+"\n";
 	        			description=description+"Additions:"+globalDataKeeper.getAllPPLTables().get(finalRows[row][0]).
@@ -132,7 +136,7 @@ public class IDUTableRenderer extends DefaultTableCellRenderer{
 	        			
 	        		}
 	        		
-	        		gui.setDescription(description);
+	        		configuration.getDescriptionText().setText(description);
         		}
         		Color cl = new Color(255,69,0,100);
         		

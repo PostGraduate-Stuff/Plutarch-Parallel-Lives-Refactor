@@ -14,7 +14,7 @@ import data.dataPPL.pplTransition.TableChange;
 
 public class TableConstructionClusterTablesPhasesZoomA implements PldConstruction {
 	
-	private static TreeMap<String,PPLSchema> allPPLSchemas=new TreeMap<String,PPLSchema>();
+	private TreeMap<String,PPLSchema> allPPLSchemas=new TreeMap<String,PPLSchema>();
 	private ArrayList<PPLTable>	tables=new ArrayList<PPLTable>();
 	private ArrayList<Phase> phases = new ArrayList<Phase>();
 
@@ -31,10 +31,10 @@ public class TableConstructionClusterTablesPhasesZoomA implements PldConstructio
 	private String[] constructedColumns;
 	private String[][] constructedRows;
 	
-	public TableConstructionClusterTablesPhasesZoomA(GlobalDataKeeper globalDataKeeper,ArrayList<String> tablesOfCluster){
+	public TableConstructionClusterTablesPhasesZoomA(TreeMap<String,PPLSchema> allPPLSchemas, ArrayList<Phase> phases, ArrayList<String> tablesOfCluster){
 		
-		allPPLSchemas=globalDataKeeper.getAllPPLSchemas();
-		phases=globalDataKeeper.getPhaseCollectors().get(0).getPhases();
+		this.allPPLSchemas=allPPLSchemas;
+		this.phases=phases;
 		this.tablesOfCluster=tablesOfCluster;
 		
 	}

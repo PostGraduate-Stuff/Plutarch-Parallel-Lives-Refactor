@@ -25,14 +25,17 @@ import javax.swing.tree.TreePath;
 
 import data.dataKeeper.GlobalDataKeeper;
 import data.dataPPL.pplSQLSchema.PPLSchema;
+import data.dataPPL.pplSQLSchema.PPLTable;
 import data.dataPPL.pplTransition.PPLTransition;
 import data.dataSorters.PldRowSorter;
 import gui.configurations.Configuration;
 import gui.mainEngine.Gui;
 import gui.tableElements.commons.JvTable;
 import gui.tableElements.commons.MyTableModel;
+import gui.tableElements.tableConstructors.TableConstructionClusterTablesPhasesZoomA;
 import gui.tableElements.tableConstructors.TableConstructionIDU;
 import gui.tableElements.tableConstructors.TableConstructionWithClusters;
+import gui.tableElements.tableConstructors.TableConstructionZoomArea;
 import gui.tableElements.tableRenderers.IDUHeaderTableRenderer;
 import gui.tableElements.tableRenderers.IDUTableRenderer;
 import gui.treeElements.TreeConstructionGeneral;
@@ -75,10 +78,34 @@ public class DataService implements IDataService
 		}	
 		return globalDataKeeper;
 	}
+	
+	public String[][] sortRows(String[][] finalRows, TreeMap<String,PPLTable> pplTables){
+		PldRowSorter sorter=new PldRowSorter();
+		return sorter.sortRows(finalRows, pplTables);
+	}
+	
 	@Override
 	public TableConstructionIDU createTableConstructionIDU(TreeMap<String,PPLSchema> AllPPLSchemas, TreeMap<Integer,PPLTransition> AllPPLTransitions)
 	{
 		TableConstructionIDU constructedTable=new TableConstructionIDU(AllPPLSchemas,AllPPLTransitions);
+		constructedTable.constructColumns();
+		constructedTable.constructRows();
+		return constructedTable;
+	}
+	
+	@Override
+	public TableConstructionClusterTablesPhasesZoomA createClusterTablesPhasesZoomA(TreeMap<String,PPLSchema> allPPLSchemas, ArrayList<Phase> phases, ArrayList<String> tablesOfCluster)
+	{
+		TableConstructionClusterTablesPhasesZoomA constructedTable=new TableConstructionClusterTablesPhasesZoomA(allPPLSchemas,phases,tablesOfCluster);
+		constructedTable.constructColumns();
+		constructedTable.constructRows();
+		return constructedTable;
+	}
+	
+	@Override
+	public TableConstructionZoomArea createTableConstructionZoomArea(GlobalDataKeeper globalDataKeeper,ArrayList<String> sSelectedTables,int selectedColumn)
+	{
+		TableConstructionZoomArea constructedTable=new TableConstructionZoomArea(globalDataKeeper,sSelectedTables, selectedColumn);
 		constructedTable.constructColumns();
 		constructedTable.constructRows();
 		return constructedTable;
@@ -205,46 +232,5 @@ public class DataService implements IDataService
 		
 		return generalTable;
 	}
-
-	@Override
-	public JvTable makeGeneralTablePhases(Configuration configuration) {
-		
-		System.out.println("GeneralTable Phases Rows");
-		int numberOfColumns=configuration.getFinalRows()[0].length;
-		int numberOfRows=configuration.getFinalRows().length;
-		System.out.println("numberOfColumns:  "+ numberOfColumns);
-		System.out.println("numberOfRows:  "+ numberOfRows);
-		
-		String[][] rows=new String[numberOfRows][numberOfColumns];
-		
-		for(int i=0; i<numberOfRows; i++){
-			
-			rows[i][0]=configuration.getFinalRows()[i][0];
-			System.out.println(rows[i][0]);
-		}
-		
-		MyTableModel generalModel=new MyTableModel(configuration.getFinalColumns(), rows);
-		
-		final JvTable generalTable=new JvTable(generalModel);
-		
-		generalTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		
-		generalTable.setShowGrid(false);
-		generalTable.setIntercellSpacing(new Dimension(0, 0));
-		
-		
-		generalTable.getColumnModel().getColumn(0).setPreferredWidth(86);
-		for(int i=1; i<generalTable.getColumnCount(); i++)
-		{
-			generalTable.getColumnModel().getColumn(i).setPreferredWidth(1);
-		}
-		return generalTable;
-		
-	    
-		
-		
-	}
-
-
 
 }

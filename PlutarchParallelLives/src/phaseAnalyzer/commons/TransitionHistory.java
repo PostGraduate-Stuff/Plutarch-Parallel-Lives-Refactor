@@ -23,11 +23,17 @@ public class TransitionHistory {
 		values.add(v);
 	}
 	
-	public void consoleVerticalReport(){
+	public String consoleVerticalReport(){
+		
+		String output = "";
+		
 		for (TransitionStats v: values){
 			System.out.println(v.toStringShort());
+			output+=v.toStringShort();
 		}
 		System.out.println();
+		
+		return output;
 	}
 
 	public ArrayList<TransitionStats> getValues() {

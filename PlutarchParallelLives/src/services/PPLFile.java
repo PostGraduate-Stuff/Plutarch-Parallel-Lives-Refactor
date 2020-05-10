@@ -42,7 +42,7 @@ public class PPLFile {
 	}
 	
 	
-private void importData(String fileName) throws IOException, RecognitionException {
+public void importData(String fileName) throws IOException, RecognitionException {
 		
 		
 		BufferedReader br = new BufferedReader(new FileReader(fileName));
