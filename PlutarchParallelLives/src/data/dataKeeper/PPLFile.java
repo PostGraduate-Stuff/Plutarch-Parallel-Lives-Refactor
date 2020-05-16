@@ -1,4 +1,4 @@
-package services;
+package data.dataKeeper;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -8,8 +8,6 @@ import java.io.IOException;
 import javax.swing.JOptionPane;
 
 import org.antlr.v4.runtime.RecognitionException;
-
-import data.dataKeeper.GlobalDataKeeper;
 
 public class PPLFile {
 	

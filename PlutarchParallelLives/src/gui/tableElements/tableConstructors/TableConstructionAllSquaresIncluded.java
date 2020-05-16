@@ -102,7 +102,7 @@ public class TableConstructionAllSquaresIncluded implements PldConstruction {
 			
 		}
 		
-		
+		constructedColumns = tmpcolumns;
 	}
 	
 	public void constructRows(){
@@ -181,7 +181,7 @@ public class TableConstructionAllSquaresIncluded implements PldConstruction {
 		float maxD=(float) maxDeletions/4;
 		segmentSize[2]=(int) Math.rint(maxD);
 		
-		
+		constructedRows = tmpRows;
 	}
 	
 	public String[] getConstructedColumns()

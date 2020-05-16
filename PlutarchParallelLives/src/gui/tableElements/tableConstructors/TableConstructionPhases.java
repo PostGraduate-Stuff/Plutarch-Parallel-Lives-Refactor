@@ -81,7 +81,7 @@ public void constructColumns(){
 			
 		}
 		
-		
+		constructedColumns = tmpcolumns;
 	}
 	
 	public void constructRows(){
@@ -162,7 +162,7 @@ public void constructColumns(){
 		float maxT=(float) maxTotalChangesForOneTr/4;
 		segmentSize[3]=(int) Math.rint(maxT);
 		
-		
+		constructedRows = tmpRows;
 	}
 	
 	private String[] constructOneRow(PPLTable oneTable,int schemaVersion,String schemaName){

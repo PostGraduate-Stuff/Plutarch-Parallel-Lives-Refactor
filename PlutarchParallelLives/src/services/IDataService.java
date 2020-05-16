@@ -8,6 +8,7 @@ import java.util.TreeMap;
 import javax.swing.JTable;
 
 import data.dataKeeper.GlobalDataKeeper;
+import data.dataKeeper.PPLFile;
 import data.dataPPL.pplSQLSchema.PPLSchema;
 import data.dataPPL.pplSQLSchema.PPLTable;
 import data.dataPPL.pplTransition.PPLTransition;
@@ -30,20 +31,5 @@ public interface IDataService {
 	
 	public String[][] sortRows(String[][] finalRows, TreeMap<String,PPLTable> pplTables);
 	
-	public PhaseAnalyzerMainEngine createPhaseAnalyserEngine(Configuration configuration, GlobalDataKeeper globalDataKeeper,PPLFile pplFile);
-
-	public void connectTransitionsWithPhases(PhaseAnalyzerMainEngine mainEngine, TreeMap<Integer,PPLTransition> allPPLTransitions);
 	
-	
-	public TableClusteringMainEngine createTableClusteringMainEngine(GlobalDataKeeper globalDataKeeper, int numberOfClusters);
-	
-	public JvTable makeGeneralTableIDU(Configuration configuration,
-				 ArrayList<Phase> initialPhases) ;
-	
-	public TableConstructionClusterTablesPhasesZoomA createClusterTablesPhasesZoomA(TreeMap<String,PPLSchema> allPPLSchemas, ArrayList<Phase> phases, ArrayList<String> tablesOfCluster);
-	
-	public TableConstructionZoomArea createTableConstructionZoomArea(GlobalDataKeeper globalDataKeeper,ArrayList<String> sSelectedTables,int selectedColumn);
-	
-	public TableConstructionIDU createTableConstructionIDU(TreeMap<String,PPLSchema> AllPPLSchemas, TreeMap<Integer,PPLTransition> AllPPLTransitions);
-
 }

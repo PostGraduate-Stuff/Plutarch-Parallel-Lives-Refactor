@@ -13,12 +13,12 @@ import javax.swing.JTextArea;
 import javax.swing.JTree;
 
 import data.dataKeeper.GlobalDataKeeper;
+import data.dataKeeper.PPLFile;
 import gui.tableElements.commons.JvTable;
 import gui.tableElements.commons.MyTableModel;
 import gui.tableElements.tableConstructors.TableConstructionIDU;
 import gui.tableElements.tableConstructors.TableConstructionWithClusters;
 import services.DataService;
-import services.PPLFile;
 
 public class Configuration 
 {

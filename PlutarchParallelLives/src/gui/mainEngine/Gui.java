@@ -22,7 +22,9 @@ import gui.treeElements.TreeConstructionPhases;
 import gui.treeElements.TreeConstructionPhasesWithClusters;
 import gui.widgets.GeneralTableIDUWidget;
 import gui.widgets.GeneralTablePhasesWidget;
-import gui.widgets.LoadProject;
+import gui.widgets.TreeConstructionPhasesWidget;
+import gui.widgets.DataGenerator;
+import gui.widgets.TreeConstructionWidget;
 import gui.widgets.ZoomAreaTableForClusterWidget;
 
 import java.awt.Color;
@@ -75,11 +77,10 @@ import org.antlr.v4.runtime.RecognitionException;
 import phaseAnalyzer.commons.Phase;
 import phaseAnalyzer.engine.PhaseAnalyzerMainEngine;
 import services.DataService;
-import services.PPLFile;
+import services.TableService;
 import tableClustering.clusterExtractor.commons.Cluster;
 import tableClustering.clusterExtractor.engine.TableClusteringMainEngine;
 import tableClustering.clusterValidator.engine.ClusterValidatorMainEngine;
-import data.dataKeeper.GlobalDataKeeper;
 import data.dataSorters.PldRowSorter;
 
 
@@ -87,13 +88,13 @@ public class Gui extends JFrame implements ActionListener{
 
 	public static final long serialVersionUID = 1L;
 	
-	private DataService service = new DataService();
-	private PPLFile pplFile;
-	private GlobalDataKeeper globalDataKeeper;
+	
+	
 	private TableConstructionIDU constructedIDUTable;
 	private TableConstructionWithClusters clusterTable;
 	private JvTable jvTable;
 	private Configuration configuration;
+	private DataGenerator dataGenerator;
 	
 	/**
 	 * Launch the application.
@@ -121,7 +122,6 @@ public class Gui extends JFrame implements ActionListener{
 	public Gui() {
 		
 		configuration = new Configuration();
-		service = new DataService();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
 				
@@ -153,7 +153,8 @@ public class Gui extends JFrame implements ActionListener{
 		            System.out.println("!!"+file.getName());
 		          
 					try  {
-						importData(file);
+						dataGenerator = new DataGenerator(configuration);
+						dataGenerator.importData(file);
 					} catch (RecognitionException e) {
 						
 						JOptionPane.showMessageDialog(null, "Something seems wrong with this file");
@@ -184,8 +185,8 @@ public class Gui extends JFrame implements ActionListener{
 				int returnVal = fcOpen1.showDialog(Gui.this, "Open");
 				
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					initiateLoadState();
-					importData(fcOpen1.getSelectedFile());
+					dataGenerator = new DataGenerator(configuration);
+					dataGenerator.importData(fcOpen1.getSelectedFile());
 				}
 				
 			}
@@ -209,16 +210,18 @@ public class Gui extends JFrame implements ActionListener{
 				}
 					
 	            File file = fcOpen1.getSelectedFile();
-	            PPLFile pplFile = service.readFile(file);
+	            DataService service = new DataService();
+	            dataGenerator = new DataGenerator(configuration);
+	            dataGenerator.setPplFile(service.readFile(file));
 
-				System.out.println(pplFile.getProjectName());
+				System.out.println(dataGenerator.getPplFile().getProjectName());
 				
-				CreateProjectJDialog createProjectDialog=new CreateProjectJDialog(pplFile.getProjectName(),
-						pplFile.getDatasetTxt(),
-						pplFile.getInputCsv(),
-						pplFile.getOutputAssessment1(),
-						pplFile.getOutputAssessment2(),
-						pplFile.getTransitionsFile());
+				CreateProjectJDialog createProjectDialog=new CreateProjectJDialog(dataGenerator.getPplFile().getProjectName(),
+						dataGenerator.getPplFile().getDatasetTxt(),
+						dataGenerator.getPplFile().getInputCsv(),
+						dataGenerator.getPplFile().getOutputAssessment1(),
+						dataGenerator.getPplFile().getOutputAssessment2(),
+						dataGenerator.getPplFile().getTransitionsFile());
 			
 				createProjectDialog.setModal(true);
 				
@@ -233,7 +236,7 @@ public class Gui extends JFrame implements ActionListener{
 		            
 					try 
 					{
-						importData(file);
+						dataGenerator.importData(fcOpen1.getSelectedFile());
 					} 
 					catch (RecognitionException e) 
 					{
@@ -256,13 +259,13 @@ public class Gui extends JFrame implements ActionListener{
 		{
 			public void actionPerformed(ActionEvent e) 
 			{
-				if(pplFile == null)
+				if(dataGenerator.getPplFile() == null)
 				{
 					JOptionPane.showMessageDialog(null, "Select a Project first");
 					return;
 				}
 				
-				TableConstructionAllSquaresIncluded table=new TableConstructionAllSquaresIncluded(globalDataKeeper);
+				TableConstructionAllSquaresIncluded table=new TableConstructionAllSquaresIncluded(dataGenerator.getGlobalDataKeeper());
 				//TODO in service
 				table.constructColumns();
 				table.constructRows();
@@ -278,7 +281,7 @@ public class Gui extends JFrame implements ActionListener{
 		JMenuItem mntmShowGeneralLifetimeIDU = new JMenuItem("Show PLD");
 		mntmShowGeneralLifetimeIDU.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(pplFile == null)
+				if(dataGenerator.getPplFile() == null)
 				{
 					JOptionPane.showMessageDialog(null, "Select a Project first");
 					return;
@@ -286,17 +289,18 @@ public class Gui extends JFrame implements ActionListener{
 				
 				configuration.getZoomInButton().setVisible(true);
 				configuration.getZoomOutButton().setVisible(true);
-				constructedIDUTable = service.createTableConstructionIDU(globalDataKeeper.getAllPPLSchemas(), globalDataKeeper.getAllPPLTransitions());
+				TableService service = new TableService();
+				constructedIDUTable = service.createTableConstructionIDU(dataGenerator.getGlobalDataKeeper().getAllPPLSchemas(), dataGenerator.getGlobalDataKeeper().getAllPPLTransitions());
 				TableConstructionIDU table = constructedIDUTable;
 				configuration.setSegmentSizeZoomArea(table.getSegmentSize());
-				System.out.println("Schemas: "+globalDataKeeper.getAllPPLSchemas().size());
+				System.out.println("Schemas: "+dataGenerator.getGlobalDataKeeper().getAllPPLSchemas().size());
 				System.out.println("C: "+table.getConstructedColumns().length+" R: "+table.getConstructedRows().length);
 
 				configuration.setFinalColumnsZoomArea(table.getConstructedColumns());
 				configuration.setFinalRowsZoomArea(table.getConstructedRows());
 				configuration.getTabbedPane().setSelectedIndex(0);
-				makeGeneralTableIDU();
-				fillTree();
+				dataGenerator.makeGeneralTableIDU();
+				dataGenerator.fillTree();
 					
 				
 			}
@@ -307,7 +311,7 @@ public class Gui extends JFrame implements ActionListener{
 		mntmShowGeneralLifetimePhasesPLD.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				
-				if(pplFile == null || pplFile.getProjectName()==null)
+				if(dataGenerator.getPplFile() == null || dataGenerator.getPplFile().getProjectName()==null)
 				{
 					JOptionPane.showMessageDialog(null, "Please select a project first!");
 					return;
@@ -332,30 +336,31 @@ public class Gui extends JFrame implements ActionListener{
 			            System.out.println(configuration.getTimeWeight()+" "+configuration.getChangeWeight());
 			            
 			            
-			            createPhaseAnalyserEngine();
+			            dataGenerator.createPhaseAnalyserEngine();
 						
 			    		
-						if(globalDataKeeper.getPhaseCollectors().size() == 0){
+						if(dataGenerator.getGlobalDataKeeper().getPhaseCollectors().size() == 0){
 							JOptionPane.showMessageDialog(null, "Extract Phases first");
 							return;
 						}
 						
-						TableConstructionPhases table=new TableConstructionPhases(globalDataKeeper);
+						TableConstructionPhases table=new TableConstructionPhases(dataGenerator.getGlobalDataKeeper());
 						//TODO in service
 						table.constructColumns();
 						table.constructRows();
 						final String[] columns= table.getConstructedColumns();
 						final String[][] rows= table.getConstructedRows();
 						configuration.setSegmentSize(table.getSegmentSize());
-						System.out.println("Schemas: "+globalDataKeeper.getAllPPLSchemas().size());
+						System.out.println("Schemas: "+dataGenerator.getGlobalDataKeeper().getAllPPLSchemas().size());
 						System.out.println("C: "+columns.length+" R: "+rows.length);
 	
 						configuration.setFinalColumns(columns);
 						configuration.setFinalRows(rows);
 						configuration.getTabbedPane().setSelectedIndex(0);
-						makeGeneralTablePhases();
-						fillPhasesTree();
+						dataGenerator.makeGeneralTablePhases();
 						
+						TreeConstructionPhasesWidget widget = new TreeConstructionPhasesWidget(dataGenerator.getGlobalDataKeeper(), configuration);
+						widget.fillPhasesTree();
 					}
 				
 				
@@ -368,7 +373,7 @@ public class Gui extends JFrame implements ActionListener{
 		mntmShowGeneralLifetimePhasesWithClustersPLD.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				configuration.setWholeCol(-1);
-				if(pplFile == null)
+				if(dataGenerator.getPplFile() == null)
 				{
 					JOptionPane.showMessageDialog(null, "Please select a project first!");
 					return;
@@ -393,38 +398,38 @@ public class Gui extends JFrame implements ActionListener{
 			            
 			            System.out.println(configuration.getTimeWeight()+" "+configuration.getChangeWeight());
 			            
-			            /*PhaseAnalyzerMainEngine mainPhaseEngine= service.createPhaseAnalyserEngine(configuration,globalDataKeeper,pplFile);
-			    		service.connectTransitionsWithPhases(mainPhaseEngine, globalDataKeeper.getAllPPLTransitions());
+			            /*PhaseAnalyzerMainEngine mainPhaseEngine= service.createPhaseAnalyserEngine(configuration,dataGenerator.getGlobalDataKeeper(),dataGenerator.getPplFile());
+			    		service.connectTransitionsWithPhases(mainPhaseEngine, dataGenerator.getGlobalDataKeeper().getAllPPLTransitions());
 			    		
-			    		globalDataKeeper.setPhaseCollectors(mainPhaseEngine.getPhaseCollectors());*/
+			    		dataGenerator.getGlobalDataKeeper().setPhaseCollectors(mainPhaseEngine.getPhaseCollectors());*/
 			            
-			    		createPhaseAnalyserEngine();
+			            dataGenerator.createPhaseAnalyserEngine();
 			    		
 			    		
-			    		createTableClusteringMainEngine(configuration.getNumberOfClusters());
-			    		/*TableClusteringMainEngine mainClusterEngine = service.createTableClusteringMainEngine(globalDataKeeper, configuration.getNumberOfClusters());
-			    		globalDataKeeper.setClusterCollectors(mainClusterEngine.getClusterCollectors());
+			            dataGenerator.createTableClusteringMainEngine(configuration.getNumberOfClusters());
+			    		/*TableClusteringMainEngine mainClusterEngine = service.createTableClusteringMainEngine(dataGenerator.getGlobalDataKeeper(), configuration.getNumberOfClusters());
+			    		dataGenerator.getGlobalDataKeeper().setClusterCollectors(mainClusterEngine.getClusterCollectors());
 			    		*/
-						if(globalDataKeeper.getPhaseCollectors().size()==0)
+						if(dataGenerator.getGlobalDataKeeper().getPhaseCollectors().size()==0)
 						{
 							JOptionPane.showMessageDialog(null, "Extract Phases first");
 							return;
 						}
-						TableConstructionWithClusters table=new TableConstructionWithClusters(globalDataKeeper);
+						TableConstructionWithClusters table=new TableConstructionWithClusters(dataGenerator.getGlobalDataKeeper());
 						//TODO in service
 						table.constructColumns();
 						table.constructRows();
 						final String[] columns= table.getConstructedColumns();
 						final String[][] rows= table.getConstructedRows();
 						configuration.setSegmentSize(table.getSegmentSize());
-						System.out.println("Schemas: "+globalDataKeeper.getAllPPLSchemas().size());
+						System.out.println("Schemas: "+dataGenerator.getGlobalDataKeeper().getAllPPLSchemas().size());
 						System.out.println("C: "+columns.length+" R: "+rows.length);
 	
 						configuration.setFinalColumns(columns);
 						configuration.setFinalRows(rows);
 						configuration.getTabbedPane().setSelectedIndex(0);
-						makeGeneralTablePhases();
-						fillClustersTree(globalDataKeeper.getClusterCollectors().get(0).getClusters());
+						dataGenerator.makeGeneralTablePhases();
+						dataGenerator.fillClustersTree(dataGenerator.getGlobalDataKeeper().getClusterCollectors().get(0).getClusters());
 							
 					}
 				
@@ -524,28 +529,28 @@ public class Gui extends JFrame implements ActionListener{
 			public void actionPerformed(ActionEvent e) {
 				
 				
-				if(pplFile != null){
+				if(dataGenerator.getPplFile() != null){
 					
 					
-					System.out.println("Project Name:"+pplFile.getProjectName());
-					System.out.println("Dataset txt:"+pplFile.getDatasetTxt());
-					System.out.println("Input Csv:"+pplFile.getInputCsv());
-					System.out.println("Output Assessment1:"+pplFile.getOutputAssessment1());
-					System.out.println("Output Assessment2:"+pplFile.getOutputAssessment2());
-					System.out.println("Transitions File:"+pplFile.getTransitionsFile());
+					System.out.println("Project Name:"+dataGenerator.getPplFile().getProjectName());
+					System.out.println("Dataset txt:"+dataGenerator.getPplFile().getDatasetTxt());
+					System.out.println("Input Csv:"+dataGenerator.getPplFile().getInputCsv());
+					System.out.println("Output Assessment1:"+dataGenerator.getPplFile().getOutputAssessment1());
+					System.out.println("Output Assessment2:"+dataGenerator.getPplFile().getOutputAssessment2());
+					System.out.println("Transitions File:"+dataGenerator.getPplFile().getTransitionsFile());
 					
-					System.out.println("Schemas:"+globalDataKeeper.getAllPPLSchemas().size());
-					System.out.println("Transitions:"+globalDataKeeper.getAllPPLTransitions().size());
-					System.out.println("Tables:"+globalDataKeeper.getAllPPLTables().size());
+					System.out.println("Schemas:"+dataGenerator.getGlobalDataKeeper().getAllPPLSchemas().size());
+					System.out.println("Transitions:"+dataGenerator.getGlobalDataKeeper().getAllPPLTransitions().size());
+					System.out.println("Tables:"+dataGenerator.getGlobalDataKeeper().getAllPPLTables().size());
 					
 					
-					ProjectInfoDialog infoDialog = new ProjectInfoDialog(pplFile.getProjectName(),
-																		 pplFile.getDatasetTxt(),
-																		 pplFile.getInputCsv(),
-																		 pplFile.getTransitionsFile(),
-																		 globalDataKeeper.getAllPPLSchemas().size(),
-																		 globalDataKeeper.getAllPPLTransitions().size(), 
-																		 globalDataKeeper.getAllPPLTables().size());
+					ProjectInfoDialog infoDialog = new ProjectInfoDialog(dataGenerator.getPplFile().getProjectName(),
+																		 dataGenerator.getPplFile().getDatasetTxt(),
+																		 dataGenerator.getPplFile().getInputCsv(),
+																		 dataGenerator.getPplFile().getTransitionsFile(),
+																		 dataGenerator.getGlobalDataKeeper().getAllPPLSchemas().size(),
+																		 dataGenerator.getGlobalDataKeeper().getAllPPLTransitions().size(), 
+																		 dataGenerator.getGlobalDataKeeper().getAllPPLTables().size());
 					
 					infoDialog.setVisible(true);
 				}
@@ -678,7 +683,7 @@ public class Gui extends JFrame implements ActionListener{
 				if (configuration.getFirstLevelUndoColumnsZoomArea() !=null) {
 					configuration.setFinalColumnsZoomArea(configuration.getFirstLevelUndoColumnsZoomArea());
 					configuration.setFinalRowsZoomArea(configuration.getFirstLevelUndoRowsZoomArea());
-					ZoomAreaTableForClusterWidget widget = new ZoomAreaTableForClusterWidget(configuration, globalDataKeeper, service);
+					ZoomAreaTableForClusterWidget widget = new ZoomAreaTableForClusterWidget(configuration, dataGenerator.getGlobalDataKeeper());
 					widget.makeZoomAreaTableForCluster();
 				}
 				
@@ -707,7 +712,7 @@ public class Gui extends JFrame implements ActionListener{
 		configuration.getNotUniformlyDistributedButton().addMouseListener(new MouseAdapter() {
 			@Override
 			   public void mouseClicked(MouseEvent e) {
-				configuration.getLifeTimeTable().notUniformlyDistributed(globalDataKeeper);
+				configuration.getLifeTimeTable().notUniformlyDistributed(dataGenerator.getGlobalDataKeeper());
 			    
 			  } 
 		});
@@ -990,11 +995,11 @@ public class Gui extends JFrame implements ActionListener{
 			for(double wd=(1.0-wb); wd>=0.0; wd=wd-0.01){
 				
 					double wc=1.0-(wb+wd);
-					TableClusteringMainEngine mainEngine2 = new TableClusteringMainEngine(globalDataKeeper,wb,wd,wc);
+					TableClusteringMainEngine mainEngine2 = new TableClusteringMainEngine(dataGenerator.getGlobalDataKeeper(),wb,wd,wc);
 					mainEngine2.extractClusters(configuration.getNumberOfClusters());
-					globalDataKeeper.setClusterCollectors(mainEngine2.getClusterCollectors());
+					dataGenerator.getGlobalDataKeeper().setClusterCollectors(mainEngine2.getClusterCollectors());
 					
-					ClusterValidatorMainEngine lala = new ClusterValidatorMainEngine(globalDataKeeper);
+					ClusterValidatorMainEngine lala = new ClusterValidatorMainEngine(dataGenerator.getGlobalDataKeeper());
 					lala.run();
 					
 					lalaString=lalaString+wb+"\t"+wd+"\t"+wc
@@ -1034,11 +1039,11 @@ public class Gui extends JFrame implements ActionListener{
 		String lalaString="Birth Weight:"+"\tDeath Weight:"+"\tChange Weight:"+"\n";
 		int counter=0;
 		
-		TableClusteringMainEngine mainEngine2 = new TableClusteringMainEngine(globalDataKeeper,0.333,0.333,0.333);
+		TableClusteringMainEngine mainEngine2 = new TableClusteringMainEngine(dataGenerator.getGlobalDataKeeper(),0.333,0.333,0.333);
 		mainEngine2.extractClusters(4);
-		globalDataKeeper.setClusterCollectors(mainEngine2.getClusterCollectors());
+		dataGenerator.getGlobalDataKeeper().setClusterCollectors(mainEngine2.getClusterCollectors());
 		
-		ClusterValidatorMainEngine lala = new ClusterValidatorMainEngine(globalDataKeeper);
+		ClusterValidatorMainEngine lala = new ClusterValidatorMainEngine(dataGenerator.getGlobalDataKeeper());
 		lala.run();
 		
 		lalaString=lalaString+"\n"+"0.333"+"\t"+"0.333"+"\t"+"0.333"
@@ -1049,11 +1054,11 @@ public class Gui extends JFrame implements ActionListener{
 			for(double wd=(1.0-wb); wd>=0.0; wd=wd-0.5){
 				
 					double wc=1.0-(wb+wd);
-					mainEngine2 = new TableClusteringMainEngine(globalDataKeeper,wb,wd,wc);
+					mainEngine2 = new TableClusteringMainEngine(dataGenerator.getGlobalDataKeeper(),wb,wd,wc);
 					mainEngine2.extractClusters(4);
-					globalDataKeeper.setClusterCollectors(mainEngine2.getClusterCollectors());
+					dataGenerator.getGlobalDataKeeper().setClusterCollectors(mainEngine2.getClusterCollectors());
 					
-					lala = new ClusterValidatorMainEngine(globalDataKeeper);
+					lala = new ClusterValidatorMainEngine(dataGenerator.getGlobalDataKeeper());
 					lala.run();
 					
 					lalaString=lalaString+"\n"+wb+"\t"+wd+"\t"+wc
@@ -1062,10 +1067,7 @@ public class Gui extends JFrame implements ActionListener{
 					counter++;
 					System.err.println(counter);
 				
-				
 			}
-			
-			
 			
 		}
 		
@@ -1085,340 +1087,16 @@ public class Gui extends JFrame implements ActionListener{
 		
 		System.out.println(lalaString);
 		
-		
-	}
-	
-	
-	
-	public void fillPhasesTree(){
-		
-		 TreeConstructionPhases tc=new TreeConstructionPhases(globalDataKeeper);
-		 configuration.setTablesTree(tc.constructTree());
-		 
-		 configuration.getTablesTree().addTreeSelectionListener(new TreeSelectionListener () {
-			    public void valueChanged(TreeSelectionEvent ae) { 
-			    	TreePath selection = ae.getPath();
-			    	configuration.getSelectedFromTree().add(selection.getLastPathComponent().toString());
-			    	System.out.println(selection.getLastPathComponent().toString()+" is selected");
-			    	
-			    }
-		 });
-		 
-		 configuration.getTablesTree().addMouseListener(new MouseAdapter() {
-				@Override
-				   public void mouseReleased(MouseEvent e) {
-					
-						if(SwingUtilities.isRightMouseButton(e)){
-							System.out.println("Right Click Tree");
-							
-							final JPopupMenu popupMenu = new JPopupMenu();
-					        JMenuItem showDetailsItem = new JMenuItem("Show This into the Table");
-					        showDetailsItem.addActionListener(new ActionListener() {
-
-					            @Override
-					            public void actionPerformed(ActionEvent e) {
-					          
-					            	configuration.getLifeTimeTable().repaint();
-					            	
-					            }
-					        });
-					        popupMenu.add(showDetailsItem);
-					        popupMenu.show(configuration.getTablesTree(), e.getX(),e.getY());
-							        							        
-							
-						}
-					
-				   }
-			});
-		 
-		 configuration.getTreeScrollPane().setViewportView(configuration.getTablesTree());
-		 configuration.getTreeScrollPane().setBounds(5, 5, 250, 170);
-		 configuration.getTreeScrollPane().setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		 configuration.getTreeScrollPane().setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		 configuration.getTreeScrollPane().add(configuration.getTreeScrollPane());
-		 
-		 configuration.getTreeLabel().setText("Phases Tree");
-
-		 configuration.getSideMenu().revalidate();
-		 configuration.getSideMenu().repaint();
-		
-	}
-	
-	public void fillClustersTree(ArrayList<Cluster> clusters){
-		
-		 TreeConstructionPhasesWithClusters treePhaseWithClusters = new TreeConstructionPhasesWithClusters(clusters);
-		 configuration.setTablesTree(treePhaseWithClusters.constructTree());
-		 
-		 configuration.getTablesTree().addTreeSelectionListener(new TreeSelectionListener () {
-			    public void valueChanged(TreeSelectionEvent ae) { 
-			    	TreePath selection = ae.getPath();
-			    	configuration.getSelectedFromTree().add(selection.getLastPathComponent().toString());
-			    	System.out.println(selection.getLastPathComponent().toString()+" is selected");
-			    	
-			    }
-		 });
-		 
-		 configuration.getTablesTree().addMouseListener(new MouseAdapter() {
-				@Override
-				   public void mouseReleased(MouseEvent e) {
-					
-						if(SwingUtilities.isRightMouseButton(e)){
-							System.out.println("Right Click Tree");
-							
-							final JPopupMenu popupMenu = new JPopupMenu();
-					        JMenuItem showDetailsItem = new JMenuItem("Show This into the Table");
-					        showDetailsItem.addActionListener(new ActionListener() {
-
-					            @Override
-					            public void actionPerformed(ActionEvent e) {
-					          
-					            	configuration.getLifeTimeTable().repaint();
-					            	
-					            }
-					        });
-					        popupMenu.add(showDetailsItem);
-					        popupMenu.show(configuration.getTablesTree(), e.getX(),e.getY());
-							        	
-						}
-					
-				   }
-			});
-		 
-		 configuration.getTreeScrollPane().setViewportView(configuration.getTablesTree());
-		 
-		 
-		 configuration.getTreeScrollPane().setBounds(5, 5, 250, 170);
-		 configuration.getTreeScrollPane().setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		 configuration.getTreeScrollPane().setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		 configuration.getTablesTreePanel().add(configuration.getTreeScrollPane());
-
-		 configuration.getTreeLabel().setText("Clusters Tree");
-
-		 configuration.getSideMenu().revalidate();
-		 configuration.getSideMenu().repaint();
-		 
-		
 	}
 	
 	public void setDescription(String descr){
 		configuration.getDescriptionText().setText(descr);
 	}
 	
-	
-	public void initiateLoadState()
-	{
-		configuration.setTimeWeight((float)0.5); 
-		configuration.setChangeWeight((float)0.5);
-		configuration.setPreProcessingTime(false);
-		configuration.setPreProcessingChange(false);
-		
-		
-	}
-	public void makeGeneralTableIDU()
-	{
-		GeneralTableIDUWidget widget = new GeneralTableIDUWidget(configuration, globalDataKeeper, service);
-		widget.makeGeneralTableIDU();
-		widget.constructGeneralTableIDU();
-	}
-	
-	
-	public void importData(File file)
-	{
-		
-		importDataFromFile(file);
-		constructedIDUTable = service.createTableConstructionIDU(globalDataKeeper.getAllPPLSchemas(), globalDataKeeper.getAllPPLTransitions());
-		
-		setIDUPanel();
-			
-		makeGeneralTableIDU();
-		
-		createPhaseAnalyserEngine();
-		
-		configuration.setNumberOfClusters(14);
-		createTableClusteringMainEngine(configuration.getNumberOfClusters());
-		
-		fillTable();
-		printPPLData();
-		fillTree();
-	}
-	
-	
-	
-	
-	public void setIDUPanel()
-	{
-		configuration.setFinalColumnsZoomArea(constructedIDUTable.getConstructedColumns());
-		configuration.setFinalRowsZoomArea(constructedIDUTable.getConstructedRows());
-		configuration.getTabbedPane().setSelectedIndex(0);
-		configuration.setSegmentSizeZoomArea(constructedIDUTable.getSegmentSize());
-	}
-	
-	
-	
-	
-	
-	
-	public void fillTable() 
-	{
-		if(globalDataKeeper.getPhaseCollectors().size()==0)
-		{
-			return;
-		}
-		constructTableWithClusters();
-		
-		configuration.getTabbedPane().setSelectedIndex(0);
-		configuration.getUniformlyDistributedButton().setVisible(true);
-		configuration.getNotUniformlyDistributedButton().setVisible(true);
-		
-		makeGeneralTablePhases();
-		
-		fillClustersTree(globalDataKeeper.getClusterCollectors().get(0).getClusters());
-	}
-	
-	public void constructTableWithClusters() 
-	{
-		clusterTable = constructClustersTable();
-		
-		final String[] columns= clusterTable.getConstructedColumns();
-		final String[][] rows= clusterTable.getConstructedRows();
-		
-		configuration.setSegmentSize(clusterTable.getSegmentSize());
-		configuration.setFinalColumns(columns);
-		configuration.setFinalRows(rows);
-		configuration.setSelectedRows(new ArrayList<Integer>());
-	}
-	
-	public TableConstructionWithClusters constructClustersTable() 
-	{
-		TableConstructionWithClusters table=new TableConstructionWithClusters(globalDataKeeper);
-		
-		table.constructColumns();
-		table.constructRows();
-		
-		return table;
-	}
-	
-	public void makeGeneralTablePhases(){
-		GeneralTablePhasesWidget widget = new GeneralTablePhasesWidget(configuration, globalDataKeeper,service) ;
-		widget.initializeGeneralTablePhases();
-	}
-	
-	
-	public void printPPLData() 
-	{
-		System.out.println("Schemas:"+globalDataKeeper.getAllPPLSchemas().size());
-		System.out.println("Transitions:"+globalDataKeeper.getAllPPLTransitions().size());
-		System.out.println("Tables:"+globalDataKeeper.getAllPPLTables().size());
-	}
-	
-	public Configuration getConfiguration() 
-	{
-		return configuration;
-	}
-
-	
-	public void fillTree(){
-		
-		 TreeConstructionGeneral treeConstruction=new TreeConstructionGeneral(globalDataKeeper.getAllPPLSchemas());
-		 configuration.setTablesTree(new JTree());
-		 configuration.setTablesTree(treeConstruction.constructTree());
-		 configuration.getTablesTree().addTreeSelectionListener(new TreeSelectionListener () {
-			    public void valueChanged(TreeSelectionEvent ae) { 
-			    	TreePath selection = ae.getPath();
-			    	configuration.getSelectedFromTree().add(selection.getLastPathComponent().toString());
-			    	System.out.println(selection.getLastPathComponent().toString()+" is selected");
-			    	
-			    }
-		 });
-		 
-		 configuration.getTablesTree().addMouseListener(new MouseAdapter() {
-				@Override
-				   public void mouseReleased(MouseEvent e) {
-					
-						if(SwingUtilities.isRightMouseButton(e)){
-							System.out.println("Right Click Tree");
-								
-									final JPopupMenu popupMenu = new JPopupMenu();
-							        JMenuItem showDetailsItem = new JMenuItem("Show This into the Table");
-							        showDetailsItem.addActionListener(new ActionListener() {
-		
-							            @Override
-							            public void actionPerformed(ActionEvent e) {
-							          
-							            	configuration.getLifeTimeTable().repaint();
-							            	
-							            }
-							        });
-							        popupMenu.add(showDetailsItem);
-							        popupMenu.show(configuration.getTablesTree(), e.getX(),e.getY());
-							        							        
-								//}
-							//}
-						}
-					
-				   }
-			});
-		 
-		 configuration.getTreeScrollPane().setViewportView(configuration.getTablesTree());
-		 
-		 configuration.getTreeScrollPane().setBounds(5, 5, 250, 170);
-		 configuration.getTreeScrollPane().setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		 configuration.getTreeScrollPane().setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		 configuration.getTablesTreePanel().add(configuration.getTreeScrollPane());
-		 
-		 configuration.getTreeLabel().setText("General Tree");
-
-		 configuration.getSideMenu().revalidate();
-		 configuration.getSideMenu().repaint();		
-		
-	}
-
-	public void setGlobalData(){
-		try{
-			globalDataKeeper=new GlobalDataKeeper(pplFile.getDatasetTxt(), pplFile.getTransitionsFile());
-			globalDataKeeper.setData();
-			System.out.println(globalDataKeeper.getAllPPLTables().size());
-			
-	        System.out.println(pplFile.getFile().toString());
-
-		}
-		catch(Exception ex){
-			
-		}
-	}
-
-	
-	public void importDataFromFile(File file)
-	{
-		pplFile = service.readFile(file);
-		globalDataKeeper= service.setGlobalData(pplFile.getDatasetTxt(), pplFile.getTransitionsFile());
-		
-	}
-
-	
-
-	public void createPhaseAnalyserEngine()
-	{
-		PhaseAnalyzerMainEngine mainPhaseEngine= service.createPhaseAnalyserEngine(configuration,globalDataKeeper,pplFile);
-		service.connectTransitionsWithPhases(mainPhaseEngine, globalDataKeeper.getAllPPLTransitions());
-		globalDataKeeper.setPhaseCollectors(mainPhaseEngine.getPhaseCollectors());
-	}
-	
-	
-	public void createTableClusteringMainEngine(int numberOfClusters)
-	{
-		TableClusteringMainEngine mainClusterEngine = service.createTableClusteringMainEngine(globalDataKeeper, numberOfClusters);
-		globalDataKeeper.setClusterCollectors(mainClusterEngine.getClusterCollectors());
-		
-	}
-	
-
-
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	
 }
