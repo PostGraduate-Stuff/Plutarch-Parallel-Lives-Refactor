@@ -1,4 +1,4 @@
-package gui.tests;
+package tests.data;
 import static org.junit.Assert.*;
 
 import java.io.IOException;
@@ -39,7 +39,7 @@ public class PPLFileTest {
 		
 		file.importData("C:\\Users\\Christina\\git\\Plutarch-Parallel-Lives-Refactor\\PlutarchParallelLives\\filesHandler\\inis\\biosql.ini");
 		
-		GlobalDataKeeper globalDataKeeper= service.setGlobalData(file.getDatasetTxt(), file.getTransitionsFile());
+		GlobalDataKeeper globalDataKeeper= service.initiateGlobalData(file.getDatasetTxt(), file.getTransitionsFile());
 
 		assertEquals("47",globalDataKeeper.getAllPPLSchemas().size() + "");
 		assertEquals("46",globalDataKeeper.getAllPPLTransitions().size()+ "");
@@ -56,7 +56,7 @@ public class PPLFileTest {
 		
 		pplFile.importData("C:\\Users\\Christina\\git\\Plutarch-Parallel-Lives-Refactor\\PlutarchParallelLives\\filesHandler\\inis\\biosql.ini");
 		
-		GlobalDataKeeper globalDataKeeper= service.setGlobalData(pplFile.getDatasetTxt(), pplFile.getTransitionsFile());
+		GlobalDataKeeper globalDataKeeper= service.initiateGlobalData(pplFile.getDatasetTxt(), pplFile.getTransitionsFile());
 		PhaseAnalyzerMainEngine mainEngine = new PhaseAnalyzerMainEngine(pplFile.getInputCsv(),
 																		pplFile.getOutputAssessment1(),
 																		pplFile.getOutputAssessment2(), 

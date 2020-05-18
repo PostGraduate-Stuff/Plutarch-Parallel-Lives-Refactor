@@ -159,18 +159,6 @@ public class GlobalDataKeeper {
 		return this.clusterCollectors;
 	}
 	
-	public String getDescription(int columnNumber){
-		String description="Transition ID:"+columnNumber+"\n";
-    	description=description+"Old Version Name:"+getAllPPLTransitions().
-				get(columnNumber).getOldVersionName()+"\n";
-		description=description+"New Version Name:"+getAllPPLTransitions().
-				get(columnNumber).getNewVersionName()+"\n";		        		
-		
-		description=description+"Transition Changes:"+getAllPPLTransitions().get(columnNumber).getNumberOfChangesForOneTr()+"\n";
-		description=description+"Additions:"+getAllPPLTransitions().get(columnNumber).getNumberOfAdditionsForOneTr()+"\n";
-		description=description+"Deletions:"+getAllPPLTransitions().get(columnNumber).getNumberOfDeletionsForOneTr()+"\n";
-		description=description+"Updates:"+getAllPPLTransitions().get(columnNumber).getNumberOfUpdatesForOneTr()+"\n";
-		return description;
-	}
+	
 	
 }

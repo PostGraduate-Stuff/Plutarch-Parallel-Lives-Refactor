@@ -8,7 +8,6 @@ import java.util.TreeMap;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
-import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.SwingUtilities;
 import javax.swing.event.TreeSelectionEvent;
@@ -19,31 +18,34 @@ import data.dataPPL.pplSQLSchema.PPLSchema;
 import gui.configurations.Configuration;
 import gui.treeElements.TreeConstructionGeneral;
 
-public class TreeConstructionWidget {
-	private Configuration configuration;
+public class TreeConstructionWidget extends TreeWidget{
+	
 	private TreeMap<String,PPLSchema> allPPLSchemas;
 	
 	public TreeConstructionWidget(Configuration configuration, TreeMap<String, PPLSchema> allPPLSchemas) {
-		this.configuration = configuration;
+		super(configuration);
 		this.allPPLSchemas = allPPLSchemas;
 	}
-
-
 	
 	public void fillTree(){
-		
 		 TreeConstructionGeneral treeConstruction=new TreeConstructionGeneral(allPPLSchemas);
 		 configuration.setTablesTree(new JTree());
 		 configuration.setTablesTree(treeConstruction.constructTree());
-		 configuration.getTablesTree().addTreeSelectionListener(new TreeSelectionListener () {
-			    public void valueChanged(TreeSelectionEvent ae) { 
-			    	TreePath selection = ae.getPath();
-			    	configuration.getSelectedFromTree().add(selection.getLastPathComponent().toString());
-			    	System.out.println(selection.getLastPathComponent().toString()+" is selected");
-			    	
-			    }
-		 });
 		 
+		 addTreeSectionListener();
+		 
+		 addTreeMouseListener();
+		 
+		 setSettingsConfigurations("General Tree");
+	}
+
+
+
+	
+
+
+
+	private void addTreeMouseListener() {
 		 configuration.getTablesTree().addMouseListener(new MouseAdapter() {
 				@Override
 				   public void mouseReleased(MouseEvent e) {
@@ -71,19 +73,19 @@ public class TreeConstructionWidget {
 					
 				   }
 			});
-		 
-		 configuration.getTreeScrollPane().setViewportView(configuration.getTablesTree());
-		 
-		 configuration.getTreeScrollPane().setBounds(5, 5, 250, 170);
-		 configuration.getTreeScrollPane().setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		 configuration.getTreeScrollPane().setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		 configuration.getTablesTreePanel().add(configuration.getTreeScrollPane());
-		 
-		 configuration.getTreeLabel().setText("General Tree");
+	}
 
-		 configuration.getSideMenu().revalidate();
-		 configuration.getSideMenu().repaint();		
-		
+
+
+	private void addTreeSectionListener() {
+		 configuration.getTablesTree().addTreeSelectionListener(new TreeSelectionListener () {
+			    public void valueChanged(TreeSelectionEvent ae) { 
+			    	TreePath selection = ae.getPath();
+			    	configuration.getSelectedFromTree().add(selection.getLastPathComponent().toString());
+			    	System.out.println(selection.getLastPathComponent().toString()+" is selected");
+			    	
+			    }
+		 });		
 	}
 
 }

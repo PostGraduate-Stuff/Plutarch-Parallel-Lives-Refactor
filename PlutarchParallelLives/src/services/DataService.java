@@ -32,7 +32,7 @@ public class DataService implements IDataService
 	
 	
 	@Override
-	public GlobalDataKeeper setGlobalData(String datasetTxt, String transitionsFile) {
+	public GlobalDataKeeper initiateGlobalData(String datasetTxt, String transitionsFile) {
 		GlobalDataKeeper globalDataKeeper = new GlobalDataKeeper();
 		try{
 			globalDataKeeper=new GlobalDataKeeper(datasetTxt, transitionsFile);

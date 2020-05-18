@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -12,31 +13,33 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 
-import data.dataKeeper.GlobalDataKeeper;
 import gui.configurations.Configuration;
-import gui.treeElements.TreeConstructionPhases;
+import gui.treeElements.TreeConstructionPhasesWithClusters;
+import tableClustering.clusterExtractor.commons.Cluster;
 
-public class TreeConstructionPhasesWidget extends TreeWidget
-{
-	private GlobalDataKeeper globalDataKeeper;
+public class TreeConstructionPhasesWithClustersWidget extends TreeWidget{
+
+	public ArrayList<Cluster> clusters;
 	
-	public TreeConstructionPhasesWidget(GlobalDataKeeper globalDataKeeper, Configuration configuration)
+	public TreeConstructionPhasesWithClustersWidget(Configuration configuration, ArrayList<Cluster> clusters)
 	{
 		super(configuration);
-		this.globalDataKeeper = globalDataKeeper;
+		this.clusters = clusters;
 	}
 	
-	public void fillPhasesTree(){
+	public void fillClustersTree(){
 		
-		 TreeConstructionPhases tree = new TreeConstructionPhases(globalDataKeeper);
-		 configuration.setTablesTree(tree.constructTree());
+		 TreeConstructionPhasesWithClusters treePhaseWithClusters = new TreeConstructionPhasesWithClusters(clusters);
+		 configuration.setTablesTree(treePhaseWithClusters.constructTree());
 		 
 		 addTreeSectionListener();
 		 
 		 addTreeMouseListener();
 		 
-		 setSettingsConfigurations("Phases Tree");
+		 setSettingsConfigurations("Clusters Tree");
 	}
+
+	
 
 	private void addTreeMouseListener() {
 		 configuration.getTablesTree().addMouseListener(new MouseAdapter() {
@@ -58,25 +61,24 @@ public class TreeConstructionPhasesWidget extends TreeWidget
 					            }
 					        });
 					        popupMenu.add(showDetailsItem);
-					        popupMenu.show(configuration.getTablesTree(), e.getX(),e.getY());						        							        
-							
+					        popupMenu.show(configuration.getTablesTree(), e.getX(),e.getY());
+							        	
 						}
-
+					
 				   }
-			});
-		 
+			});		
 	}
 
 	private void addTreeSectionListener() {
-		 configuration.getTablesTree().addTreeSelectionListener(new TreeSelectionListener () {
-			    public void valueChanged(TreeSelectionEvent ae) { 
-			    	TreePath selection = ae.getPath();
-			    	configuration.getSelectedFromTree().add(selection.getLastPathComponent().toString());
-			    	System.out.println(selection.getLastPathComponent().toString()+" is selected");
-			    	
-			    }
-		 });
+		configuration.getTablesTree().addTreeSelectionListener(new TreeSelectionListener () {
+		    public void valueChanged(TreeSelectionEvent ae) { 
+		    	TreePath selection = ae.getPath();
+		    	configuration.getSelectedFromTree().add(selection.getLastPathComponent().toString());
+		    	System.out.println(selection.getLastPathComponent().toString()+" is selected");
+		    	
+		    }
+	 });		
 	}
-	
+
 
 }

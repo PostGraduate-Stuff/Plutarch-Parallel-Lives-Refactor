@@ -3,7 +3,6 @@ package gui.widgets;
 import data.dataKeeper.GlobalDataKeeper;
 import gui.configurations.Configuration;
 import gui.tableElements.tableConstructors.TableConstructionZoomArea;
-import services.DataService;
 import services.TableService;
 
 public class SelectionToZoomAreaWidget {
@@ -21,11 +20,9 @@ public class SelectionToZoomAreaWidget {
 		configuration.setFinalColumnsZoomArea(columns);
 		configuration.setFinalRowsZoomArea(rows);
 		configuration.getTabbedPane().setSelectedIndex(0);
-		//makeZoomAreaTable();
+		
 		ZoomAreaTableWidget zoomAreaTableWidget = new ZoomAreaTableWidget(configuration, globalDataKeeper);
 		zoomAreaTableWidget.makeZoomAreaTable();
-		
-		
 	}
 
 }

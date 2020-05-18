@@ -27,7 +27,7 @@ public interface IDataService {
 
 	public PPLFile readFile(File file);
 	
-	public GlobalDataKeeper setGlobalData(String datasetTxt, String transitionsFile);
+	public GlobalDataKeeper initiateGlobalData(String datasetTxt, String transitionsFile);
 	
 	public String[][] sortRows(String[][] finalRows, TreeMap<String,PPLTable> pplTables);
 	

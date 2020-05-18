@@ -1,48 +1,31 @@
 package gui.mainEngine;
 
 import gui.configurations.Configuration;
-//try to extract relationship beetween gui and pplSchema and pplTransition
 import gui.dialogs.CreateProjectJDialog;
 import gui.dialogs.EnlargeTable;
 import gui.dialogs.ParametersJDialog;
 import gui.dialogs.ProjectInfoDialog;
 import gui.tableElements.commons.JvTable;
 import gui.tableElements.commons.MyTableModel;
-import gui.tableElements.tableConstructors.PldConstruction;
 import gui.tableElements.tableConstructors.TableConstructionAllSquaresIncluded;
-import gui.tableElements.tableConstructors.TableConstructionClusterTablesPhasesZoomA;
-import gui.tableElements.tableConstructors.TableConstructionIDU;
 import gui.tableElements.tableConstructors.TableConstructionPhases;
 import gui.tableElements.tableConstructors.TableConstructionWithClusters;
-import gui.tableElements.tableConstructors.TableConstructionZoomArea;
-import gui.tableElements.tableRenderers.IDUHeaderTableRenderer;
-import gui.tableElements.tableRenderers.IDUTableRenderer;
-import gui.treeElements.TreeConstructionGeneral;
-import gui.treeElements.TreeConstructionPhases;
-import gui.treeElements.TreeConstructionPhasesWithClusters;
-import gui.widgets.GeneralTableIDUWidget;
-import gui.widgets.GeneralTablePhasesWidget;
+import gui.widgets.PLDShowWidget;
 import gui.widgets.TreeConstructionPhasesWidget;
-import gui.widgets.DataGenerator;
-import gui.widgets.TreeConstructionWidget;
+import gui.widgets.DataGeneratorWidget;
 import gui.widgets.ZoomAreaTableForClusterWidget;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
@@ -56,45 +39,27 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
-import javax.swing.JTree;
 import javax.swing.ListSelectionModel;
-import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.tree.TreePath;
 
 import org.antlr.v4.runtime.RecognitionException;
 
-import phaseAnalyzer.commons.Phase;
-import phaseAnalyzer.engine.PhaseAnalyzerMainEngine;
-import services.DataService;
-import services.TableService;
-import tableClustering.clusterExtractor.commons.Cluster;
 import tableClustering.clusterExtractor.engine.TableClusteringMainEngine;
 import tableClustering.clusterValidator.engine.ClusterValidatorMainEngine;
-import data.dataSorters.PldRowSorter;
 
 
 public class Gui extends JFrame implements ActionListener{
 
 	public static final long serialVersionUID = 1L;
-	
-	
-	
-	private TableConstructionIDU constructedIDUTable;
-	private TableConstructionWithClusters clusterTable;
-	private JvTable jvTable;
+
 	private Configuration configuration;
-	private DataGenerator dataGenerator;
+	private DataGeneratorWidget dataGenerator;
 	
 	/**
 	 * Launch the application.
@@ -153,7 +118,7 @@ public class Gui extends JFrame implements ActionListener{
 		            System.out.println("!!"+file.getName());
 		          
 					try  {
-						dataGenerator = new DataGenerator(configuration);
+						dataGenerator = new DataGeneratorWidget(configuration);
 						dataGenerator.importData(file);
 					} catch (RecognitionException e) {
 						
@@ -185,7 +150,7 @@ public class Gui extends JFrame implements ActionListener{
 				int returnVal = fcOpen1.showDialog(Gui.this, "Open");
 				
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
-					dataGenerator = new DataGenerator(configuration);
+					dataGenerator = new DataGeneratorWidget(configuration);
 					dataGenerator.importData(fcOpen1.getSelectedFile());
 				}
 				
@@ -210,9 +175,8 @@ public class Gui extends JFrame implements ActionListener{
 				}
 					
 	            File file = fcOpen1.getSelectedFile();
-	            DataService service = new DataService();
-	            dataGenerator = new DataGenerator(configuration);
-	            dataGenerator.setPplFile(service.readFile(file));
+	            dataGenerator = new DataGeneratorWidget(configuration);
+	            dataGenerator.readFile(file);
 
 				System.out.println(dataGenerator.getPplFile().getProjectName());
 				
@@ -281,28 +245,8 @@ public class Gui extends JFrame implements ActionListener{
 		JMenuItem mntmShowGeneralLifetimeIDU = new JMenuItem("Show PLD");
 		mntmShowGeneralLifetimeIDU.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				if(dataGenerator.getPplFile() == null)
-				{
-					JOptionPane.showMessageDialog(null, "Select a Project first");
-					return;
-				}
-				
-				configuration.getZoomInButton().setVisible(true);
-				configuration.getZoomOutButton().setVisible(true);
-				TableService service = new TableService();
-				constructedIDUTable = service.createTableConstructionIDU(dataGenerator.getGlobalDataKeeper().getAllPPLSchemas(), dataGenerator.getGlobalDataKeeper().getAllPPLTransitions());
-				TableConstructionIDU table = constructedIDUTable;
-				configuration.setSegmentSizeZoomArea(table.getSegmentSize());
-				System.out.println("Schemas: "+dataGenerator.getGlobalDataKeeper().getAllPPLSchemas().size());
-				System.out.println("C: "+table.getConstructedColumns().length+" R: "+table.getConstructedRows().length);
-
-				configuration.setFinalColumnsZoomArea(table.getConstructedColumns());
-				configuration.setFinalRowsZoomArea(table.getConstructedRows());
-				configuration.getTabbedPane().setSelectedIndex(0);
-				dataGenerator.makeGeneralTableIDU();
-				dataGenerator.fillTree();
-					
-				
+				PLDShowWidget pldShowWidget = new PLDShowWidget(configuration, dataGenerator);
+				pldShowWidget.showPLD();
 			}
 		});
 		mnTable.add(mntmShowGeneralLifetimeIDU);
@@ -1091,6 +1035,10 @@ public class Gui extends JFrame implements ActionListener{
 	
 	public void setDescription(String descr){
 		configuration.getDescriptionText().setText(descr);
+	}
+	
+	public Configuration getConfiguration(){
+		return this.configuration;
 	}
 	
 	@Override

@@ -5,17 +5,34 @@ import java.util.ArrayList;
 import data.dataKeeper.GlobalDataKeeper;
 import gui.configurations.Configuration;
 import gui.tableElements.tableConstructors.PldConstruction;
-import gui.tableElements.tableConstructors.TableConstructionClusterTablesPhasesZoomA;
-import gui.tableElements.tableConstructors.TableConstructionZoomArea;
-import services.DataService;
 import services.TableService;
 
 public class ClusterSelectionToZoomAreaWidget 
 {
-	public void showClusterSelectionToZoomArea(Configuration configuration, GlobalDataKeeper globalDataKeeper, int selectedColumn,String selectedCluster)
-	{
 
-		ArrayList<String> tablesOfCluster=new ArrayList<String>();
+	private Configuration configuration;
+	private GlobalDataKeeper globalDataKeeper;
+	private int selectedColumn; 
+	
+	public ClusterSelectionToZoomAreaWidget(Configuration configuration, GlobalDataKeeper globalDataKeeper,int selectedColumn) {
+		this.configuration = configuration;
+		this.globalDataKeeper = globalDataKeeper;
+		this.selectedColumn = selectedColumn;
+	}
+	
+	public void showClusterSelectionToZoomArea()
+	{
+		ArrayList<String> tablesOfCluster = createTableCluster();
+	
+		updateConfigurationWithPldTable(tablesOfCluster);
+		ZoomAreaTableForClusterWidget zoomAreaTableForClusterWidget = new ZoomAreaTableForClusterWidget(configuration, globalDataKeeper);
+		zoomAreaTableForClusterWidget.makeZoomAreaTableForCluster();
+		
+	}
+	
+	private ArrayList<String> createTableCluster(){
+		ArrayList<String> tablesOfCluster = new ArrayList<>();
+		
 		for(int i=0; i <configuration.getTablesSelected().size(); i++){
 			String[] selectedClusterSplit= configuration.getTablesSelected().get(i).split(" ");
 			int cluster=Integer.parseInt(selectedClusterSplit[1]);
@@ -25,7 +42,10 @@ public class ClusterSelectionToZoomAreaWidget
 			}
 			System.out.println(configuration.getTablesSelected().get(i));
 		}
-		
+		return tablesOfCluster;
+	}
+	
+	private void updateConfigurationWithPldTable(ArrayList<String> tablesOfCluster){
 		PldConstruction table;
 		TableService service = new TableService(); 
 		if (selectedColumn==0) {
@@ -45,9 +65,6 @@ public class ClusterSelectionToZoomAreaWidget
 		configuration.setFinalColumnsZoomArea(columns);
 		configuration.setFinalRowsZoomArea(rows);
 		configuration.getTabbedPane().setSelectedIndex(0);
-		//makeZoomAreaTableForCluster();
-		ZoomAreaTableForClusterWidget zoomAreaTableForClusterWidget = new ZoomAreaTableForClusterWidget(configuration, globalDataKeeper);
-		zoomAreaTableForClusterWidget.makeZoomAreaTableForCluster();
 		
 	}
 }
