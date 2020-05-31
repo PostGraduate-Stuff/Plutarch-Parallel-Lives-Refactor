@@ -1,10 +1,12 @@
-package gui.widgets;
+package gui.ui;
 
 import java.io.File;
 import java.util.ArrayList;
 import data.dataKeeper.GlobalDataKeeper;
 import data.dataKeeper.PPLFile;
-import gui.configurations.Configuration;
+import gui.configurations.DataConfiguration;
+import gui.configurations.DataTablesConfiguration;
+import gui.configurations.GuiConfiguration;
 import gui.tableElements.tableConstructors.TableConstructionIDU;
 import gui.tableElements.tableConstructors.TableConstructionWithClusters;
 import phaseAnalyzer.engine.PhaseAnalyzerMainEngine;
@@ -14,15 +16,22 @@ import services.TableService;
 import tableClustering.clusterExtractor.commons.Cluster;
 import tableClustering.clusterExtractor.engine.TableClusteringMainEngine;
 
-public class DataGeneratorWidget{
+public class DataGeneratorUI{
 	private GlobalDataKeeper globalDataKeeper;
 	private PPLFile pplFile;
-	private Configuration configuration;
+	private GuiConfiguration guiConfiguration;
+	private DataConfiguration dataConfiguration;
+	private DataTablesConfiguration dataTableConfiguration;
 	private TableConstructionIDU constructedIDUTable;
 	private TableConstructionWithClusters clusterTable;
 	
-	public DataGeneratorWidget(Configuration configuration) {
-		this.configuration = configuration;
+	public DataGeneratorUI(GuiConfiguration guiConfiguration,
+								DataConfiguration dataConfiguration,
+								DataTablesConfiguration dataTableConfiguration) 
+	{
+		this.guiConfiguration = guiConfiguration;
+		this.dataConfiguration = dataConfiguration;
+		this.dataTableConfiguration = dataTableConfiguration;
 	}
 
 	public void importData(File file){
@@ -37,30 +46,30 @@ public class DataGeneratorWidget{
 		
 		createPhaseAnalyserEngine();
 		
-		configuration.setNumberOfClusters(14);
-		createTableClusteringMainEngine(configuration.getNumberOfClusters());
+		dataConfiguration.setNumberOfClusters(14);
+		createTableClusteringMainEngine(dataConfiguration.getNumberOfClusters());
 		
 		fillTable();
-		printPPLData();
+		globalDataKeeper.printPPLData();
 		fillTree();
 	}
 	
 	public void initiateLoadState(){
-		configuration.setTimeWeight((float)0.5); 
-		configuration.setChangeWeight((float)0.5);
-		configuration.setPreProcessingTime(false);
-		configuration.setPreProcessingChange(false);
+		dataConfiguration.setTimeWeight((float)0.5); 
+		dataConfiguration.setChangeWeight((float)0.5);
+		dataConfiguration.setPreProcessingTime(false);
+		dataConfiguration.setPreProcessingChange(false);
 	}
 	
 	public void setIDUPanel(){
-		configuration.setFinalColumnsZoomArea(constructedIDUTable.getConstructedColumns());
-		configuration.setFinalRowsZoomArea(constructedIDUTable.getConstructedRows());
-		configuration.getTabbedPane().setSelectedIndex(0);
-		configuration.setSegmentSizeZoomArea(constructedIDUTable.getSegmentSize());
+		dataConfiguration.setFinalColumnsZoomArea(constructedIDUTable.getConstructedColumns());
+		dataConfiguration.setFinalRowsZoomArea(constructedIDUTable.getConstructedRows());
+		guiConfiguration.getTabbedPane().setSelectedIndex(0);
+		dataConfiguration.setSegmentSizeZoomArea(constructedIDUTable.getSegmentSize());
 	}
 	
 	public void makeGeneralTableIDU(){
-		GeneralTableIDUWidget widget = new GeneralTableIDUWidget(configuration, globalDataKeeper);
+		GeneralTableIDUUI widget = new GeneralTableIDUUI (guiConfiguration,dataConfiguration,dataTableConfiguration, globalDataKeeper);
 		widget.makeGeneralTableIDU();
 		widget.constructGeneralTableIDU();
 	}
@@ -71,9 +80,9 @@ public class DataGeneratorWidget{
 		}
 		constructTableWithClusters();
 		
-		configuration.getTabbedPane().setSelectedIndex(0);
-		configuration.getUniformlyDistributedButton().setVisible(true);
-		configuration.getNotUniformlyDistributedButton().setVisible(true);
+		guiConfiguration.getTabbedPane().setSelectedIndex(0);
+		guiConfiguration.getUniformlyDistributedButton().setVisible(true);
+		guiConfiguration.getNotUniformlyDistributedButton().setVisible(true);
 		
 		makeGeneralTablePhases();
 		fillClustersTree( globalDataKeeper.getClusterCollectors().get(0).getClusters());
@@ -85,10 +94,10 @@ public class DataGeneratorWidget{
 		final String[] columns= clusterTable.getConstructedColumns();
 		final String[][] rows= clusterTable.getConstructedRows();
 		
-		configuration.setSegmentSize(clusterTable.getSegmentSize());
-		configuration.setFinalColumns(columns);
-		configuration.setFinalRows(rows);
-		configuration.setSelectedRows(new ArrayList<Integer>());
+		dataConfiguration.setSegmentSize(clusterTable.getSegmentSize());
+		dataConfiguration.setFinalColumns(columns);
+		dataConfiguration.setFinalRows(rows);
+		guiConfiguration.setSelectedRows(new ArrayList<Integer>());
 	}
 	
 	public TableConstructionWithClusters constructClustersTable(){
@@ -99,18 +108,12 @@ public class DataGeneratorWidget{
 	}
 	
 	public void makeGeneralTablePhases(){
-		GeneralTablePhasesWidget widget = new GeneralTablePhasesWidget(configuration, globalDataKeeper) ;
+		GeneralTablePhasesUI widget = new GeneralTablePhasesUI(guiConfiguration,dataConfiguration,dataTableConfiguration, globalDataKeeper) ;
 		widget.initializeGeneralTablePhases();
 	}
 	
-	public void printPPLData(){
-		System.out.println("Schemas:"+globalDataKeeper.getAllPPLSchemas().size());
-		System.out.println("Transitions:"+globalDataKeeper.getAllPPLTransitions().size());
-		System.out.println("Tables:"+globalDataKeeper.getAllPPLTables().size());
-	}
-	
 	public void fillTree(){
-		TreeConstructionWidget treeWidget = new TreeConstructionWidget(configuration, globalDataKeeper.getAllPPLSchemas());
+		TreeConstructionUI treeWidget = new TreeConstructionUI(guiConfiguration,dataTableConfiguration, globalDataKeeper.getAllPPLSchemas());
 		treeWidget.fillTree();
 	}
 
@@ -135,7 +138,7 @@ public class DataGeneratorWidget{
 	
 	public void createPhaseAnalyserEngine(){
 		PhasesService myService = new PhasesService();
-		PhaseAnalyzerMainEngine mainPhaseEngine= myService.createPhaseAnalyserEngine(configuration,globalDataKeeper,pplFile);
+		PhaseAnalyzerMainEngine mainPhaseEngine= myService.createPhaseAnalyserEngine(dataConfiguration,globalDataKeeper,pplFile);
 		myService.connectTransitionsWithPhases(mainPhaseEngine, globalDataKeeper.getAllPPLTransitions());
 		globalDataKeeper.setPhaseCollectors(mainPhaseEngine.getPhaseCollectors());
 	}
@@ -147,13 +150,10 @@ public class DataGeneratorWidget{
 	}
 	
 	public void fillClustersTree(ArrayList<Cluster> clusters){
-		TreeConstructionPhasesWithClustersWidget clustersTree = new TreeConstructionPhasesWithClustersWidget(configuration,clusters);
+		TreeConstructionPhasesWithClustersUI clustersTree = new TreeConstructionPhasesWithClustersUI(guiConfiguration, dataTableConfiguration ,clusters);
 		clustersTree.fillClustersTree();
 	}
 	
-	public Configuration getConfiguration(){
-		return configuration;
-	}
 
 	public GlobalDataKeeper getGlobalDataKeeper() {
 		return globalDataKeeper;

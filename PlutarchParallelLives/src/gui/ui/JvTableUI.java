@@ -1,35 +1,38 @@
-package gui.widgets;
+package gui.ui;
 
 import java.awt.Dimension;
 import java.util.ArrayList;
 
 import javax.swing.JTable;
 
-import gui.configurations.Configuration;
+import gui.configurations.DataConfiguration;
+import gui.configurations.GuiConfiguration;
 import gui.tableElements.commons.JvTable;
 import gui.tableElements.commons.MyTableModel;
 import gui.tableElements.tableRenderers.IDUHeaderTableRenderer;
 import phaseAnalyzer.commons.Phase;
 
-public class JvTableWidget {
-	private Configuration configuration;
+public class JvTableUI {
+	private GuiConfiguration configuration;
+	private DataConfiguration dataConfiguration;
 	private ArrayList<Phase> initialPhases;
 	private JvTable generalTable;
 	
-	public JvTableWidget(Configuration configuration, ArrayList<Phase> initialPhases) {
+	public JvTableUI(GuiConfiguration configuration, DataConfiguration dataConfiguration, ArrayList<Phase> initialPhases) {
 		this.configuration = configuration;
+		this.dataConfiguration = dataConfiguration;
 		this.initialPhases = initialPhases;
 	}
 
 	public JvTable makeGeneralTableIDU() 
 	{
-		int numberOfColumns=configuration.getFinalRowsZoomArea()[0].length;
-		int numberOfRows=configuration.getFinalRowsZoomArea().length;
+		int numberOfColumns=dataConfiguration.getFinalRowsZoomArea()[0].length;
+		int numberOfRows=dataConfiguration.getFinalRowsZoomArea().length;
 		
 		String[][] rows= createFinalZoomAreaRows(numberOfRows, numberOfColumns);
 		
 		MyTableModel zoomModel= new MyTableModel();
-		zoomModel.initializeZoomModel(configuration.getFinalColumnsZoomArea(), rows);
+		zoomModel.initializeZoomModel(dataConfiguration.getFinalColumnsZoomArea(), rows);
 		
 		createJvTable(zoomModel); 
 		
@@ -88,7 +91,7 @@ public class JvTableWidget {
 		String[][] rows = new String[numberOfRows][numberOfColumns];
 				
 		for(int i=0; i<numberOfRows; i++){
-			rows[i][0]=configuration.getFinalRowsZoomArea()[i][0];
+			rows[i][0]=dataConfiguration.getFinalRowsZoomArea()[i][0];
 		}
 		
 		return rows;

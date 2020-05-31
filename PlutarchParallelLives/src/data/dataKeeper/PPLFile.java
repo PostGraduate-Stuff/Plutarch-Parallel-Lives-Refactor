@@ -94,18 +94,19 @@ public void importData(String fileName) throws IOException, RecognitionException
 		
 		br.close();
 		
+		displayProjectsDescription();
 		
+		
+	}
+	
+	public void displayProjectsDescription(){
 		System.out.println("Project Name:"+projectName);
 		System.out.println("Dataset txt:"+datasetTxt);
 		System.out.println("Input Csv:"+inputCsv);
 		System.out.println("Output Assessment1:"+outputAssessment1);
 		System.out.println("Output Assessment2:"+outputAssessment2);
 		System.out.println("Transitions File:"+transitionsFile);
-
-		
-		
 	}
-
 
 public File getFile() {
 	return file;

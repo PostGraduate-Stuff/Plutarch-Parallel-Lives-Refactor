@@ -12,7 +12,7 @@ import data.dataKeeper.PPLFile;
 import data.dataPPL.pplSQLSchema.PPLSchema;
 import data.dataPPL.pplSQLSchema.PPLTable;
 import data.dataPPL.pplTransition.PPLTransition;
-import gui.configurations.Configuration;
+import gui.configurations.GuiConfiguration;
 import gui.tableElements.commons.JvTable;
 import gui.tableElements.commons.MyTableModel;
 import gui.tableElements.tableConstructors.TableConstructionClusterTablesPhasesZoomA;

@@ -9,10 +9,10 @@ import org.junit.Test;
 
 import data.dataKeeper.GlobalDataKeeper;
 import data.dataKeeper.PPLFile;
-import gui.configurations.Configuration;
+import gui.configurations.GuiConfiguration;
 import gui.mainEngine.Gui;
 import gui.tableElements.tableConstructors.TableConstructionWithClusters;
-import gui.widgets.DataGeneratorWidget;
+import gui.ui.DataGeneratorUI;
 import phaseAnalyzer.engine.PhaseAnalyzerMainEngine;
 import services.DataService;
 import services.TableService;
@@ -23,7 +23,7 @@ public class WidgetTester {
 	public void testDataGeneratorWidget() throws RecognitionException, IOException 
 	{
 		Gui gui = new Gui();
-		DataGeneratorWidget dataWidget = new DataGeneratorWidget(gui.getConfiguration());
+		DataGeneratorUI dataWidget = new DataGeneratorUI(gui.getConfiguration(), gui.getDataConfiguration(), gui.getTablesConfiguration());
 		dataWidget.initiateLoadState();
 		dataWidget.importDataFromFile(new File("C:\\Users\\Christina\\git\\Plutarch-Parallel-Lives-Refactor\\PlutarchParallelLives\\filesHandler\\inis\\biosql.ini"));
 		TableService service = new TableService();

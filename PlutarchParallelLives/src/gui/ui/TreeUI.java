@@ -1,15 +1,18 @@
-package gui.widgets;
+package gui.ui;
 
 import javax.swing.JScrollPane;
 
-import gui.configurations.Configuration;
+import gui.configurations.DataTablesConfiguration;
+import gui.configurations.GuiConfiguration;
 
-public abstract class TreeWidget {
-	protected Configuration configuration;
+public abstract class TreeUI {
+	protected GuiConfiguration configuration;
+	protected DataTablesConfiguration tablesConfiguration;
 	
-	public TreeWidget(Configuration configuration)
+	public TreeUI(GuiConfiguration configuration, DataTablesConfiguration tablesConfiguration)
 	{
 		this.configuration = configuration;
+		this.tablesConfiguration = tablesConfiguration;
 	}
 	
 	protected void setSettingsConfigurations(String text) {

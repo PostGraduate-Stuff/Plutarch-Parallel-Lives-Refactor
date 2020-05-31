@@ -1,4 +1,4 @@
-package gui.widgets;
+package gui.ui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,16 +13,17 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 
 import data.dataKeeper.GlobalDataKeeper;
-import gui.configurations.Configuration;
+import gui.configurations.DataTablesConfiguration;
+import gui.configurations.GuiConfiguration;
 import gui.treeElements.TreeConstructionPhases;
 
-public class TreeConstructionPhasesWidget extends TreeWidget
+public class TreeConstructionPhasesUI extends TreeUI
 {
 	private GlobalDataKeeper globalDataKeeper;
 	
-	public TreeConstructionPhasesWidget(GlobalDataKeeper globalDataKeeper, Configuration configuration)
+	public TreeConstructionPhasesUI(GlobalDataKeeper globalDataKeeper, GuiConfiguration configuration, DataTablesConfiguration tablesConfiguration)
 	{
-		super(configuration);
+		super(configuration, tablesConfiguration);
 		this.globalDataKeeper = globalDataKeeper;
 	}
 	
@@ -53,7 +54,7 @@ public class TreeConstructionPhasesWidget extends TreeWidget
 					            @Override
 					            public void actionPerformed(ActionEvent e) {
 					          
-					            	configuration.getLifeTimeTable().repaint();
+					            	tablesConfiguration.getLifeTimeTable().repaint();
 					            	
 					            }
 					        });

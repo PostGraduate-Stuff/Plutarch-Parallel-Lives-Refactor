@@ -5,19 +5,20 @@ import java.util.TreeMap;
 import data.dataKeeper.GlobalDataKeeper;
 import data.dataKeeper.PPLFile;
 import data.dataPPL.pplTransition.PPLTransition;
-import gui.configurations.Configuration;
+import gui.configurations.DataConfiguration;
+import gui.configurations.GuiConfiguration;
 import phaseAnalyzer.engine.PhaseAnalyzerMainEngine;
 
 public class PhasesService implements IPhasesService
 {
 	@Override
-	public PhaseAnalyzerMainEngine createPhaseAnalyserEngine(Configuration configuration,
+	public PhaseAnalyzerMainEngine createPhaseAnalyserEngine(DataConfiguration dataConfiguration,
 									GlobalDataKeeper globalDataKeeper,
 									PPLFile pplFile) 
 	{
 		
-        System.out.println(configuration.getTimeWeight()+" "+ configuration.getChangeWeight());
-		PhaseAnalyzerMainEngine mainEngine = new PhaseAnalyzerMainEngine(pplFile.getInputCsv(),pplFile.getOutputAssessment1(),pplFile.getOutputAssessment2(), configuration.getTimeWeight(),configuration.getChangeWeight(), configuration.getPreProcessingTime(), configuration.getPreProcessingChange());
+        System.out.println(dataConfiguration.getTimeWeight()+" "+ dataConfiguration.getChangeWeight());
+		PhaseAnalyzerMainEngine mainEngine = new PhaseAnalyzerMainEngine(pplFile.getInputCsv(),pplFile.getOutputAssessment1(),pplFile.getOutputAssessment2(), dataConfiguration.getTimeWeight(),dataConfiguration.getChangeWeight(), dataConfiguration.getPreProcessingTime(), dataConfiguration.getPreProcessingChange());
 
 		mainEngine.parseInput();		
 		System.out.println("\n\n\n");
@@ -30,7 +31,6 @@ public class PhasesService implements IPhasesService
 	public void connectTransitionsWithPhases(PhaseAnalyzerMainEngine mainEngine,
 											TreeMap<Integer,PPLTransition> allPPLTransitions) 
 	{
-		//test an to mainEngine exei krathsei tis allages kai eksw sto GUI alliws thelei return
 		
 		int numberOfPhases= 56;
 		if(allPPLTransitions.size()<56)

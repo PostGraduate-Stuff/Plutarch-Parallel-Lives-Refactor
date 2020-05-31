@@ -1,4 +1,4 @@
-package gui.widgets;
+package gui.ui;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -17,18 +17,20 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 import data.dataKeeper.Description;
 import data.dataKeeper.GlobalDataKeeper;
-import gui.configurations.Configuration;
+import gui.configurations.DataConfiguration;
+import gui.configurations.DataTablesConfiguration;
+import gui.configurations.GuiConfiguration;
 import gui.tableElements.commons.JvTable;
 import gui.tableElements.commons.MyTableModel;
 
-public class ZoomAreaTableForClusterWidget extends TableWidget {
+public class ZoomAreaTableForClusterUI extends TableUI {
 
 	private GlobalDataKeeper globalDataKeeper;
 	
 	private Description descriptionHelper;
 	
-	public ZoomAreaTableForClusterWidget(Configuration configuration, GlobalDataKeeper globalDataKeeper){
-		super(configuration);
+	public ZoomAreaTableForClusterUI(GuiConfiguration configuration, GlobalDataKeeper globalDataKeeper, DataTablesConfiguration tablesConfiguration, DataConfiguration dataConfiguration){
+		super(configuration, dataConfiguration, tablesConfiguration);
 		this.globalDataKeeper = globalDataKeeper;
 		this.descriptionHelper = new Description(globalDataKeeper);
 	}
@@ -40,7 +42,7 @@ public class ZoomAreaTableForClusterWidget extends TableWidget {
 		
 		final String[][] rowsZoom = createZoomArea();
 		
-		configuration.setZoomModel(new MyTableModel(configuration.getFinalColumnsZoomArea(), rowsZoom));
+		tablesConfiguration.setZoomModel(new MyTableModel(dataConfiguration.getFinalColumnsZoomArea(), rowsZoom));
 		
 		createtable(); 
 		
@@ -112,7 +114,7 @@ public class ZoomAreaTableForClusterWidget extends TableWidget {
 		        
 		        
 		        
-		        String tmpValue=configuration.getFinalRowsZoomArea()[row][column];
+		        String tmpValue=dataConfiguration.getFinalRowsZoomArea()[row][column];
 		        String columnName=table.getColumnName(column);
 		        Color fr=new Color(0,0,0);
 		        c.setForeground(fr);
@@ -131,9 +133,9 @@ public class ZoomAreaTableForClusterWidget extends TableWidget {
 		        }
 		        else if(configuration.getSelectedColumnZoomArea()==0){
 		        	if (isSelected){
-		        		String description="Table:"+configuration.getFinalRowsZoomArea()[row][0]+"\n";
-		        		description=description+descriptionHelper.getBirthDeathDescription(configuration.getFinalRowsZoomArea()[row][0]);
-		        		description=description+"Total Changes:"+globalDataKeeper.getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).getTotalChanges()+"\n";
+		        		String description="Table:"+dataConfiguration.getFinalRowsZoomArea()[row][0]+"\n";
+		        		description=description+descriptionHelper.getBirthDeathDescription(dataConfiguration.getFinalRowsZoomArea()[row][0]);
+		        		description=description+"Total Changes:"+globalDataKeeper.getAllPPLTables().get(dataConfiguration.getFinalRowsZoomArea()[row][0]).getTotalChanges()+"\n";
 		        		configuration.getDescriptionText().setText(description);
 		        		Color cl = new Color(255,69,0,100);
 		        		c.setBackground(cl);
@@ -149,8 +151,8 @@ public class ZoomAreaTableForClusterWidget extends TableWidget {
 		        			
 		        			description="Transition "+table.getColumnName(column)+"\n";
 		        			description = description + descriptionHelper.getOldNewVersionDescription(Integer.parseInt(table.getColumnName(column)));
-		        			description=description+"Table:"+configuration.getFinalRowsZoomArea()[row][0]+"\n";
-		        			description=description+descriptionHelper.getBirthDeathDescription(configuration.getFinalRowsZoomArea()[row][0]);
+		        			description=description+"Table:"+dataConfiguration.getFinalRowsZoomArea()[row][0]+"\n";
+		        			description=description+descriptionHelper.getBirthDeathDescription(dataConfiguration.getFinalRowsZoomArea()[row][0]);
 			        		description=description+"Total Changes For This Phase:"+tmpValue+"\n";
 			        		
 			        		configuration.getDescriptionText().setText(description);
@@ -172,14 +174,14 @@ public class ZoomAreaTableForClusterWidget extends TableWidget {
 	        		if(numericValue==0){
 	        			insersionColor=new Color(0,100,0);
 	        		}
-	        		else if(numericValue> 0&& numericValue<=configuration.getSegmentSizeZoomArea()[3]){
+	        		else if(numericValue> 0&& numericValue<=dataConfiguration.getSegmentSizeZoomArea()[3]){
 	        			
 	        			insersionColor=new Color(176,226,255);
 		        	}
-	        		else if(numericValue>configuration.getSegmentSizeZoomArea()[3] && numericValue<=2*configuration.getSegmentSizeZoomArea()[3]){
+	        		else if(numericValue>dataConfiguration.getSegmentSizeZoomArea()[3] && numericValue<=2*dataConfiguration.getSegmentSizeZoomArea()[3]){
 	        			insersionColor=new Color(92,172,238);
 	        		}
-	        		else if(numericValue>2*configuration.getSegmentSizeZoomArea()[3] && numericValue<=3*configuration.getSegmentSizeZoomArea()[3]){
+	        		else if(numericValue>2*dataConfiguration.getSegmentSizeZoomArea()[3] && numericValue<=3*dataConfiguration.getSegmentSizeZoomArea()[3]){
 	        			
 	        			insersionColor=new Color(28,134,238);
 	        		}
@@ -239,10 +241,10 @@ public class ZoomAreaTableForClusterWidget extends TableWidget {
 
 						            @Override
 						            public void actionPerformed(ActionEvent e) {
-						            	configuration.setFirstLevelUndoColumnsZoomArea(configuration.getFinalColumnsZoomArea());
-						            	configuration.setFirstLevelUndoRowsZoomArea(configuration.getFinalRowsZoomArea());
-						            	SelectionToZoomAreaWidget widget = new SelectionToZoomAreaWidget();
-						            	widget.showSelectionToZoomArea(configuration.getSelectedColumnZoomArea(), globalDataKeeper, configuration);
+						            	dataConfiguration.setFirstLevelUndoColumnsZoomArea(dataConfiguration.getFinalColumnsZoomArea());
+						            	dataConfiguration.setFirstLevelUndoRowsZoomArea(dataConfiguration.getFinalRowsZoomArea());
+						            	SelectionToZoomAreaUI widget = new SelectionToZoomAreaUI();
+						            	widget.showSelectionToZoomArea(configuration.getSelectedColumnZoomArea(), globalDataKeeper, configuration, dataConfiguration, tablesConfiguration);
 										
 						            	
 						            }
@@ -266,7 +268,7 @@ public class ZoomAreaTableForClusterWidget extends TableWidget {
 			         
 			         configuration.setSelectedRowsFromMouse(target.getSelectedRows());
 			         configuration.setSelectedColumnZoomArea(target.getSelectedColumn());
-			         configuration.getZoomAreaTable().repaint();
+			         tablesConfiguration.getZoomAreaTable().repaint();
 				}
 			   
 			   }
@@ -274,7 +276,7 @@ public class ZoomAreaTableForClusterWidget extends TableWidget {
 	}
 
 	private JvTable createtable() {
-		table=new JvTable(configuration.getZoomModel());
+		table=new JvTable(tablesConfiguration.getZoomModel());
 		
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		
@@ -294,12 +296,12 @@ public class ZoomAreaTableForClusterWidget extends TableWidget {
 	}
 
 	private String[][] createZoomArea() {
-		int numberOfColumns = configuration.getFinalRowsZoomArea()[0].length;
-		int numberOfRows = configuration.getFinalRowsZoomArea().length;
+		int numberOfColumns = dataConfiguration.getFinalRowsZoomArea()[0].length;
+		int numberOfRows = dataConfiguration.getFinalRowsZoomArea().length;
 		String[][] rowsZoom = new String[numberOfRows][numberOfColumns];
 
 		for(int i=0; i<numberOfRows; i++){
-			rowsZoom[i][0]=configuration.getFinalRowsZoomArea()[i][0];
+			rowsZoom[i][0]=dataConfiguration.getFinalRowsZoomArea()[i][0];
 		}
 		
 		return rowsZoom;

@@ -1,4 +1,4 @@
-package gui.widgets;
+package gui.ui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -13,17 +13,18 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 
-import gui.configurations.Configuration;
+import gui.configurations.DataTablesConfiguration;
+import gui.configurations.GuiConfiguration;
 import gui.treeElements.TreeConstructionPhasesWithClusters;
 import tableClustering.clusterExtractor.commons.Cluster;
 
-public class TreeConstructionPhasesWithClustersWidget extends TreeWidget{
+public class TreeConstructionPhasesWithClustersUI extends TreeUI{
 
 	public ArrayList<Cluster> clusters;
 	
-	public TreeConstructionPhasesWithClustersWidget(Configuration configuration, ArrayList<Cluster> clusters)
+	public TreeConstructionPhasesWithClustersUI(GuiConfiguration configuration, DataTablesConfiguration tablesConfiguration, ArrayList<Cluster> clusters)
 	{
-		super(configuration);
+		super(configuration,tablesConfiguration);
 		this.clusters = clusters;
 	}
 	
@@ -56,7 +57,7 @@ public class TreeConstructionPhasesWithClustersWidget extends TreeWidget{
 					            @Override
 					            public void actionPerformed(ActionEvent e) {
 					          
-					            	configuration.getLifeTimeTable().repaint();
+					            	tablesConfiguration.getLifeTimeTable().repaint();
 					            	
 					            }
 					        });

@@ -64,8 +64,12 @@ public class GlobalDataKeeper {
 		setAtomicChanges(w.getAtomicChanges());
 		setDataFolder(w.getDataFolder());
 		
-
-		
+	}
+	
+	public void printPPLData(){
+		System.out.println("Schemas:"+allPPLSchemas.size());
+		System.out.println("Transitions:"+allPPLTransitions.size());
+		System.out.println("Tables:"+allTables.size());
 	}
 	
 	public void setPhaseCollectors(ArrayList<PhaseCollector> phaseCollectors){

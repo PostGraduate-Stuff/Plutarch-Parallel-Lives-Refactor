@@ -1,6 +1,6 @@
 package gui.tableElements.tableRenderers;
 
-import gui.configurations.Configuration;
+import gui.configurations.GuiConfiguration;
 import gui.mainEngine.Gui;
 
 import java.awt.Color;
@@ -21,10 +21,10 @@ public class IDUTableRenderer extends DefaultTableCellRenderer{
 	private int selectedColumn;
 	//private ArrayList<String> selectedFromTree = new ArrayList<String>();
 	private Integer[] segmentSize=new Integer[3];
-	private Configuration configuration;
+	private GuiConfiguration configuration;
 
 	
-	public IDUTableRenderer(Configuration configuration ,String[][] finalRows , GlobalDataKeeper globalDataKeeper,Integer[] segmentSize){
+	public IDUTableRenderer(GuiConfiguration configuration ,String[][] finalRows , GlobalDataKeeper globalDataKeeper,Integer[] segmentSize){
 		this.finalRows=finalRows;
 		//this.wholeCol = wholeCol;
 		this.globalDataKeeper = globalDataKeeper;

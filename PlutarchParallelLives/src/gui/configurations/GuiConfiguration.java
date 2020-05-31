@@ -1,8 +1,13 @@
 package gui.configurations;
 
+import java.awt.Color;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
+import javax.swing.GroupLayout;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -11,80 +16,32 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTree;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.border.EmptyBorder;
 
 import data.dataKeeper.GlobalDataKeeper;
 import data.dataKeeper.PPLFile;
+import gui.dialogs.EnlargeTable;
 import gui.tableElements.commons.JvTable;
 import gui.tableElements.commons.MyTableModel;
 import gui.tableElements.tableConstructors.TableConstructionIDU;
 import gui.tableElements.tableConstructors.TableConstructionWithClusters;
+import gui.ui.ZoomAreaTableForClusterUI;
 import services.DataService;
 
-public class Configuration 
+public class GuiConfiguration extends JFrame
 {
-	private Float timeWeight=null;
-	private Float changeWeight=null;
-	private Double birthWeight=null;
-	private Double deathWeight=null;
-	private Double changeWeightCl=null;
-	private Integer numberOfPhases=null;
-	private Integer numberOfClusters=null;
-	private Boolean preProcessingTime=null;
-	private Boolean preProcessingChange=null;
+	
+	//gui
 	private int rowHeight=1;
 	private int columnWidth=1;
 	private int wholeCol=-1;
-	private Integer[] segmentSize=new Integer[4];
-	
-	private String[] finalColumns=null;
-	private String[][] finalRows=null;
-	private String[] finalColumnsZoomArea = null; 
-	private String[][] finalRowsZoomArea =null;
-	
-	private ArrayList<Integer> selectedRows=new ArrayList<Integer>();
-	
-	
-	//~~
-	
 	private JPanel contentPane;
 	private JPanel lifeTimePanel = new JPanel();
 	private JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-	
-	private MyTableModel detailedModel = null;
-	private MyTableModel generalModel = null;
-	private MyTableModel zoomModel = null;
-
-	private JvTable LifeTimeTable=null;
-	private JvTable zoomAreaTable=null;
-	
-	
-	
 	private JScrollPane tmpScrollPane =new JScrollPane();
 	private JScrollPane treeScrollPane= new JScrollPane();
 	private JScrollPane tmpScrollPaneZoomArea =new JScrollPane();
-
-	
-	
-	//public ArrayList<Integer> selectedRows=new ArrayList<Integer>();
-	//public globalDataKeeper globalDataKeeper=null;
-
-	
-	
-	
-	
-	
-	private String[] firstLevelUndoColumnsZoomArea=null;
-	private String[][] firstLevelUndoRowsZoomArea=null;
-	//public String currentProject=null; == getFileContent
-	//public String project=null;
-	
-	
-	
-	private Integer[] segmentSizeZoomArea=new Integer[4];
-	private Integer[] segmentSizeDetailedTable=new Integer[3];
-
-	private ArrayList<String> selectedFromTree=new ArrayList<String>();
-	
 	private JTree tablesTree=new JTree();
 	private JPanel sideMenu=new JPanel();
 	private JPanel tablesTreePanel=new JPanel();
@@ -99,111 +56,144 @@ public class Configuration
 	private JButton uniformlyDistributedButton;
 	private JButton notUniformlyDistributedButton;
 	private JButton showThisToPopup;
-
-	
-	private int[] selectedRowsFromMouse;
-	private int selectedColumn=-1;
-	private int selectedColumnZoomArea=-1;
-
-	private int wholeColZoomArea=-1;
-	
-	
-
-	private ArrayList<String> tablesSelected = new ArrayList<String>();
-
-	private boolean showingPld=false;
-	
 	private JButton undoButton;
 	private JMenu mnProject;
 	private JMenuItem mntmInfo;
 	
-	//~~
-
-	public Configuration(Float timeWeight,
-						 Float changeWeight,
-						 Double birthWeight,
-						 Double deathWeight,
-						 Double changeWeightCl)
-	{
-		this.timeWeight=timeWeight;
-		this.changeWeight=changeWeight;
-		this.birthWeight=birthWeight;
-		this.deathWeight=deathWeight;
-		this.changeWeightCl=changeWeightCl;
+	private boolean showingPld=false;
+	
+	private ArrayList<Integer> selectedRows=new ArrayList<Integer>();
+	private ArrayList<String> tablesSelected = new ArrayList<String>();
+	private ArrayList<String> selectedFromTree=new ArrayList<String>();
+	private int[] selectedRowsFromMouse;
+	private int selectedColumn=-1;
+	private int selectedColumnZoomArea=-1;
+	private int wholeColZoomArea=-1;
+	
+	public void setSideMenu(){
+		setSideMenuConfig();
+		setTablesTreePanelConfig();
+		setDescriptionPanelConfig();
+		setDescriptionPanelConfig();
+		addToSideMenu();
 	}
 	
-	public Configuration(){}
-
-	public Float getTimeWeight() {
-		return timeWeight;
+	private void setSideMenuConfig(){
+		sideMenu.setBounds(0, 0, 280, 600);
+		sideMenu.setBackground(Color.DARK_GRAY);
+		
+		GroupLayout gl_sideMenu = new GroupLayout(sideMenu);
+		gl_sideMenu.setHorizontalGroup(gl_sideMenu.createParallelGroup(Alignment.LEADING));
+		gl_sideMenu.setVerticalGroup(gl_sideMenu.createParallelGroup(Alignment.LEADING));
+		sideMenu.setLayout(gl_sideMenu);
+	}
+	
+	private void setTablesTreePanelConfig(){
+		tablesTreePanel.setBounds(10, 400, 260, 180);
+		tablesTreePanel.setBackground(Color.LIGHT_GRAY);
+		
+		GroupLayout gl_tablesTreePanel = new GroupLayout(tablesTreePanel);
+		gl_tablesTreePanel.setHorizontalGroup(gl_tablesTreePanel.createParallelGroup(Alignment.LEADING));
+		gl_tablesTreePanel.setVerticalGroup(gl_tablesTreePanel.createParallelGroup(Alignment.LEADING));
+		tablesTreePanel.setLayout(gl_tablesTreePanel);
+		
+		treeLabel = new JLabel();
+		treeLabel.setBounds(10, 370, 260, 40);
+		treeLabel.setForeground(Color.WHITE);
+		treeLabel.setText("Tree");
 	}
 
-	public void setTimeWeight(Float timeWeight) {
-		this.timeWeight = timeWeight;
+	private void setDescriptionPanelConfig(){
+		descriptionPanel.setBounds(10, 190, 260, 180);
+		descriptionPanel.setBackground(Color.LIGHT_GRAY);
+		
+		GroupLayout gl_descriptionPanel = new GroupLayout(descriptionPanel);
+		gl_descriptionPanel.setHorizontalGroup(gl_descriptionPanel.createParallelGroup(Alignment.LEADING));
+		gl_descriptionPanel.setVerticalGroup(gl_descriptionPanel.createParallelGroup(Alignment.LEADING));
+		
+		descriptionPanel.setLayout(gl_descriptionPanel);
+		
+		descriptionText = new JTextArea();
+		descriptionText.setBounds(5, 5, 250, 170);
+		descriptionText.setForeground(Color.BLACK);
+		descriptionText.setText("");
+		descriptionText.setBackground(Color.LIGHT_GRAY);
+		
+		descriptionPanel.add(descriptionText);
+		
+		descriptionLabel = new JLabel();
+		descriptionLabel.setBounds(10, 160, 260, 40);
+		descriptionLabel.setForeground(Color.WHITE);
+		descriptionLabel.setText("Description");
 	}
 
-	public Float getChangeWeight() {
-		return changeWeight;
-	}
+	private void addToSideMenu(){
+		sideMenu.add(treeLabel);
+		sideMenu.add(tablesTreePanel);
+		
+		sideMenu.add(descriptionLabel);
+		sideMenu.add(descriptionPanel);
 
-	public void setChangeWeight(Float changeWeight) {
-		this.changeWeight = changeWeight;
+		lifeTimePanel.add(sideMenu);
 	}
+	
 
-	public Double getBirthWeight() {
-		return birthWeight;
+	
+	public void addLifeTimePanel(){
+		
+		lifeTimePanel.add(zoomInButton);
+		lifeTimePanel.add(undoButton);
+		lifeTimePanel.add(zoomOutButton);
+		lifeTimePanel.add(uniformlyDistributedButton);
+		lifeTimePanel.add(notUniformlyDistributedButton);
+		lifeTimePanel.add(showThisToPopup);
+	
+		lifeTimePanel.add(zoomAreaLabel);
+		
+		lifeTimePanel.add(generalTableLabel);
+		
+		
 	}
-
-	public void setBirthWeight(Double birthWeight) {
-		this.birthWeight = birthWeight;
+	
+	public void addLabels(){
+		generalTableLabel = new JLabel("Parallel Lives Diagram");
+		generalTableLabel.setBounds(300, 0, 150, 30);
+		generalTableLabel.setForeground(Color.BLACK);
+		
+		zoomAreaLabel = new JLabel();
+		zoomAreaLabel.setText("<HTML>Z<br>o<br>o<br>m<br><br>A<br>r<br>e<br>a</HTML>");
+		zoomAreaLabel.setBounds(1255, 325, 15, 300);
+		zoomAreaLabel.setForeground(Color.BLACK);
+		
+		
 	}
-
-	public Double getDeathWeight() {
-		return deathWeight;
+	
+	public void addContentPane() {
+		contentPane = new JPanel();
+		
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		
+		
+		GroupLayout gl_contentPane = new GroupLayout(contentPane);
+		gl_contentPane.setHorizontalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addComponent(tabbedPane, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 1474, Short.MAX_VALUE));
+		gl_contentPane.setVerticalGroup(gl_contentPane.createParallelGroup(Alignment.LEADING)
+				.addComponent(tabbedPane, Alignment.TRAILING, GroupLayout.DEFAULT_SIZE, 771, Short.MAX_VALUE));
+		contentPane.setLayout(gl_contentPane);
+		
 	}
-
-	public void setDeathWeight(Double deathWeight) {
-		this.deathWeight = deathWeight;
-	}
-
-	public Double getChangeWeightCl() {
-		return changeWeightCl;
-	}
-
-	public void setChangeWeightCl(Double changeWeightCl) {
-		this.changeWeightCl = changeWeightCl;
-	}
-
-	public Integer getNumberOfPhases() {
-		return numberOfPhases;
-	}
-
-	public void setNumberOfPhases(Integer numberOfPhases) {
-		this.numberOfPhases = numberOfPhases;
-	}
-
-	public Integer getNumberOfClusters() {
-		return numberOfClusters;
-	}
-
-	public void setNumberOfClusters(Integer numberOfClusters) {
-		this.numberOfClusters = numberOfClusters;
-	}
-
-	public Boolean getPreProcessingTime() {
-		return preProcessingTime;
-	}
-
-	public void setPreProcessingTime(Boolean preProcessingTime) {
-		this.preProcessingTime = preProcessingTime;
-	}
-
-	public Boolean getPreProcessingChange() {
-		return preProcessingChange;
-	}
-
-	public void setPreProcessingChange(Boolean preProcessingChange) {
-		this.preProcessingChange = preProcessingChange;
+	
+	public void addTabbedPane(){
+		tabbedPane.addTab("LifeTime Table", null, lifeTimePanel, null);
+		
+		GroupLayout gl_lifeTimePanel = new GroupLayout(lifeTimePanel);
+		gl_lifeTimePanel.setHorizontalGroup(gl_lifeTimePanel.createParallelGroup(Alignment.LEADING)
+				.addGap(0, 1469, Short.MAX_VALUE));
+		gl_lifeTimePanel.setVerticalGroup(gl_lifeTimePanel.createParallelGroup(Alignment.LEADING)
+				.addGap(0, 743, Short.MAX_VALUE)
+		);
+		lifeTimePanel.setLayout(gl_lifeTimePanel);
 	}
 
 	public int getRowHeight() {
@@ -230,46 +220,6 @@ public class Configuration
 		this.wholeCol = wholeCol;
 	}
 
-	public Integer[] getSegmentSize() {
-		return segmentSize;
-	}
-
-	public void setSegmentSize(Integer[] segmentSize) {
-		this.segmentSize = segmentSize;
-	}
-
-	public String[] getFinalColumns() {
-		return finalColumns;
-	}
-
-	public void setFinalColumns(String[] finalColumns) {
-		this.finalColumns = finalColumns;
-	}
-
-	public String[][] getFinalRows() {
-		return finalRows;
-	}
-
-	public void setFinalRows(String[][] finalRows) {
-		this.finalRows = finalRows;
-	}
-
-	public String[] getFinalColumnsZoomArea() {
-		return finalColumnsZoomArea;
-	}
-
-	public void setFinalColumnsZoomArea(String[] finalColumnsZoomArea) {
-		this.finalColumnsZoomArea = finalColumnsZoomArea;
-	}
-
-	public String[][] getFinalRowsZoomArea() {
-		return finalRowsZoomArea;
-	}
-
-	public void setFinalRowsZoomArea(String[][] finalRowsZoomArea) {
-		this.finalRowsZoomArea = finalRowsZoomArea;
-	}
-	
 	public void setSelectedRows(ArrayList<Integer> selectedRows) {
 		this.selectedRows = selectedRows;
 	}
@@ -282,7 +232,7 @@ public class Configuration
 		return contentPane;
 	}
 
-	public void setContentPane(JPanel contentPane) {
+	public void setContentPaneConfig(JPanel contentPane) {
 		this.contentPane = contentPane;
 	}
 
@@ -302,45 +252,7 @@ public class Configuration
 		this.tabbedPane = tabbedPane;
 	}
 
-	public MyTableModel getDetailedModel() {
-		return detailedModel;
-	}
-
-	public void setDetailedModel(MyTableModel detailedModel) {
-		this.detailedModel = detailedModel;
-	}
-
-	public MyTableModel getGeneralModel() {
-		return generalModel;
-	}
-
-	public void setGeneralModel(MyTableModel generalModel) {
-		this.generalModel = generalModel;
-	}
-
-	public MyTableModel getZoomModel() {
-		return zoomModel;
-	}
-
-	public void setZoomModel(MyTableModel zoomModel) {
-		this.zoomModel = zoomModel;
-	}
-
-	public JvTable getLifeTimeTable() {
-		return LifeTimeTable;
-	}
-
-	public void setLifeTimeTable(JvTable lifeTimeTable) {
-		LifeTimeTable = lifeTimeTable;
-	}
-
-	public JvTable getZoomAreaTable() {
-		return zoomAreaTable;
-	}
-
-	public void setZoomAreaTable(JvTable zoomAreaTable) {
-		this.zoomAreaTable = zoomAreaTable;
-	}
+	
 
 	public JScrollPane getTmpScrollPane() {
 		return tmpScrollPane;
@@ -364,40 +276,6 @@ public class Configuration
 
 	public void setTmpScrollPaneZoomArea(JScrollPane tmpScrollPaneZoomArea) {
 		this.tmpScrollPaneZoomArea = tmpScrollPaneZoomArea;
-	}
-
-	
-
-	public String[] getFirstLevelUndoColumnsZoomArea() {
-		return firstLevelUndoColumnsZoomArea;
-	}
-
-	public void setFirstLevelUndoColumnsZoomArea(String[] firstLevelUndoColumnsZoomArea) {
-		this.firstLevelUndoColumnsZoomArea = firstLevelUndoColumnsZoomArea;
-	}
-
-	public String[][] getFirstLevelUndoRowsZoomArea() {
-		return firstLevelUndoRowsZoomArea;
-	}
-
-	public void setFirstLevelUndoRowsZoomArea(String[][] firstLevelUndoRowsZoomArea) {
-		this.firstLevelUndoRowsZoomArea = firstLevelUndoRowsZoomArea;
-	}
-
-	public Integer[] getSegmentSizeZoomArea() {
-		return segmentSizeZoomArea;
-	}
-
-	public void setSegmentSizeZoomArea(Integer[] segmentSizeZoomArea) {
-		this.segmentSizeZoomArea = segmentSizeZoomArea;
-	}
-
-	public Integer[] getSegmentSizeDetailedTable() {
-		return segmentSizeDetailedTable;
-	}
-
-	public void setSegmentSizeDetailedTable(Integer[] segmentSizeDetailedTable) {
-		this.segmentSizeDetailedTable = segmentSizeDetailedTable;
 	}
 
 	public ArrayList<String> getSelectedFromTree() {

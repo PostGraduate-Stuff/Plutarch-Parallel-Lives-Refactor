@@ -1,4 +1,4 @@
-package  gui.widgets;
+package  gui.ui;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -18,18 +18,24 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 import data.dataKeeper.Description;
 import data.dataKeeper.GlobalDataKeeper;
-import gui.configurations.Configuration;
+import gui.configurations.DataConfiguration;
+import gui.configurations.DataTablesConfiguration;
+import gui.configurations.GuiConfiguration;
 import  gui.tableElements.commons.JvTable;
 import  gui.tableElements.commons.MyTableModel;
 
-public class GeneralTablePhasesWidget 
+public class GeneralTablePhasesUI 
 {
 	private JvTable generalTable;
-	private Configuration configuration;
+	private GuiConfiguration configuration;
+	private DataConfiguration dataConfiguration;
+	private DataTablesConfiguration tablesConfiguration;
 	private GlobalDataKeeper globalDataKeeper;
 	
-	public GeneralTablePhasesWidget(Configuration configuration,GlobalDataKeeper globalDataKeeper) {
+	public GeneralTablePhasesUI(GuiConfiguration configuration,DataConfiguration dataConfiguration, DataTablesConfiguration tablesConfiguration, GlobalDataKeeper globalDataKeeper) {
 		this.configuration = configuration;
+		this.dataConfiguration = dataConfiguration;
+		this.tablesConfiguration = tablesConfiguration;
 		this.globalDataKeeper = globalDataKeeper;
 	}
 	
@@ -41,8 +47,8 @@ public class GeneralTablePhasesWidget
 	public JvTable makeGeneralTablePhases() {
 		
 		System.out.println("GeneralTable Phases Rows");
-		int numberOfColumns=configuration.getFinalRows()[0].length;
-		int numberOfRows=configuration.getFinalRows().length;
+		int numberOfColumns=dataConfiguration.getFinalRows()[0].length;
+		int numberOfRows=dataConfiguration.getFinalRows().length;
 		System.out.println("numberOfColumns:  "+ numberOfColumns);
 		System.out.println("numberOfRows:  "+ numberOfRows);
 		
@@ -50,11 +56,11 @@ public class GeneralTablePhasesWidget
 		
 		for(int i=0; i<numberOfRows; i++){
 			
-			rows[i][0]=configuration.getFinalRows()[i][0];
+			rows[i][0]=dataConfiguration.getFinalRows()[i][0];
 			System.out.println(rows[i][0]);
 		}
 		
-		MyTableModel generalModel=new MyTableModel(configuration.getFinalColumns(), rows);
+		MyTableModel generalModel=new MyTableModel(dataConfiguration.getFinalColumns(), rows);
 		
 		final JvTable generalTable=new JvTable(generalModel);
 		
@@ -83,7 +89,7 @@ public class GeneralTablePhasesWidget
 		    {
 		        final Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 		        	        
-		        String tmpValue=configuration.getFinalRows()[row][column];
+		        String tmpValue=dataConfiguration.getFinalRows()[row][column];
 		        String columnName=table.getColumnName(column);
 		        Color fr=new Color(0,0,0);
 		        c.setForeground(fr);
@@ -102,14 +108,14 @@ public class GeneralTablePhasesWidget
 		        else if(configuration.getSelectedColumn()==0){
 		        	if (isSelected){
 		        		Description descriptionTag = new Description(globalDataKeeper);
-		        		if(configuration.getFinalRows()[row][0].contains("Cluster")){
-			        		String description="Cluster:"+configuration.getFinalRows()[row][0]+"\n";
+		        		if(dataConfiguration.getFinalRows()[row][0].contains("Cluster")){
+			        		String description="Cluster:"+dataConfiguration.getFinalRows()[row][0]+"\n";
 				          	description=description+descriptionTag.getClusterDescription(row);
 			        		configuration.getDescriptionText().setText(description);
 		        		}
 		        		else{
-		        			String description=descriptionTag.getBirthDeathDescription(configuration.getFinalRows()[row][0]);
-		        			description=description+"Total Changes:"+globalDataKeeper.getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).getTotalChanges()+"\n";
+		        			String description=descriptionTag.getBirthDeathDescription(dataConfiguration.getFinalRows()[row][0]);
+		        			description=description+"Total Changes:"+globalDataKeeper.getAllPPLTables().get(dataConfiguration.getFinalRowsZoomArea()[row][0]).getTotalChanges()+"\n";
 			        		configuration.getDescriptionText().setText(description);
 		        		}
 		        		Color cl = new Color(255,69,0,100);
@@ -119,7 +125,7 @@ public class GeneralTablePhasesWidget
 		        }
 		        else{
 		        	
-		        	if(configuration.getSelectedFromTree().contains(configuration.getFinalRows()[row][0])){
+		        	if(configuration.getSelectedFromTree().contains(dataConfiguration.getFinalRows()[row][0])){
 
 		        		Color cl = new Color(255,69,0,100);
 		        		
@@ -133,9 +139,9 @@ public class GeneralTablePhasesWidget
 		        		String description="";
 		        		if(!table.getColumnName(column).contains("Table name")){
 		        			Description descriptionHelper = new Description(globalDataKeeper);
-			        		if(configuration.getFinalRows()[row][0].contains("Cluster")){
+			        		if(dataConfiguration.getFinalRows()[row][0].contains("Cluster")){
 
-				        		description=configuration.getFinalRows()[row][0]+"\n";
+				        		description=dataConfiguration.getFinalRows()[row][0]+"\n";
 				        		description=description+"Tables:"+globalDataKeeper.getClusterCollectors().get(0).getClusters().get(row).getNamesOfTables().size()+"\n\n";
 
 				        		description=description+table.getColumnName(column)+"\n";
@@ -146,7 +152,7 @@ public class GeneralTablePhasesWidget
 			        		else{
 			        			description=table.getColumnName(column)+"\n";
 			        			description = description+descriptionHelper.getTransitionsOfPhasesTitles(column);
-			        			description = description+descriptionHelper.getBirthDeathDescription(configuration.getFinalRows()[row][0]);
+			        			description = description+descriptionHelper.getBirthDeathDescription(dataConfiguration.getFinalRows()[row][0]);
 				        		description=description+"Total Changes For This Phase:"+tmpValue+"\n";
 			        		}
 			        		configuration.getDescriptionText().setText(description);
@@ -166,14 +172,14 @@ public class GeneralTablePhasesWidget
 	        		if(numericValue==0){
 	        			insersionColor=new Color(154,205,50,200);
 	        		}
-	        		else if(numericValue> 0&& numericValue<=configuration.getSegmentSize()[3]){
+	        		else if(numericValue> 0&& numericValue<=dataConfiguration.getSegmentSize()[3]){
 	        			
 	        			insersionColor=new Color(176,226,255);
 		        	}
-	        		else if(numericValue>configuration.getSegmentSize()[3] && numericValue<=2*configuration.getSegmentSize()[3]){
+	        		else if(numericValue>dataConfiguration.getSegmentSize()[3] && numericValue<=2*dataConfiguration.getSegmentSize()[3]){
 	        			insersionColor=new Color(92,172,238);
 	        		}
-	        		else if(numericValue>2*configuration.getSegmentSize()[3] && numericValue<=3*configuration.getSegmentSize()[3]){
+	        		else if(numericValue>2*dataConfiguration.getSegmentSize()[3] && numericValue<=3*dataConfiguration.getSegmentSize()[3]){
 	        			
 	        			insersionColor=new Color(28,134,238);
 	        		}
@@ -213,7 +219,7 @@ public class GeneralTablePhasesWidget
 			         
 					configuration.setSelectedRowsFromMouse(target.getSelectedRows());
 					configuration.setSelectedColumn(target.getSelectedColumn());
-					configuration.getLifeTimeTable().repaint();
+					tablesConfiguration.getLifeTimeTable().repaint();
 				}
 
 			   }
@@ -244,12 +250,12 @@ public class GeneralTablePhasesWidget
 				            @Override
 				            public void actionPerformed(ActionEvent le) {
 				            	if(sSelectedRow.contains("Cluster ")){
-				            		ClusterSelectionToZoomAreaWidget clusterSelectionToZoomArea = new ClusterSelectionToZoomAreaWidget(configuration, globalDataKeeper, configuration.getSelectedColumn());
+				            		ClusterSelectionToZoomAreaUI clusterSelectionToZoomArea = new ClusterSelectionToZoomAreaUI(configuration, globalDataKeeper, configuration.getSelectedColumn(), tablesConfiguration, dataConfiguration);
 				            		clusterSelectionToZoomArea.showClusterSelectionToZoomArea();
 				            	}
 				            	else{
-				            		SelectionToZoomAreaWidget selectionToZoomAreaWidget = new SelectionToZoomAreaWidget();
-				            		selectionToZoomAreaWidget.showSelectionToZoomArea(configuration.getSelectedColumn(), globalDataKeeper, configuration);
+				            		SelectionToZoomAreaUI selectionToZoomAreaWidget = new SelectionToZoomAreaUI();
+				            		selectionToZoomAreaWidget.showSelectionToZoomArea(configuration.getSelectedColumn(), globalDataKeeper, configuration, dataConfiguration, tablesConfiguration);
 				            	}
 				            }
 				        });
@@ -261,7 +267,7 @@ public class GeneralTablePhasesWidget
 				            public void actionPerformed(ActionEvent le) {
 				            	
 				            	configuration.setSelectedFromTree(new ArrayList<String>());
-				            	configuration.getLifeTimeTable().repaint();
+				            	tablesConfiguration.getLifeTimeTable().repaint();
 				            }
 				        });
 				        popupMenu.add(clearSelectionItem);
@@ -278,7 +284,7 @@ public class GeneralTablePhasesWidget
 		        System.out.println("Column index selected " + configuration.getWholeCol() + " " + name);
 		        generalTable.repaint();
 		        if (configuration.isShowingPld()) {
-		        	GeneralTableIDUWidget widget = new GeneralTableIDUWidget(configuration, globalDataKeeper);
+		        	GeneralTableIDUUI widget = new GeneralTableIDUUI(configuration, dataConfiguration, tablesConfiguration, globalDataKeeper);
 		        	widget.makeGeneralTableIDU();
 				}
 		    }
@@ -299,7 +305,7 @@ public class GeneralTablePhasesWidget
 					            	configuration.setWholeCol(-1);
 					            	generalTable.repaint();
 					            	if(configuration.isShowingPld()){
-					            		GeneralTableIDUWidget widget = new GeneralTableIDUWidget(configuration, globalDataKeeper);
+					            		GeneralTableIDUUI widget = new GeneralTableIDUUI(configuration,dataConfiguration, tablesConfiguration, globalDataKeeper);
 							        	widget.makeGeneralTableIDU();
 					            	}
 					            }
@@ -310,18 +316,18 @@ public class GeneralTablePhasesWidget
 
 					            @Override
 					            public void actionPerformed(ActionEvent e) {
-									String sSelectedRow=configuration.getFinalRows()[0][0];
+									String sSelectedRow=dataConfiguration.getFinalRows()[0][0];
 									System.out.println("?"+sSelectedRow);
 									configuration.setTablesSelected(new ArrayList<String>());
-					            	for(int i=0; i<configuration.getFinalRows().length; i++)
+					            	for(int i=0; i<dataConfiguration.getFinalRows().length; i++)
 					            		configuration.getTablesSelected().add((String) generalTable.getValueAt(i, 0));
 
 					            	if(!sSelectedRow.contains("Cluster ")){
-					            		SelectionToZoomAreaWidget widget = new SelectionToZoomAreaWidget();
-					            		widget.showSelectionToZoomArea(configuration.getWholeCol(), globalDataKeeper, configuration);
+					            		SelectionToZoomAreaUI widget = new SelectionToZoomAreaUI();
+					            		widget.showSelectionToZoomArea(configuration.getWholeCol(), globalDataKeeper, configuration, dataConfiguration, tablesConfiguration);
 					            	}
 					            	else{
-					            		ClusterSelectionToZoomAreaWidget widget = new ClusterSelectionToZoomAreaWidget(configuration, globalDataKeeper, configuration.getWholeCol());
+					            		ClusterSelectionToZoomAreaUI widget = new ClusterSelectionToZoomAreaUI(configuration, globalDataKeeper, configuration.getWholeCol(), tablesConfiguration, dataConfiguration);
 					            		widget.showClusterSelectionToZoomArea();
 					            	}
 					            	
@@ -335,9 +341,9 @@ public class GeneralTablePhasesWidget
 		setSettingsConfigurations();
 	}
 	private void setSettingsConfigurations(){
-		configuration.setLifeTimeTable(generalTable);
+		tablesConfiguration.setLifeTimeTable(generalTable);
 		
-		configuration.getTmpScrollPane().setViewportView(configuration.getLifeTimeTable());
+		configuration.getTmpScrollPane().setViewportView(tablesConfiguration.getLifeTimeTable());
 		configuration.getTmpScrollPane().setAlignmentX(0);
 		configuration.getTmpScrollPane().setAlignmentY(0);
 		configuration.getTmpScrollPane().setBounds(300,30,950,265);

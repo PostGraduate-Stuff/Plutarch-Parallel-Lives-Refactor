@@ -1,20 +1,24 @@
-package gui.widgets;
+package gui.ui;
 
 import java.util.ArrayList;
 
 import data.dataKeeper.GlobalDataKeeper;
-import gui.configurations.Configuration;
+import gui.configurations.DataConfiguration;
+import gui.configurations.DataTablesConfiguration;
+import gui.configurations.GuiConfiguration;
 import gui.tableElements.tableConstructors.PldConstruction;
 import services.TableService;
 
-public class ClusterSelectionToZoomAreaWidget 
+public class ClusterSelectionToZoomAreaUI 
 {
 
-	private Configuration configuration;
+	private GuiConfiguration configuration;
+	private DataConfiguration dataConfiguration;
+	private DataTablesConfiguration tablesConfiguration;
 	private GlobalDataKeeper globalDataKeeper;
 	private int selectedColumn; 
 	
-	public ClusterSelectionToZoomAreaWidget(Configuration configuration, GlobalDataKeeper globalDataKeeper,int selectedColumn) {
+	public ClusterSelectionToZoomAreaUI(GuiConfiguration configuration, GlobalDataKeeper globalDataKeeper,int selectedColumn, DataTablesConfiguration tablesConfiguration, DataConfiguration dataConfiguration) {
 		this.configuration = configuration;
 		this.globalDataKeeper = globalDataKeeper;
 		this.selectedColumn = selectedColumn;
@@ -25,7 +29,7 @@ public class ClusterSelectionToZoomAreaWidget
 		ArrayList<String> tablesOfCluster = createTableCluster();
 	
 		updateConfigurationWithPldTable(tablesOfCluster);
-		ZoomAreaTableForClusterWidget zoomAreaTableForClusterWidget = new ZoomAreaTableForClusterWidget(configuration, globalDataKeeper);
+		ZoomAreaTableForClusterUI zoomAreaTableForClusterWidget = new ZoomAreaTableForClusterUI(configuration, globalDataKeeper, tablesConfiguration, dataConfiguration);
 		zoomAreaTableForClusterWidget.makeZoomAreaTableForCluster();
 		
 	}
@@ -58,12 +62,12 @@ public class ClusterSelectionToZoomAreaWidget
 	
 		final String[] columns= table.getConstructedColumns();
 		final String[][] rows= table.getConstructedRows();
-		configuration.setSegmentSizeZoomArea(table.getSegmentSize());
+		dataConfiguration.setSegmentSizeZoomArea(table.getSegmentSize());
 		System.out.println("Schemas: "+globalDataKeeper.getAllPPLSchemas().size());
 		System.out.println("C: "+columns.length+" R: "+rows.length);
 
-		configuration.setFinalColumnsZoomArea(columns);
-		configuration.setFinalRowsZoomArea(rows);
+		dataConfiguration.setFinalColumnsZoomArea(columns);
+		dataConfiguration.setFinalRowsZoomArea(rows);
 		configuration.getTabbedPane().setSelectedIndex(0);
 		
 	}

@@ -1,4 +1,4 @@
-package gui.widgets;
+package gui.ui;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -17,16 +17,18 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 import data.dataKeeper.Description;
 import data.dataKeeper.GlobalDataKeeper;
-import gui.configurations.Configuration;
+import gui.configurations.DataConfiguration;
+import gui.configurations.DataTablesConfiguration;
+import gui.configurations.GuiConfiguration;
 import gui.tableElements.commons.JvTable;
 import gui.tableElements.commons.MyTableModel;
 
-public class ZoomAreaTableWidget extends TableWidget{
+public class ZoomAreaTableUI extends TableUI{
 	private GlobalDataKeeper globalDataKeeper;
 	private Description descriptionHelper;
 	
-	public ZoomAreaTableWidget(Configuration configuration, GlobalDataKeeper globalDataKeeper){
-		super(configuration);
+	public ZoomAreaTableUI(GuiConfiguration configuration, DataConfiguration dataConfiguration, DataTablesConfiguration tablesConfiguration, GlobalDataKeeper globalDataKeeper){
+		super(configuration, dataConfiguration, tablesConfiguration);
 		this.globalDataKeeper = globalDataKeeper;
 		descriptionHelper = new Description(globalDataKeeper);
 	}
@@ -34,7 +36,7 @@ public class ZoomAreaTableWidget extends TableWidget{
 	public void makeZoomAreaTable() {
 		configuration.setShowingPld(false);
 		String[][] rowsZoom = creatRowstable();
-		configuration.setZoomModel(new MyTableModel(configuration.getFinalColumnsZoomArea(), rowsZoom));
+		tablesConfiguration.setZoomModel(new MyTableModel(dataConfiguration.getFinalColumnsZoomArea(), rowsZoom));
 		createtable(); 
 		setDefaultRender(rowsZoom);
 		setLeftClickListener();
@@ -116,7 +118,7 @@ public class ZoomAreaTableWidget extends TableWidget{
 			         
 					configuration.setSelectedRowsFromMouse( target.getSelectedRows());
 					configuration.setSelectedColumnZoomArea(target.getSelectedColumn());
-					configuration.getZoomAreaTable().repaint();
+					tablesConfiguration.getZoomAreaTable().repaint();
 				}
 			    
 			   }
@@ -137,7 +139,7 @@ public class ZoomAreaTableWidget extends TableWidget{
 		        
 		        
 		        
-		        String tmpValue=configuration.getFinalRowsZoomArea()[row][column];
+		        String tmpValue= dataConfiguration.getFinalRowsZoomArea()[row][column];
 		        String columnName=table.getColumnName(column);
 		        Color fr=new Color(0,0,0);
 		        c.setForeground(fr);
@@ -152,8 +154,8 @@ public class ZoomAreaTableWidget extends TableWidget{
 		        }
 		        else if(configuration.getSelectedColumnZoomArea()==0){
 		        	if (isSelected){
-		        		String description=descriptionHelper.getBirthDeathDescription(configuration.getFinalRowsZoomArea()[row][0]);
-		        		description=description+"Total Changes:"+globalDataKeeper.getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).
+		        		String description=descriptionHelper.getBirthDeathDescription(dataConfiguration.getFinalRowsZoomArea()[row][0]);
+		        		description=description+"Total Changes:"+globalDataKeeper.getAllPPLTables().get(dataConfiguration.getFinalRowsZoomArea()[row][0]).
 		        				getTotalChangesForOnePhase(Integer.parseInt(table.getColumnName(1)), Integer.parseInt(table.getColumnName(table.getColumnCount()-1)))+"\n";
 		        		configuration.getDescriptionText().setText(description);
 		        		
@@ -169,15 +171,15 @@ public class ZoomAreaTableWidget extends TableWidget{
 		        		String description="";
 		        		if(!table.getColumnName(column).contains("Table name")){
 			        		        		
-			        		if(globalDataKeeper.getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).getTableChanges().getTableAtChForOneTransition(Integer.parseInt(table.getColumnName(column)))!=null)
+			        		if(globalDataKeeper.getAllPPLTables().get(dataConfiguration.getFinalRowsZoomArea()[row][0]).getTableChanges().getTableAtChForOneTransition(Integer.parseInt(table.getColumnName(column)))!=null)
 			        		{
-			        			description=description+"Transition Changes:"+globalDataKeeper.getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).
+			        			description=description+"Transition Changes:"+globalDataKeeper.getAllPPLTables().get(dataConfiguration.getFinalRowsZoomArea()[row][0]).
 			        				getTableChanges().getTableAtChForOneTransition(Integer.parseInt(table.getColumnName(column))).size()+"\n";
-			        			description=description+"Additions:"+globalDataKeeper.getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).
+			        			description=description+"Additions:"+globalDataKeeper.getAllPPLTables().get(dataConfiguration.getFinalRowsZoomArea()[row][0]).
 			        					getNumberOfAdditionsForOneTr(Integer.parseInt(table.getColumnName(column)))+"\n";
-			        			description=description+"Deletions:"+globalDataKeeper.getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).
+			        			description=description+"Deletions:"+globalDataKeeper.getAllPPLTables().get(dataConfiguration.getFinalRowsZoomArea()[row][0]).
 			        					getNumberOfDeletionsForOneTr(Integer.parseInt(table.getColumnName(column)))+"\n";
-			        			description=description+"Updates:"+globalDataKeeper.getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).
+			        			description=description+"Updates:"+globalDataKeeper.getAllPPLTables().get(dataConfiguration.getFinalRowsZoomArea()[row][0]).
 			        					getNumberOfUpdatesForOneTr(Integer.parseInt(table.getColumnName(column)))+"\n";
 			        			
 			        		}
@@ -207,14 +209,14 @@ public class ZoomAreaTableWidget extends TableWidget{
 	        		if(numericValue==0){
 	        			insersionColor=new Color(0,100,0);
 	        		}
-	        		else if(numericValue> 0&& numericValue<=configuration.getSegmentSizeZoomArea()[3]){
+	        		else if(numericValue> 0&& numericValue<=dataConfiguration.getSegmentSizeZoomArea()[3]){
 	        			
 	        			insersionColor=new Color(176,226,255);
 		        	}
-	        		else if(numericValue>configuration.getSegmentSizeZoomArea()[3] && numericValue<=2*configuration.getSegmentSizeZoomArea()[3]){
+	        		else if(numericValue>dataConfiguration.getSegmentSizeZoomArea()[3] && numericValue<=2*dataConfiguration.getSegmentSizeZoomArea()[3]){
 	        			insersionColor=new Color(92,172,238);
 	        		}
-	        		else if(numericValue>2*configuration.getSegmentSizeZoomArea()[3] && numericValue<=3*configuration.getSegmentSizeZoomArea()[3]){
+	        		else if(numericValue>2*dataConfiguration.getSegmentSizeZoomArea()[3] && numericValue<=3*dataConfiguration.getSegmentSizeZoomArea()[3]){
 	        			
 	        			insersionColor=new Color(28,134,238);
 	        		}
@@ -249,7 +251,7 @@ public class ZoomAreaTableWidget extends TableWidget{
 	}
 
 	private void createtable() {
-		table=new JvTable(configuration.getZoomModel());
+		table=new JvTable(tablesConfiguration.getZoomModel());
 		table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		table.setShowGrid(false);
 		table.setIntercellSpacing(new Dimension(0, 0));
@@ -263,11 +265,11 @@ public class ZoomAreaTableWidget extends TableWidget{
 	}
 
 	private String[][] creatRowstable() {
-		int numberOfColumns=configuration.getFinalRowsZoomArea()[0].length;
-		int numberOfRows=configuration.getFinalRowsZoomArea().length;
+		int numberOfColumns= dataConfiguration.getFinalRowsZoomArea()[0].length;
+		int numberOfRows=dataConfiguration.getFinalRowsZoomArea().length;
 		String[][] rowsZoom=new String[numberOfRows][numberOfColumns];
 		for(int i=0; i<numberOfRows; i++){
-			rowsZoom[i][0]=configuration.getFinalRowsZoomArea()[i][0];
+			rowsZoom[i][0]=dataConfiguration.getFinalRowsZoomArea()[i][0];
 		}
 		return rowsZoom;
 	}

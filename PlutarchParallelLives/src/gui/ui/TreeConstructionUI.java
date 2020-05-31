@@ -1,4 +1,4 @@
-package gui.widgets;
+package gui.ui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,15 +15,16 @@ import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 
 import data.dataPPL.pplSQLSchema.PPLSchema;
-import gui.configurations.Configuration;
+import gui.configurations.DataTablesConfiguration;
+import gui.configurations.GuiConfiguration;
 import gui.treeElements.TreeConstructionGeneral;
 
-public class TreeConstructionWidget extends TreeWidget{
+public class TreeConstructionUI extends TreeUI{
 	
 	private TreeMap<String,PPLSchema> allPPLSchemas;
 	
-	public TreeConstructionWidget(Configuration configuration, TreeMap<String, PPLSchema> allPPLSchemas) {
-		super(configuration);
+	public TreeConstructionUI(GuiConfiguration configuration, DataTablesConfiguration tablesConfiguration, TreeMap<String, PPLSchema> allPPLSchemas) {
+		super(configuration, tablesConfiguration);
 		this.allPPLSchemas = allPPLSchemas;
 	}
 	
@@ -60,7 +61,7 @@ public class TreeConstructionWidget extends TreeWidget{
 							            @Override
 							            public void actionPerformed(ActionEvent e) {
 							          
-							            	configuration.getLifeTimeTable().repaint();
+							            	tablesConfiguration.getLifeTimeTable().repaint();
 							            	
 							            }
 							        });

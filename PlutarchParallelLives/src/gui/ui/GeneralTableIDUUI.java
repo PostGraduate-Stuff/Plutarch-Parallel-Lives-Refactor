@@ -1,4 +1,4 @@
-package gui.widgets;
+package gui.ui;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -22,26 +22,26 @@ import gui.tableElements.tableRenderers.IDUTableRenderer;
 import phaseAnalyzer.commons.Phase;
 import services.DataService;
 
-public class GeneralTableIDUWidget extends TableWidget{
+public class GeneralTableIDUUI extends TableUI{
 	
 	private GlobalDataKeeper globalDataKeeper;
 	
-	public GeneralTableIDUWidget(Configuration configuration,GlobalDataKeeper globalDataKeeper) {
+	public GeneralTableIDUUI(GuiConfiguration configuration,DataConfiguration dataConfiguration,DataTablesConfiguration tablesConfiguration,GlobalDataKeeper globalDataKeeper) {
 
-		super(configuration);
+		super(configuration,dataConfiguration,tablesConfiguration);
 		this.globalDataKeeper = globalDataKeeper;
 	}
 
 	public void makeGeneralTableIDU (){
 		DataService service = new DataService();
-		String[][] sortedRows = service.sortRows(configuration.getFinalRowsZoomArea(), globalDataKeeper.getAllPPLTables());
+		String[][] sortedRows = service.sortRows(dataConfiguration.getFinalRowsZoomArea(), globalDataKeeper.getAllPPLTables());
 		setSortedRows(sortedRows);
 		setPLDVisibility(true);
 	}
 	
 	public void setSortedRows(String[][] sortedRows)
 	{
-		configuration.setFinalRowsZoomArea(sortedRows);
+		dataConfiguration.setFinalRowsZoomArea(sortedRows);
 		configuration.setSelectedRows(new ArrayList<Integer>());
 	}
 	
@@ -63,7 +63,7 @@ public class GeneralTableIDUWidget extends TableWidget{
 			initialPhases = globalDataKeeper.getPhaseCollectors().get(0).getPhases();
 		}
 		
-		JvTableWidget jvTableWidget = new JvTableWidget(configuration, initialPhases);
+		JvTableUI jvTableWidget = new JvTableUI(configuration, dataConfiguration, initialPhases);
 		table = jvTableWidget.makeGeneralTableIDU();
 		setGeneralTablesListeners();
 
@@ -71,7 +71,7 @@ public class GeneralTableIDUWidget extends TableWidget{
 	}
 	
 	private void setGeneralTablesListeners(){
-		final IDUTableRenderer renderer = new IDUTableRenderer(configuration,configuration.getFinalRowsZoomArea(),globalDataKeeper, configuration.getSegmentSize());
+		final IDUTableRenderer renderer = new IDUTableRenderer(configuration,dataConfiguration.getFinalRowsZoomArea(),globalDataKeeper, dataConfiguration.getSegmentSize());
 		table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer()
 		{
 			private static final long serialVersionUID = 1L;
@@ -81,7 +81,7 @@ public class GeneralTableIDUWidget extends TableWidget{
 		    {
 		        final Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 		        
-		        String tmpValue=configuration.getFinalRowsZoomArea()[row][column];
+		        String tmpValue=dataConfiguration.getFinalRowsZoomArea()[row][column];
 		        String columnName=table.getColumnName(column);
 		        Color fr=new Color(0,0,0);
 		        
@@ -104,15 +104,15 @@ public class GeneralTableIDUWidget extends TableWidget{
 		        		c.setBackground(cl);
 		        		
 		        		Description descriptionTag = new Description(globalDataKeeper);
-			        	String description= descriptionTag.getBirthDeathDescription(configuration.getFinalRowsZoomArea()[row][0]);
-			        	description=description+"Total Changes:"+globalDataKeeper.getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).getTotalChanges()+"\n";
+			        	String description= descriptionTag.getBirthDeathDescription(dataConfiguration.getFinalRowsZoomArea()[row][0]);
+			        	description=description+"Total Changes:"+globalDataKeeper.getAllPPLTables().get(dataConfiguration.getFinalRowsZoomArea()[row][0]).getTotalChanges()+"\n";
 	        			configuration.getDescriptionText().setText(description);
 		        		
 		        		return c;
 		        	}
 		        }
 		        else{
-		        	if(configuration.getSelectedFromTree().contains(configuration.getFinalRowsZoomArea()[row][0])){
+		        	if(configuration.getSelectedFromTree().contains(dataConfiguration.getFinalRowsZoomArea()[row][0])){
 		        		Color cl = new Color(255,69,0,100);
 		        		c.setBackground(cl);
 		        		return c;
@@ -122,7 +122,7 @@ public class GeneralTableIDUWidget extends TableWidget{
 		        		Description descriptionTag = new Description(globalDataKeeper);
 		        		String description="";
 		        		if(!table.getColumnName(column).contains("Table name")){
-		        			if(globalDataKeeper.getAllPPLTables().get(configuration.getFinalRowsZoomArea()[row][0]).getTableChanges().getTableAtChForOneTransition(Integer.parseInt(table.getColumnName(column)))!=null){
+		        			if(globalDataKeeper.getAllPPLTables().get(dataConfiguration.getFinalRowsZoomArea()[row][0]).getTableChanges().getTableAtChForOneTransition(Integer.parseInt(table.getColumnName(column)))!=null){
 		    		        	description= descriptionTag.getTransitionDescription(column);
 		            			configuration.getDescriptionText().setText(description);
 			        		}
@@ -146,13 +146,13 @@ public class GeneralTableIDUWidget extends TableWidget{
 	        		if(numericValue==0){
 	        			insersionColor=new Color(154,205,50,200);
 	        		}
-	        		else if(numericValue> 0&& numericValue<=configuration.getSegmentSizeZoomArea()[3]){
+	        		else if(numericValue> 0&& numericValue<=dataConfiguration.getSegmentSizeZoomArea()[3]){
 	        			insersionColor=new Color(176,226,255);
 		        	}
-	        		else if(numericValue>configuration.getSegmentSizeZoomArea()[3] && numericValue<=2*configuration.getSegmentSizeZoomArea()[3]){
+	        		else if(numericValue>dataConfiguration.getSegmentSizeZoomArea()[3] && numericValue<=2*dataConfiguration.getSegmentSizeZoomArea()[3]){
 	        			insersionColor=new Color(92,172,238);
 	        		}
-	        		else if(numericValue>2*configuration.getSegmentSizeZoomArea()[3] && numericValue<=3*configuration.getSegmentSizeZoomArea()[3]){
+	        		else if(numericValue>2*dataConfiguration.getSegmentSizeZoomArea()[3] && numericValue<=3*dataConfiguration.getSegmentSizeZoomArea()[3]){
 	        			
 	        			insersionColor=new Color(28,134,238);
 	        		}
@@ -194,7 +194,7 @@ public class GeneralTableIDUWidget extends TableWidget{
 					configuration.setSelectedColumnZoomArea(target.getSelectedColumn());
 				    renderer.setSelCol(configuration.getSelectedColumnZoomArea());
 				    target.getSelectedColumns();
-				    configuration.getZoomAreaTable().repaint();
+				    tablesConfiguration.getZoomAreaTable().repaint();
 				}
 			}
 		});
@@ -219,7 +219,7 @@ public class GeneralTableIDUWidget extends TableWidget{
 				            @Override
 				            public void actionPerformed(ActionEvent e) {
 				            	configuration.setSelectedFromTree(new ArrayList<String>());
-				            	configuration.getZoomAreaTable().repaint();
+				            	tablesConfiguration.getZoomAreaTable().repaint();
 				            }
 				        });
 				        popupMenu.add(showDetailsItem);

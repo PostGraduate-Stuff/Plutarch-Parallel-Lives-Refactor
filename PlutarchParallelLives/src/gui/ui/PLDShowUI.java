@@ -1,21 +1,15 @@
-package gui.widgets;
+package gui.ui;
 
 import javax.swing.JOptionPane;
 
-import gui.configurations.Configuration;
+import gui.configurations.DataConfiguration;
+import gui.configurations.GuiConfiguration;
 import gui.tableElements.tableConstructors.TableConstructionIDU;
 import services.TableService;
 
-public class PLDShowWidget {
-	private Configuration configuration;
-	private DataGeneratorWidget dataGenerator;
+public class PLDShowUI {
 	
-	public PLDShowWidget(Configuration configuration, DataGeneratorWidget dataGenerator) {
-		this.configuration = configuration;
-		this.dataGenerator = dataGenerator;
-	}
-	 
-	public void showPLD(){
+	public void showPLD( GuiConfiguration configuration,  DataConfiguration dataConfiguration,  DataGeneratorUI dataGenerator){
 		if(dataGenerator.getPplFile() == null)
 		{
 			JOptionPane.showMessageDialog(null, "Select a Project first");
@@ -26,12 +20,12 @@ public class PLDShowWidget {
 		configuration.getZoomOutButton().setVisible(true);
 		TableService service = new TableService();
 		TableConstructionIDU table = service.createTableConstructionIDU(dataGenerator.getGlobalDataKeeper().getAllPPLSchemas(), dataGenerator.getGlobalDataKeeper().getAllPPLTransitions());
-		configuration.setSegmentSizeZoomArea(table.getSegmentSize());
+		dataConfiguration.setSegmentSizeZoomArea(table.getSegmentSize());
 		System.out.println("Schemas: "+dataGenerator.getGlobalDataKeeper().getAllPPLSchemas().size());
 		System.out.println("C: "+table.getConstructedColumns().length+" R: "+table.getConstructedRows().length);
 
-		configuration.setFinalColumnsZoomArea(table.getConstructedColumns());
-		configuration.setFinalRowsZoomArea(table.getConstructedRows());
+		dataConfiguration.setFinalColumnsZoomArea(table.getConstructedColumns());
+		dataConfiguration.setFinalRowsZoomArea(table.getConstructedRows());
 		configuration.getTabbedPane().setSelectedIndex(0);
 		dataGenerator.makeGeneralTableIDU();
 		dataGenerator.fillTree();

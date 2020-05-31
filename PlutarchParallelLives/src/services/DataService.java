@@ -9,7 +9,7 @@ import data.dataKeeper.PPLFile;
 import data.dataPPL.pplSQLSchema.PPLTable;
 import data.dataPPL.pplTransition.PPLTransition;
 import data.dataSorters.PldRowSorter;
-import gui.configurations.Configuration;
+import gui.configurations.GuiConfiguration;
 import phaseAnalyzer.engine.PhaseAnalyzerMainEngine;
 
 public class DataService implements IDataService 
