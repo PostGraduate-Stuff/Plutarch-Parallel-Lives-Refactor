@@ -111,18 +111,24 @@ public class MyTableModel extends AbstractTableModel {
         }
     }
 
-    private void printDebugData() {
+    public String printDebugData() {
         int numRows = getRowCount();
         int numCols = getColumnCount();
-
+        String OldDetailedModel = "";
+        
         for (int i=0; i < numRows; i++) {
-            System.out.print("    row " + i + ":");
+            System.out.print("	row " + i + ":");
+            OldDetailedModel+= "    row " + i + ":";
             for (int j=0; j < numCols; j++) {
                 System.out.print("  " + rows[i][j]);
+                OldDetailedModel+= "  " + rows[i][j];
             }
             System.out.println();
+            
         }
         System.out.println("--------------------------");
+        OldDetailedModel+= "--------------------------";
+    return OldDetailedModel;
     }
 	
 	
