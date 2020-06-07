@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <class-diagram version="1.2.4" icons="true" always-add-relationships="true" generalizations="true" realizations="true" 
   associations="true" dependencies="true" nesting-relationships="true" router="FAN">  
-  <class id="1" language="java" name="gui.ui.GeneralTableIDUUI" project="PlutarchParallelLives" 
-    file="/PlutarchParallelLives/src/gui/ui/GeneralTableIDUUI.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="1" language="java" name="gui.ui.table.GeneralTableIDUUI" project="PlutarchParallelLives" 
+    file="/PlutarchParallelLives/src/gui/ui/table/GeneralTableIDUUI.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="243" y="150"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
@@ -19,8 +19,8 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="3" language="java" name="gui.ui.GeneralTablePhasesUI" project="PlutarchParallelLives" 
-    file="/PlutarchParallelLives/src/gui/ui/GeneralTablePhasesUI.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="3" language="java" name="gui.ui.table.GeneralTablePhasesUI" project="PlutarchParallelLives" 
+    file="/PlutarchParallelLives/src/gui/ui/table/GeneralTablePhasesUI.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="271" y="660"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
@@ -37,8 +37,8 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="5" language="java" name="gui.ui.ClusterSelectionToZoomAreaUI" project="PlutarchParallelLives" 
-    file="/PlutarchParallelLives/src/gui/ui/ClusterSelectionToZoomAreaUI.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="5" language="java" name="gui.ui.zoom.ClusterSelectionToZoomAreaUI" project="PlutarchParallelLives" 
+    file="/PlutarchParallelLives/src/gui/ui/zoom/ClusterSelectionToZoomAreaUI.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="793" y="63"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
@@ -46,8 +46,8 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="6" language="java" name="gui.ui.SelectionToZoomAreaUI" project="PlutarchParallelLives" 
-    file="/PlutarchParallelLives/src/gui/ui/SelectionToZoomAreaUI.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="6" language="java" name="gui.ui.zoom.SelectionToZoomAreaUI" project="PlutarchParallelLives" 
+    file="/PlutarchParallelLives/src/gui/ui/zoom/SelectionToZoomAreaUI.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="784" y="820"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
@@ -55,8 +55,8 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="7" language="java" name="gui.ui.ZoomAreaTableForClusterUI" project="PlutarchParallelLives" 
-    file="/PlutarchParallelLives/src/gui/ui/ZoomAreaTableForClusterUI.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="7" language="java" name="gui.ui.table.ZoomAreaTableForClusterUI" project="PlutarchParallelLives" 
+    file="/PlutarchParallelLives/src/gui/ui/table/ZoomAreaTableForClusterUI.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="-12" y="437"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
@@ -64,8 +64,8 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="8" language="java" name="gui.ui.ZoomAreaTableUI" project="PlutarchParallelLives" 
-    file="/PlutarchParallelLives/src/gui/ui/ZoomAreaTableUI.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="8" language="java" name="gui.ui.table.ZoomAreaTableUI" project="PlutarchParallelLives" 
+    file="/PlutarchParallelLives/src/gui/ui/table/ZoomAreaTableUI.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="1227" y="217"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
@@ -74,7 +74,7 @@
     </display>  
   </class>  
   <association id="9">    
-    <end type="SOURCE" refId="2" navigable="false">      
+    <end type="SOURCE" refId="3" navigable="false">      
       <attribute id="10" name="configuration">        
         <position height="0" width="0" x="110" y="239"/>      
       </attribute>      
@@ -86,72 +86,72 @@
     <display labels="true" multiplicity="true"/>  
   </association>  
   <dependency id="12">    
-    <end type="SOURCE" refId="6"/>    
+    <end type="SOURCE" refId="8"/>    
     <end type="TARGET" refId="4"/>  
   </dependency>  
   <association id="13">    
-    <end type="SOURCE" refId="3" navigable="false">      
+    <end type="SOURCE" refId="5" navigable="false">      
       <attribute id="14" name="configuration">        
-        <position height="0" width="0" x="110" y="239"/>      
+        <position height="0" width="0" x="0" y="0"/>      
       </attribute>      
       <multiplicity id="15" minimum="0" maximum="1">        
-        <position height="0" width="0" x="110" y="239"/>      
+        <position height="0" width="0" x="0" y="0"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="4" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
   <dependency id="16">    
-    <end type="SOURCE" refId="3"/>    
-    <end type="TARGET" refId="6"/>  
-  </dependency>  
-  <dependency id="17">    
-    <end type="SOURCE" refId="7"/>    
+    <end type="SOURCE" refId="6"/>    
     <end type="TARGET" refId="4"/>  
   </dependency>  
-  <dependency id="18">    
+  <dependency id="17">    
     <end type="SOURCE" refId="5"/>    
     <end type="TARGET" refId="4"/>  
   </dependency>  
-  <association id="19">    
-    <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="20" name="configuration">        
-        <position height="0" width="0" x="0" y="0"/>      
+  <dependency id="18">    
+    <end type="SOURCE" refId="6"/>    
+    <end type="TARGET" refId="8"/>  
+  </dependency>  
+  <dependency id="19">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="6"/>  
+  </dependency>  
+  <dependency id="20">    
+    <end type="SOURCE" refId="7"/>    
+    <end type="TARGET" refId="6"/>  
+  </dependency>  
+  <dependency id="21">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="4"/>  
+  </dependency>  
+  <association id="22">    
+    <end type="SOURCE" refId="2" navigable="false">      
+      <attribute id="23" name="configuration">        
+        <position height="0" width="0" x="110" y="239"/>      
       </attribute>      
-      <multiplicity id="21" minimum="0" maximum="1">        
-        <position height="0" width="0" x="0" y="0"/>      
+      <multiplicity id="24" minimum="0" maximum="1">        
+        <position height="0" width="0" x="110" y="239"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="4" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <dependency id="22">    
-    <end type="SOURCE" refId="8"/>    
+  <dependency id="25">    
+    <end type="SOURCE" refId="7"/>    
     <end type="TARGET" refId="4"/>  
   </dependency>  
-  <dependency id="23">    
+  <dependency id="26">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="7"/>  
+  </dependency>  
+  <dependency id="27">    
     <end type="SOURCE" refId="3"/>    
     <end type="TARGET" refId="5"/>  
   </dependency>  
-  <dependency id="24">    
-    <end type="SOURCE" refId="7"/>    
-    <end type="TARGET" refId="6"/>  
-  </dependency>  
-  <dependency id="25">    
+  <dependency id="28">    
     <end type="SOURCE" refId="3"/>    
     <end type="TARGET" refId="1"/>  
-  </dependency>  
-  <dependency id="26">    
-    <end type="SOURCE" refId="6"/>    
-    <end type="TARGET" refId="8"/>  
-  </dependency>  
-  <dependency id="27">    
-    <end type="SOURCE" refId="1"/>    
-    <end type="TARGET" refId="4"/>  
-  </dependency>  
-  <dependency id="28">    
-    <end type="SOURCE" refId="2"/>    
-    <end type="TARGET" refId="7"/>  
   </dependency>  
   <dependency id="29">    
     <end type="SOURCE" refId="5"/>    

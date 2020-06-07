@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <class-diagram version="1.2.4" icons="true" automaticImage="PNG" always-add-relationships="true" generalizations="true" 
   realizations="true" associations="true" dependencies="true" nesting-relationships="true" router="FAN">  
-  <class id="1" language="java" name="gui.ui.DataGeneratorUI" project="PlutarchParallelLives" 
-    file="/PlutarchParallelLives/src/gui/ui/DataGeneratorUI.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="1" language="java" name="gui.ui.functionality.DataGeneratorUI" project="PlutarchParallelLives" 
+    file="/PlutarchParallelLives/src/gui/ui/functionality/DataGeneratorUI.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="177" width="348" x="387" y="-178"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
@@ -10,8 +10,8 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="2" language="java" name="gui.ui.GeneralTableIDUUI" project="PlutarchParallelLives" 
-    file="/PlutarchParallelLives/src/gui/ui/GeneralTableIDUUI.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="2" language="java" name="gui.ui.table.GeneralTableIDUUI" project="PlutarchParallelLives" 
+    file="/PlutarchParallelLives/src/gui/ui/table/GeneralTableIDUUI.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="108" width="355" x="39" y="115"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
@@ -19,8 +19,8 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="3" language="java" name="gui.ui.JvTableUI" project="PlutarchParallelLives" 
-    file="/PlutarchParallelLives/src/gui/ui/JvTableUI.java" binary="false" corner="BOTTOM_RIGHT">    
+  <class id="3" language="java" name="gui.ui.table.JvTableUI" project="PlutarchParallelLives" 
+    file="/PlutarchParallelLives/src/gui/ui/table/JvTableUI.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="192" y="-44"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
@@ -28,16 +28,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="4" language="java" name="gui.mainEngine.Gui.RowListener" project="PlutarchParallelLives" 
-    file="/PlutarchParallelLives/src/gui/mainEngine/Gui.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="106" width="247" x="835" y="123"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="5" language="java" name="gui.mainEngine.Gui" project="PlutarchParallelLives" 
+  <class id="4" language="java" name="gui.mainEngine.Gui" project="PlutarchParallelLives" 
     file="/PlutarchParallelLives/src/gui/mainEngine/Gui.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="232" width="314" x="979" y="-149"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
@@ -46,16 +37,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="6" language="java" name="gui.mainEngine.Gui.ColumnListener" project="PlutarchParallelLives" 
-    file="/PlutarchParallelLives/src/gui/mainEngine/Gui.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="106" width="247" x="1122" y="123"/>    
-    <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
-      sort-features="false" accessors="true" visibility="true">      
-      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
-      <operations public="true" package="true" protected="true" private="true" static="true"/>    
-    </display>  
-  </class>  
-  <class id="7" language="java" name="services.DataService" project="PlutarchParallelLives" 
+  <class id="5" language="java" name="services.DataService" project="PlutarchParallelLives" 
     file="/PlutarchParallelLives/src/services/DataService.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="-1" width="-1" x="270" y="345"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
@@ -64,7 +46,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="8" language="java" name="services.PhasesService" project="PlutarchParallelLives" 
+  <class id="6" language="java" name="services.PhasesService" project="PlutarchParallelLives" 
     file="/PlutarchParallelLives/src/services/PhasesService.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="124" width="304" x="766" y="285"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" 
@@ -73,7 +55,7 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <class id="9" language="java" name="services.TableService" project="PlutarchParallelLives" 
+  <class id="7" language="java" name="services.TableService" project="PlutarchParallelLives" 
     file="/PlutarchParallelLives/src/services/TableService.java" binary="false" corner="BOTTOM_RIGHT">    
     <position height="160" width="260" x="495" y="267"/>    
     <display autosize="false" stereotype="true" package="true" initial-value="true" signature="true" 
@@ -82,49 +64,41 @@
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <association id="10">    
-    <end type="SOURCE" refId="5" navigable="false">      
-      <attribute id="11" name="dataGenerator">        
+  <dependency id="8">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <dependency id="9">    
+    <end type="SOURCE" refId="1"/>    
+    <end type="TARGET" refId="6"/>  
+  </dependency>  
+  <dependency id="10">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="5"/>  
+  </dependency>  
+  <dependency id="11">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="3"/>  
+  </dependency>  
+  <association id="12">    
+    <end type="SOURCE" refId="4" navigable="false">      
+      <attribute id="13" name="dataGenerator">        
         <position height="0" width="0" x="0" y="0"/>      
       </attribute>      
-      <multiplicity id="12" minimum="0" maximum="1">        
+      <multiplicity id="14" minimum="0" maximum="1">        
         <position height="0" width="0" x="0" y="0"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="1" navigable="true"/>    
     <display labels="true" multiplicity="true"/>  
   </association>  
-  <dependency id="13">    
+  <dependency id="15">    
     <end type="SOURCE" refId="1"/>    
     <end type="TARGET" refId="2"/>  
   </dependency>  
-  <dependency id="14">    
-    <end type="SOURCE" refId="2"/>    
-    <end type="TARGET" refId="7"/>  
-  </dependency>  
-  <dependency id="15">    
-    <end type="SOURCE" refId="1"/>    
-    <end type="TARGET" refId="7"/>  
-  </dependency>  
   <dependency id="16">    
     <end type="SOURCE" refId="1"/>    
-    <end type="TARGET" refId="9"/>  
-  </dependency>  
-  <dependency id="17">    
-    <end type="SOURCE" refId="1"/>    
-    <end type="TARGET" refId="8"/>  
-  </dependency>  
-  <nesting id="18">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="4"/>  
-  </nesting>  
-  <nesting id="19">    
-    <end type="SOURCE" refId="5"/>    
-    <end type="TARGET" refId="6"/>  
-  </nesting>  
-  <dependency id="20">    
-    <end type="SOURCE" refId="2"/>    
-    <end type="TARGET" refId="3"/>  
+    <end type="TARGET" refId="7"/>  
   </dependency>  
   <classifier-display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
     sort-features="false" accessors="true" visibility="true">    

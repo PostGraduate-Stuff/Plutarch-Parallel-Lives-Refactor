@@ -1,4 +1,4 @@
-package gui.ui;
+package gui.ui.functionality;
 
 import javax.swing.JOptionPane;
 
@@ -9,7 +9,7 @@ import services.TableService;
 
 public class PLDShowUI {
 	
-	public void showPLD( GuiConfiguration configuration,  DataConfiguration dataConfiguration,  DataGeneratorUI dataGenerator){
+	public void showPLD(final GuiConfiguration configuration, final DataConfiguration dataConfiguration, final DataGeneratorUI dataGenerator){
 		if(dataGenerator.getPplFile() == null)
 		{
 			JOptionPane.showMessageDialog(null, "Select a Project first");
@@ -18,6 +18,7 @@ public class PLDShowUI {
 		
 		configuration.getZoomInButton().setVisible(true);
 		configuration.getZoomOutButton().setVisible(true);
+		
 		TableService service = new TableService();
 		TableConstructionIDU table = service.createTableConstructionIDU(dataGenerator.getGlobalDataKeeper().getAllPPLSchemas(), dataGenerator.getGlobalDataKeeper().getAllPPLTransitions());
 		dataConfiguration.setSegmentSizeZoomArea(table.getSegmentSize());

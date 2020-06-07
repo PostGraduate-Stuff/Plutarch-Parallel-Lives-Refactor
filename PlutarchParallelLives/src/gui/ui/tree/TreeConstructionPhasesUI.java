@@ -1,10 +1,9 @@
-package gui.ui;
+package gui.ui.tree;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -13,34 +12,32 @@ import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 
+import data.dataKeeper.GlobalDataKeeper;
 import gui.configurations.DataTablesConfiguration;
 import gui.configurations.GuiConfiguration;
-import gui.treeElements.TreeConstructionPhasesWithClusters;
-import tableClustering.clusterExtractor.commons.Cluster;
+import gui.treeElements.TreeConstructionPhases;
 
-public class TreeConstructionPhasesWithClustersUI extends TreeUI{
-
-	public ArrayList<Cluster> clusters;
+public class TreeConstructionPhasesUI extends TreeUI
+{
+	private GlobalDataKeeper globalDataKeeper;
 	
-	public TreeConstructionPhasesWithClustersUI(GuiConfiguration configuration, DataTablesConfiguration tablesConfiguration, ArrayList<Cluster> clusters)
+	public TreeConstructionPhasesUI(final GlobalDataKeeper globalDataKeeper, final GuiConfiguration configuration, final DataTablesConfiguration tablesConfiguration)
 	{
-		super(configuration,tablesConfiguration);
-		this.clusters = clusters;
+		super(configuration, tablesConfiguration);
+		this.globalDataKeeper = globalDataKeeper;
 	}
 	
-	public void fillClustersTree(){
+	public void fillPhasesTree(){
 		
-		 TreeConstructionPhasesWithClusters treePhaseWithClusters = new TreeConstructionPhasesWithClusters(clusters);
-		 configuration.setTablesTree(treePhaseWithClusters.constructTree());
+		 TreeConstructionPhases tree = new TreeConstructionPhases(globalDataKeeper);
+		 configuration.setTablesTree(tree.constructTree());
 		 
 		 addTreeSectionListener();
 		 
 		 addTreeMouseListener();
 		 
-		 setSettingsConfigurations("Clusters Tree");
+		 setSettingsConfigurations("Phases Tree");
 	}
-
-	
 
 	private void addTreeMouseListener() {
 		 configuration.getTablesTree().addMouseListener(new MouseAdapter() {
@@ -62,24 +59,25 @@ public class TreeConstructionPhasesWithClustersUI extends TreeUI{
 					            }
 					        });
 					        popupMenu.add(showDetailsItem);
-					        popupMenu.show(configuration.getTablesTree(), e.getX(),e.getY());
-							        	
+					        popupMenu.show(configuration.getTablesTree(), e.getX(),e.getY());						        							        
+							
 						}
-					
+
 				   }
-			});		
+			});
+		 
 	}
 
 	private void addTreeSectionListener() {
-		configuration.getTablesTree().addTreeSelectionListener(new TreeSelectionListener () {
-		    public void valueChanged(TreeSelectionEvent ae) { 
-		    	TreePath selection = ae.getPath();
-		    	configuration.getSelectedFromTree().add(selection.getLastPathComponent().toString());
-		    	System.out.println(selection.getLastPathComponent().toString()+" is selected");
-		    	
-		    }
-	 });		
+		 configuration.getTablesTree().addTreeSelectionListener(new TreeSelectionListener () {
+			    public void valueChanged(TreeSelectionEvent ae) { 
+			    	TreePath selection = ae.getPath();
+			    	configuration.getSelectedFromTree().add(selection.getLastPathComponent().toString());
+			    	System.out.println(selection.getLastPathComponent().toString()+" is selected");
+			    	
+			    }
+		 });
 	}
-
+	
 
 }

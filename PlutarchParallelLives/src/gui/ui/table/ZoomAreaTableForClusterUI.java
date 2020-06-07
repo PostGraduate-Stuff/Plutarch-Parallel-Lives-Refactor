@@ -1,4 +1,4 @@
-package gui.ui;
+package gui.ui.table;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -22,6 +22,7 @@ import gui.configurations.DataTablesConfiguration;
 import gui.configurations.GuiConfiguration;
 import gui.tableElements.commons.JvTable;
 import gui.tableElements.commons.MyTableModel;
+import gui.ui.zoom.SelectionToZoomAreaUI;
 
 public class ZoomAreaTableForClusterUI extends TableUI {
 
@@ -29,7 +30,7 @@ public class ZoomAreaTableForClusterUI extends TableUI {
 	
 	private Description descriptionHelper;
 	
-	public ZoomAreaTableForClusterUI(GuiConfiguration configuration, GlobalDataKeeper globalDataKeeper, DataTablesConfiguration tablesConfiguration, DataConfiguration dataConfiguration){
+	public ZoomAreaTableForClusterUI(final GuiConfiguration configuration, final GlobalDataKeeper globalDataKeeper, final DataTablesConfiguration tablesConfiguration, final DataConfiguration dataConfiguration){
 		super(configuration, dataConfiguration, tablesConfiguration);
 		this.globalDataKeeper = globalDataKeeper;
 		this.descriptionHelper = new Description(globalDataKeeper);
@@ -168,28 +169,9 @@ public class ZoomAreaTableForClusterUI extends TableUI {
 
 		        try{
 		        	int numericValue=Integer.parseInt(tmpValue);
-		        	Color insersionColor=null;
 					setToolTipText(Integer.toString(numericValue));
-		        	
-	        		if(numericValue==0){
-	        			insersionColor=new Color(0,100,0);
-	        		}
-	        		else if(numericValue> 0&& numericValue<=dataConfiguration.getSegmentSizeZoomArea()[3]){
-	        			
-	        			insersionColor=new Color(176,226,255);
-		        	}
-	        		else if(numericValue>dataConfiguration.getSegmentSizeZoomArea()[3] && numericValue<=2*dataConfiguration.getSegmentSizeZoomArea()[3]){
-	        			insersionColor=new Color(92,172,238);
-	        		}
-	        		else if(numericValue>2*dataConfiguration.getSegmentSizeZoomArea()[3] && numericValue<=3*dataConfiguration.getSegmentSizeZoomArea()[3]){
-	        			
-	        			insersionColor=new Color(28,134,238);
-	        		}
-	        		else{
-	        			insersionColor=new Color(16,78,139);
-	        		}
+					Color insersionColor=setInsertionColourForZoomTable(numericValue,dataConfiguration.getSegmentSizeZoomArea()[3]);
 	        		c.setBackground(insersionColor);
-		        	
 		        	return c;
 		        }
 		        catch(Exception e){
@@ -197,17 +179,18 @@ public class ZoomAreaTableForClusterUI extends TableUI {
 	        			c.setBackground(Color.DARK_GRAY);
 	        			return c; 
 	        		}
-	        		else{
-	        			if(columnName.contains("v")){
-	        				c.setBackground(Color.lightGray);
-	        				setToolTipText(columnName);
-	        			}
-	        			else{
-	        				Color tableNameColor=new Color(205,175,149);
-	        				c.setBackground(tableNameColor);
-	        			}
-		        		return c; 
-	        		}
+	        		
+        			if(columnName.contains("v")){
+        				c.setBackground(Color.lightGray);
+        				setToolTipText(columnName);
+    	        		return c; 
+        			}
+        			
+    				Color tableNameColor=new Color(205,175,149);
+    				c.setBackground(tableNameColor);
+        			
+	        		return c; 
+	        		
 		        }
 		    }
 		});

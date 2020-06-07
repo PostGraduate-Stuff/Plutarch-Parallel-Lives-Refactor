@@ -2,8 +2,8 @@ package tableClustering.clusterExtractor.engine;
 
 import java.util.ArrayList;
 
+import tableClustering.clusterExtractor.analysis.AgglomerativeClusterExtractor;
 import tableClustering.clusterExtractor.analysis.ClusterExtractor;
-import tableClustering.clusterExtractor.analysis.ClusterExtractorFactory;
 import tableClustering.clusterExtractor.commons.ClusterCollector;
 import data.dataKeeper.GlobalDataKeeper;
 
@@ -14,7 +14,6 @@ public class TableClusteringMainEngine {
 	private Double deathWeight;
 	private Double changeWeight;
 	private ArrayList<ClusterCollector> clusterCollectors;
-	private ClusterExtractorFactory clusterExtractorFactory; 
 	private ClusterExtractor clusterExtractor;
 	private ArrayList<ClusterCollector> allClusterCollectors;
 
@@ -26,8 +25,7 @@ public class TableClusteringMainEngine {
 		this.deathWeight=deathWeight;
 		this.changeWeight=changeWeight;
 		
-		clusterExtractorFactory = new ClusterExtractorFactory();
-		clusterExtractor = clusterExtractorFactory.createClusterExtractor("AgglomerativeClusterExtractor");
+		clusterExtractor = new AgglomerativeClusterExtractor();
 		
 		allClusterCollectors = new ArrayList<ClusterCollector>();
 

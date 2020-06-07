@@ -1,43 +1,44 @@
-package gui.ui;
+package gui.ui.tree;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.TreeMap;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import javax.swing.JTree;
 import javax.swing.SwingUtilities;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.TreePath;
 
-import data.dataKeeper.GlobalDataKeeper;
+import data.dataPPL.pplSQLSchema.PPLSchema;
 import gui.configurations.DataTablesConfiguration;
 import gui.configurations.GuiConfiguration;
-import gui.treeElements.TreeConstructionPhases;
+import gui.treeElements.TreeConstructionGeneral;
 
-public class TreeConstructionPhasesUI extends TreeUI
-{
-	private GlobalDataKeeper globalDataKeeper;
+public class TreeConstructionUI extends TreeUI{
 	
-	public TreeConstructionPhasesUI(GlobalDataKeeper globalDataKeeper, GuiConfiguration configuration, DataTablesConfiguration tablesConfiguration)
-	{
+	private TreeMap<String,PPLSchema> allPPLSchemas;
+	
+	public TreeConstructionUI(final GuiConfiguration configuration, final DataTablesConfiguration tablesConfiguration, TreeMap<String, PPLSchema> allPPLSchemas) {
 		super(configuration, tablesConfiguration);
-		this.globalDataKeeper = globalDataKeeper;
+		this.allPPLSchemas = allPPLSchemas;
 	}
 	
-	public void fillPhasesTree(){
-		
-		 TreeConstructionPhases tree = new TreeConstructionPhases(globalDataKeeper);
-		 configuration.setTablesTree(tree.constructTree());
+	public void fillTree(){
+		 TreeConstructionGeneral treeConstruction=new TreeConstructionGeneral(allPPLSchemas);
+		 configuration.setTablesTree(new JTree());
+		 configuration.setTablesTree(treeConstruction.constructTree());
 		 
 		 addTreeSectionListener();
 		 
 		 addTreeMouseListener();
 		 
-		 setSettingsConfigurations("Phases Tree");
-	}
+		 setSettingsConfigurations("General Tree");
+		}
 
 	private void addTreeMouseListener() {
 		 configuration.getTablesTree().addMouseListener(new MouseAdapter() {
@@ -46,7 +47,7 @@ public class TreeConstructionPhasesUI extends TreeUI
 					
 						if(SwingUtilities.isRightMouseButton(e)){
 							System.out.println("Right Click Tree");
-							
+								
 							final JPopupMenu popupMenu = new JPopupMenu();
 					        JMenuItem showDetailsItem = new JMenuItem("Show This into the Table");
 					        showDetailsItem.addActionListener(new ActionListener() {
@@ -59,14 +60,14 @@ public class TreeConstructionPhasesUI extends TreeUI
 					            }
 					        });
 					        popupMenu.add(showDetailsItem);
-					        popupMenu.show(configuration.getTablesTree(), e.getX(),e.getY());						        							        
-							
+					        popupMenu.show(configuration.getTablesTree(), e.getX(),e.getY());
 						}
-
+					
 				   }
 			});
-		 
 	}
+
+
 
 	private void addTreeSectionListener() {
 		 configuration.getTablesTree().addTreeSelectionListener(new TreeSelectionListener () {
@@ -76,8 +77,7 @@ public class TreeConstructionPhasesUI extends TreeUI
 			    	System.out.println(selection.getLastPathComponent().toString()+" is selected");
 			    	
 			    }
-		 });
+		 });		
 	}
-	
 
 }

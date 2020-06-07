@@ -14,9 +14,6 @@ import phaseAnalyzer.commons.TransitionStats;
 
 public class SimpleTextParser implements IParser {
 
-	/* (non-Javadoc)
-	 * @see parser.IParser#parse(java.lang.String, java.lang.String)
-	 */
 	@Override
 	public TransitionHistory parse(String fileName, String delimeter) {
 		int transitionId; int time; 

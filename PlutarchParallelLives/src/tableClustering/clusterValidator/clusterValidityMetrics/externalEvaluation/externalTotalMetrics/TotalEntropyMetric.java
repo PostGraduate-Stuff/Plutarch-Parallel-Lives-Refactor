@@ -2,9 +2,10 @@ package tableClustering.clusterValidator.clusterValidityMetrics.externalEvaluati
 
 import java.util.ArrayList;
 
+import tableClustering.clusterValidator.clusterValidityMetrics.Interface.TotalMetrics;
 import tableClustering.clusterValidator.commons.ClusterInfoKeeper;
 
-public class TotalEntropyMetric implements ExternalTotalMetrics {
+public class TotalEntropyMetric implements TotalMetrics {
 
 	private ArrayList<ClusterInfoKeeper> clusterInfoKeepers = new ArrayList<ClusterInfoKeeper>();
 	private Double totalEntropy=new Double(0);

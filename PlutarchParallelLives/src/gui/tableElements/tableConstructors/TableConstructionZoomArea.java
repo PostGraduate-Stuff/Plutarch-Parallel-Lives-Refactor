@@ -11,7 +11,7 @@ import data.dataPPL.pplTransition.AtomicChange;
 import data.dataPPL.pplTransition.PPLTransition;
 import data.dataPPL.pplTransition.TableChange;
 
-public class TableConstructionZoomArea implements PldConstruction {
+public class TableConstructionZoomArea extends TableConstruction {
 
 	private static TreeMap<String,PPLSchema> allPPLSchemas=new TreeMap<String,PPLSchema>();
 	private static TreeMap<String,PPLSchema> selectedPPLSchemas=new TreeMap<String,PPLSchema>();
@@ -29,9 +29,6 @@ public class TableConstructionZoomArea implements PldConstruction {
 	private int maxUpdates=1;
 	private int maxTotalChangesForOneTr=1;
 	
-	private String[] constructedColumns;
-	private String[][] constructedRows;
-
 	private Integer segmentSize[]=new Integer[4];
 	
 	public TableConstructionZoomArea(GlobalDataKeeper globalDataKeeper,ArrayList<String> sSelectedTables,int selectedColumn){
@@ -110,7 +107,7 @@ public class TableConstructionZoomArea implements PldConstruction {
 			
 		}
 		
-		
+		this.constructedColumns = tmpcolumns;
 		
 	}
 	
@@ -166,6 +163,7 @@ public class TableConstructionZoomArea implements PldConstruction {
 			
 		}
 		
+		this.constructedRows = tmpRows;
 		
 		float maxI=(float) maxInsersions/4;
 		segmentSize[0]=(int) Math.rint(maxI);
@@ -181,16 +179,6 @@ public class TableConstructionZoomArea implements PldConstruction {
 		
 		
 		
-	}
-	
-	public String[] getConstructedColumns()
-	{
-		return constructedColumns;
-	}
-	
-	public String[][] getConstructedRows()
-	{
-		return constructedRows;
 	}
 	
 	private String[] constructOneRow(PPLTable oneTable){

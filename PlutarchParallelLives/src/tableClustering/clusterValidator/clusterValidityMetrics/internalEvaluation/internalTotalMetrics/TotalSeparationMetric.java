@@ -3,9 +3,10 @@ package tableClustering.clusterValidator.clusterValidityMetrics.internalEvaluati
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import tableClustering.clusterValidator.clusterValidityMetrics.Interface.TotalMetrics;
 import tableClustering.clusterValidator.commons.ClusterInfoKeeper;
 
-public class TotalSeparationMetric implements InternalTotalMetrics {
+public class TotalSeparationMetric implements TotalMetrics {
 
 	private ArrayList<ClusterInfoKeeper> clusterInfoKeepers = new ArrayList<ClusterInfoKeeper>();
 	private Double totalSeparation=null;

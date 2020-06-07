@@ -4,11 +4,12 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import tableClustering.clusterExtractor.commons.Cluster;
+import tableClustering.clusterValidator.clusterValidityMetrics.Interface.TotalMetrics;
 import tableClustering.clusterValidator.commons.Centroid;
 import tableClustering.clusterValidator.commons.ClusterInfoKeeper;
 import data.dataPPL.pplSQLSchema.PPLTable;
 
-public class ClusterCohesionMetric implements InternalClusterMetrics {
+public class ClusterCohesionMetric implements TotalMetrics {
 	
 	ClusterInfoKeeper clusterInfoKeeper = null;
 	private Double sumClusterCohesion = null;
@@ -20,7 +21,7 @@ public class ClusterCohesionMetric implements InternalClusterMetrics {
 	}
 	
 	@Override
-	public void computeMetric() {
+	public void compute() {
 		Cluster currCluster = clusterInfoKeeper.getCluster();
 		TreeMap<String, PPLTable> currClusterTables = currCluster.getTables();
 		Centroid clusterCentroid = clusterInfoKeeper.getCentroid();

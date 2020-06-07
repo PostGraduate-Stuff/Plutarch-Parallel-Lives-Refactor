@@ -1,4 +1,4 @@
-package gui.ui;
+package gui.ui.functionality;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,14 +11,12 @@ import javax.swing.JOptionPane;
 
 import org.antlr.v4.runtime.RecognitionException;
 
-import gui.configurations.DataConfiguration;
-import gui.configurations.DataTablesConfiguration;
-import gui.configurations.GuiConfiguration;
-import gui.dialogs.CreateProjectJDialog;
-import gui.mainEngine.Gui;
 
-public class ProjectEditorUI extends JFrame
+import gui.dialogs.CreateProjectJDialog;
+
+public class ProjectEditorUI extends ProjectHandler
 {
+	private static final long serialVersionUID = 1L;
 
 	public JMenuItem editProject(final DataGeneratorUI dataGenerator)
 	{
@@ -27,7 +25,6 @@ public class ProjectEditorUI extends JFrame
 		{
 			public void actionPerformed(ActionEvent arg0) 
 			{
-				String fileName=null;
 				File dir=new File("filesHandler/inis");
 				JFileChooser fcOpen1 = new JFileChooser();
 				fcOpen1.setCurrentDirectory(dir);
@@ -44,34 +41,14 @@ public class ProjectEditorUI extends JFrame
 				System.out.println(dataGenerator.getPplFile().getProjectName());
 				
 				CreateProjectJDialog createProjectDialog=new CreateProjectJDialog(dataGenerator.getPplFile().getProjectName(),
-						dataGenerator.getPplFile().getDatasetTxt(),
-						dataGenerator.getPplFile().getInputCsv(),
-						dataGenerator.getPplFile().getOutputAssessment1(),
-						dataGenerator.getPplFile().getOutputAssessment2(),
-						dataGenerator.getPplFile().getTransitionsFile());
+																					dataGenerator.getPplFile().getDatasetTxt(),
+																					dataGenerator.getPplFile().getInputCsv(),
+																					dataGenerator.getPplFile().getOutputAssessment1(),
+																					dataGenerator.getPplFile().getOutputAssessment2(),
+																					dataGenerator.getPplFile().getTransitionsFile());
+				initiateDatagenerator(createProjectDialog, dataGenerator, file);
 			
-				createProjectDialog.setModal(true);
 				
-				createProjectDialog.setVisible(true);
-				
-				if(createProjectDialog.getConfirmation())
-				{
-					createProjectDialog.setVisible(false);
-					file = createProjectDialog.getFile();
-		            System.out.println(file.toString());
-		            System.out.println("!!"+file.getName());
-		            
-					try 
-					{
-						dataGenerator.importData(fcOpen1.getSelectedFile());
-					} 
-					catch (RecognitionException e) 
-					{
-						JOptionPane.showMessageDialog(null, "Something seems wrong with this file");
-						return;
-					}
-					
-				}
 					
 			}
 		});

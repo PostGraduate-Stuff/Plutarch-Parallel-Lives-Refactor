@@ -1,14 +1,15 @@
-package gui.ui;
+package gui.ui.zoom;
 
 import data.dataKeeper.GlobalDataKeeper;
 import gui.configurations.DataConfiguration;
 import gui.configurations.DataTablesConfiguration;
 import gui.configurations.GuiConfiguration;
 import gui.tableElements.tableConstructors.TableConstructionZoomArea;
+import gui.ui.table.ZoomAreaTableUI;
 import services.TableService;
 
 public class SelectionToZoomAreaUI {
-	public void showSelectionToZoomArea(int selectedColumn, GlobalDataKeeper globalDataKeeper, GuiConfiguration configuration, DataConfiguration dataConfiguration, DataTablesConfiguration tablesConfiguration){
+	public void showSelectionToZoomArea(int selectedColumn, final GlobalDataKeeper globalDataKeeper, final GuiConfiguration configuration, final DataConfiguration dataConfiguration, final DataTablesConfiguration tablesConfiguration){
 		TableService service = new TableService();
 		TableConstructionZoomArea table=service.createTableConstructionZoomArea(globalDataKeeper,configuration.getTablesSelected(),selectedColumn);
 		final String[] columns= table.getConstructedColumns();

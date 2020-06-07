@@ -4,16 +4,16 @@ import gui.configurations.DataConfiguration;
 import gui.configurations.DataTablesConfiguration;
 import gui.configurations.GuiConfiguration;
 import gui.dialogs.EnlargeTable;
-import gui.ui.DataGeneratorUI;
-import gui.ui.InfoUI;
-import gui.ui.PLDShowUI;
-import gui.ui.PhasesClustersPLDUI;
-import gui.ui.PhasesPLDUI;
-import gui.ui.ProjectCreatorUI;
-import gui.ui.ProjectEditorUI;
-import gui.ui.ProjectLoaderUI;
-import gui.ui.TableLifetimeDisplayUI;
-import gui.ui.ZoomAreaTableForClusterUI;
+import gui.ui.functionality.DataGeneratorUI;
+import gui.ui.functionality.InfoUI;
+import gui.ui.functionality.PLDShowUI;
+import gui.ui.functionality.PhasesClustersPLDUI;
+import gui.ui.functionality.PhasesPLDUI;
+import gui.ui.functionality.ProjectCreatorUI;
+import gui.ui.functionality.ProjectEditorUI;
+import gui.ui.functionality.ProjectLoaderUI;
+import gui.ui.table.TableLifetimeDisplayUI;
+import gui.ui.table.ZoomAreaTableForClusterUI;
 
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
@@ -43,9 +43,9 @@ public class Gui extends JFrame implements ActionListener{
 
 	public static final long serialVersionUID = 1L;
 
-	private GuiConfiguration configuration;
-	private DataConfiguration dataConfiguration;
-	private DataTablesConfiguration tablesConfiguration;
+	private final GuiConfiguration configuration;
+	private final DataConfiguration dataConfiguration;
+	private final DataTablesConfiguration tablesConfiguration;
 	private DataGeneratorUI dataGenerator;
 	
 	public static void main(String[] args) {
@@ -69,6 +69,12 @@ public class Gui extends JFrame implements ActionListener{
 		tablesConfiguration = new DataTablesConfiguration();
 		dataGenerator = new DataGeneratorUI(configuration, dataConfiguration, tablesConfiguration);
 		
+		initializeUserInterface();
+		
+	}
+	
+	
+	private void initializeUserInterface() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setResizable(false);
 				
@@ -78,6 +84,9 @@ public class Gui extends JFrame implements ActionListener{
 		menuBar.add(getFileTab());
 		
 		menuBar.add(getTableTab());
+	
+		configuration.setMnProject(new JMenu("Project"));
+		menuBar.add(configuration.getMnProject());
 		
 		JButton buttonHelp=new JButton("Help");
 		buttonHelp.addActionListener(new ActionListener() {
@@ -93,9 +102,6 @@ public class Gui extends JFrame implements ActionListener{
 		
 		buttonHelp.setBounds(900,900 , 80, 40);
 		menuBar.add(buttonHelp);
-	
-		configuration.setMnProject(new JMenu("Project"));
-		menuBar.add(configuration.getMnProject());
 		
 		InfoUI infoUI = new InfoUI();
 		JMenuItem infoItem = infoUI.showInfo(dataGenerator);
@@ -135,10 +141,9 @@ public class Gui extends JFrame implements ActionListener{
 		configuration.addLifeTimePanel();
 		
 		pack();
-		setBounds(30, 30, 1300, 700);
+		setBounds(30, 30, 1300, 700);		
 	}
-	
-	
+
 	private JMenu getFileTab(){
 		JMenu mnFile = new JMenu("File");
 		
@@ -159,10 +164,6 @@ public class Gui extends JFrame implements ActionListener{
 	
 	private JMenu getTableTab() {
 		JMenu mnTable = new JMenu("Table");
-		dataConfiguration.getSegmentSizeDetailedTable();
-		TableLifetimeDisplayUI tableLifetimeUI = new TableLifetimeDisplayUI(configuration, dataConfiguration, dataGenerator, tablesConfiguration);	;			
-		JMenuItem mntmShowLifetimeTable =tableLifetimeUI.createShowTableMenuItem();
-		mnTable.add(mntmShowLifetimeTable);
 		
 		dataConfiguration.getSegmentSizeDetailedTable();
 		JMenuItem mntmShowGeneralLifetimeIDU = new JMenuItem("Show PLD");
@@ -182,8 +183,11 @@ public class Gui extends JFrame implements ActionListener{
 		JMenuItem mntmShowGeneralLifetimePhasesWithClustersPLD = phasesClustersPLDUI.showGeneralLifetimePhasesWithClusters(dataGenerator, configuration, dataConfiguration, tablesConfiguration);
 		mnTable.add(mntmShowGeneralLifetimePhasesWithClustersPLD);
 		
-		configuration.setSideMenu();
+		TableLifetimeDisplayUI tableLifetimeUI = new TableLifetimeDisplayUI(configuration, dataConfiguration, dataGenerator, tablesConfiguration);	;			
+		JMenuItem mntmShowLifetimeTable =tableLifetimeUI.createShowTableMenuItem();
+		mnTable.add(mntmShowLifetimeTable);
 		
+		configuration.setSideMenu();
 		
 		return mnTable;
 	}

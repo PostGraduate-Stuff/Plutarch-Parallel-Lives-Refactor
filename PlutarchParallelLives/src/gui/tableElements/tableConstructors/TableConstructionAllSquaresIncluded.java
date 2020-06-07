@@ -11,7 +11,7 @@ import data.dataPPL.pplTransition.AtomicChange;
 import data.dataPPL.pplTransition.PPLTransition;
 import data.dataPPL.pplTransition.TableChange;
 
-public class TableConstructionAllSquaresIncluded implements PldConstruction {
+public class TableConstructionAllSquaresIncluded extends TableConstruction {
 	
 	
 	private static TreeMap<String,PPLSchema> allPPLSchemas=new TreeMap<String,PPLSchema>();
@@ -25,9 +25,6 @@ public class TableConstructionAllSquaresIncluded implements PldConstruction {
 	private int maxInsersions=1;
 	private int maxUpdates=1;
 	private Integer segmentSize[]=new Integer[3];
-	
-	private String[] constructedColumns;
-	private String[][] constructedRows;
 
 	
 	public TableConstructionAllSquaresIncluded(GlobalDataKeeper globalDataKeeper){
@@ -184,15 +181,6 @@ public class TableConstructionAllSquaresIncluded implements PldConstruction {
 		constructedRows = tmpRows;
 	}
 	
-	public String[] getConstructedColumns()
-	{
-		return constructedColumns;
-	}
-	
-	public String[][] getConstructedRows()
-	{
-		return constructedRows;
-	}
 	
 	private String[] constructOneRow(PPLTable oneTable,int schemaVersion){
 		

@@ -26,7 +26,7 @@ import gui.tableElements.commons.JvTable;
 import gui.tableElements.commons.MyTableModel;
 import gui.tableElements.tableConstructors.TableConstructionIDU;
 import gui.tableElements.tableConstructors.TableConstructionWithClusters;
-import gui.ui.ZoomAreaTableForClusterUI;
+import gui.ui.table.ZoomAreaTableForClusterUI;
 import services.DataService;
 
 public class GuiConfiguration extends JFrame
@@ -469,5 +469,42 @@ public class GuiConfiguration extends JFrame
 	public void setMntmInfo(JMenuItem mntmInfo) {
 		this.mntmInfo = mntmInfo;
 	}
+
+	public void setDistributedButton() {
+		tabbedPane.setSelectedIndex(0);
+		uniformlyDistributedButton.setVisible(true);
+		notUniformlyDistributedButton.setVisible(true);
+		
+	}
 	
+	public void setPLDVisibility(boolean action)
+	{
+		showingPld = action;
+		zoomInButton.setVisible(action);
+		zoomOutButton.setVisible(action);
+		showThisToPopup.setVisible(action); 
+	}
+
+	public void setScrollPaneSettings(JvTable table) {
+		tmpScrollPaneZoomArea.setViewportView(table);
+		tmpScrollPaneZoomArea.setAlignmentX(0);
+		tmpScrollPaneZoomArea.setAlignmentY(0);
+		tmpScrollPaneZoomArea.setBounds(300,300,950,250);
+		tmpScrollPaneZoomArea.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		tmpScrollPaneZoomArea.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		lifeTimePanel.add(tmpScrollPaneZoomArea);		
+	}
+
+	public void setTreeScrollSettings(String text) {
+		treeScrollPane.setViewportView(tablesTree);
+		treeScrollPane.setBounds(5, 5, 250, 170);
+		treeScrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		treeScrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+		tablesTreePanel.add(treeScrollPane);
+		 
+		treeLabel.setText(text);
+
+		sideMenu.revalidate();
+		sideMenu.repaint();				
+	}
 }

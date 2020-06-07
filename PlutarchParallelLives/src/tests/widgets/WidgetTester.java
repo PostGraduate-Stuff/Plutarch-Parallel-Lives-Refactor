@@ -12,7 +12,7 @@ import data.dataKeeper.PPLFile;
 import gui.configurations.GuiConfiguration;
 import gui.mainEngine.Gui;
 import gui.tableElements.tableConstructors.TableConstructionWithClusters;
-import gui.ui.DataGeneratorUI;
+import gui.ui.functionality.DataGeneratorUI;
 import phaseAnalyzer.engine.PhaseAnalyzerMainEngine;
 import services.DataService;
 import services.TableService;
@@ -24,7 +24,7 @@ public class WidgetTester {
 	{
 		Gui gui = new Gui();
 		DataGeneratorUI dataWidget = new DataGeneratorUI(gui.getConfiguration(), gui.getDataConfiguration(), gui.getTablesConfiguration());
-		dataWidget.initiateLoadState();
+		gui.getDataConfiguration().initiateLoadState();
 		dataWidget.importDataFromFile(new File("C:\\Users\\Christina\\git\\Plutarch-Parallel-Lives-Refactor\\PlutarchParallelLives\\filesHandler\\inis\\biosql.ini"));
 		TableService service = new TableService();
 		dataWidget.setConstructedIDUTable(service.createTableConstructionIDU(dataWidget.getGlobalDataKeeper().getAllPPLSchemas(), dataWidget.getGlobalDataKeeper().getAllPPLTransitions()));

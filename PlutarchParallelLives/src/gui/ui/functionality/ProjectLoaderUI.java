@@ -1,4 +1,4 @@
-package gui.ui;
+package gui.ui.functionality;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,13 +8,10 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 
-import gui.configurations.DataConfiguration;
-import gui.configurations.DataTablesConfiguration;
-import gui.configurations.GuiConfiguration;
-import gui.mainEngine.Gui;
 
 public class ProjectLoaderUI extends JFrame
 {
+	private static final long serialVersionUID = 1L;
 
 	public JMenuItem loadProject(final DataGeneratorUI dataGenerator){
 		JMenuItem mntmLoadProject = new JMenuItem("Load Project");

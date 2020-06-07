@@ -6,14 +6,13 @@ import java.util.TreeMap;
 
 import data.dataPPL.pplSQLSchema.PPLTable;
 import tableClustering.clusterExtractor.commons.Cluster;
+import tableClustering.clusterValidator.clusterValidityMetrics.Interface.TotalMetrics;
 import tableClustering.clusterValidator.clusterValidityMetrics.externalEvaluation.externalClusterMetrics.ClusterEntropyMetric;
 import tableClustering.clusterValidator.clusterValidityMetrics.externalEvaluation.externalClusterMetrics.ClusterFMeasureMetric;
 import tableClustering.clusterValidator.clusterValidityMetrics.externalEvaluation.externalClusterMetrics.ClusterPrecisionMetric;
 import tableClustering.clusterValidator.clusterValidityMetrics.externalEvaluation.externalClusterMetrics.ClusterRecallMetric;
-import tableClustering.clusterValidator.clusterValidityMetrics.externalEvaluation.externalClusterMetrics.ExternalClusterMetric;
 import tableClustering.clusterValidator.clusterValidityMetrics.internalEvaluation.internalClusterMetrics.ClusterCohesionMetric;
 import tableClustering.clusterValidator.clusterValidityMetrics.internalEvaluation.internalClusterMetrics.ClusterSeparationMetric;
-import tableClustering.clusterValidator.clusterValidityMetrics.internalEvaluation.internalClusterMetrics.InternalClusterMetrics;
 
 
 public class ClusterInfoKeeper {
@@ -67,8 +66,8 @@ public class ClusterInfoKeeper {
 	
 	private void computeClusterCohesion(){
 		
-		InternalClusterMetrics cohesionMetricCalculator = new ClusterCohesionMetric(this);
-		cohesionMetricCalculator.computeMetric();
+		TotalMetrics cohesionMetricCalculator = new ClusterCohesionMetric(this);
+		cohesionMetricCalculator.compute();
 		clusterCohesion=cohesionMetricCalculator.getResult();
 		//System.out.println(clusterCohesion);
 		
@@ -76,8 +75,8 @@ public class ClusterInfoKeeper {
 	
 	private void computeClusterSeparation(){
 		
-		InternalClusterMetrics separationMetricCalculator = new ClusterSeparationMetric(clusterCentroid,overallCentroid);
-		separationMetricCalculator.computeMetric();
+		TotalMetrics separationMetricCalculator = new ClusterSeparationMetric(clusterCentroid,overallCentroid);
+		separationMetricCalculator.compute();
 		clusterSeparation=(double)this.cluster.getTables().size()*separationMetricCalculator.getResult();
 		//System.out.println(clusterSeparation+"\n");
 		
@@ -85,7 +84,7 @@ public class ClusterInfoKeeper {
 	
 	public void computeClusterEntropy(ArrayList<ClassOfObjects> classesOfObjects,ArrayList<Cluster> clusters,int classIndex){
 		
-		ExternalClusterMetric entropyMetricCalculator = new ClusterEntropyMetric(classesOfObjects,clusters,classIndex);
+		TotalMetrics entropyMetricCalculator = new ClusterEntropyMetric(classesOfObjects,clusters,classIndex);
 		entropyMetricCalculator.compute();
 		clusterEntropy = entropyMetricCalculator.getResult();
 		//System.err.println("-------------->"+clusterEntropy);
@@ -94,7 +93,7 @@ public class ClusterInfoKeeper {
 	
 	public void computeClusterPrecision(ArrayList<ClassOfObjects> classesOfObjects){
 		
-		ExternalClusterMetric precisionMetricCalculator;
+		TotalMetrics precisionMetricCalculator;
 		for(int i=0; i<classesOfObjects.size(); i++){
 			precisionMetricCalculator = new ClusterPrecisionMetric(this.cluster,classesOfObjects.get(i));
 			precisionMetricCalculator.compute();
@@ -105,7 +104,7 @@ public class ClusterInfoKeeper {
 	
 	public void computeClusterRecall(ArrayList<ClassOfObjects> classesOfObjects){
 		
-		ExternalClusterMetric recallMetricCalculator;
+		TotalMetrics recallMetricCalculator;
 		for(int i=0; i<classesOfObjects.size(); i++){
 			recallMetricCalculator = new ClusterRecallMetric(this.cluster,classesOfObjects.get(i));
 			recallMetricCalculator.compute();
@@ -116,7 +115,7 @@ public class ClusterInfoKeeper {
 	
 	public void computeClusterFMeasure(){
 		
-		ExternalClusterMetric fMeasureMetricCalculator;
+		TotalMetrics fMeasureMetricCalculator;
 		for(int i=0; i<precisions.size(); i++){
 			fMeasureMetricCalculator = new ClusterFMeasureMetric(precisions.get(i),recalls.get(i));
 			fMeasureMetricCalculator.compute();

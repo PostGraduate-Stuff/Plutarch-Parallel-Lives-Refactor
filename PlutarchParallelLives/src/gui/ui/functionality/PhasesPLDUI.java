@@ -1,4 +1,4 @@
-package gui.ui;
+package gui.ui.functionality;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,8 +11,9 @@ import gui.configurations.DataTablesConfiguration;
 import gui.configurations.GuiConfiguration;
 import gui.dialogs.ParametersJDialog;
 import gui.tableElements.tableConstructors.TableConstructionPhases;
+import gui.ui.tree.TreeConstructionPhasesUI;
 
-public class PhasesPLDUI {
+public class PhasesPLDUI extends PLDHandler {
 
 	
 	public JMenuItem showPhasesPLDUI(final DataGeneratorUI dataGenerator, final GuiConfiguration configuration,
@@ -28,46 +29,23 @@ public class PhasesPLDUI {
 				}
 				
 					configuration.setWholeCol(-1);
-					ParametersJDialog jD=new ParametersJDialog(false);
-					
-					jD.setModal(true);
-					
-					
-					jD.setVisible(true);
-					
-					if(jD.getConfirmation()){
-					
-						dataConfiguration.setTimeWeight(jD.getTimeWeight());
-						dataConfiguration.setChangeWeight(jD.getChangeWeight());
-						dataConfiguration.setPreProcessingTime(jD.getPreProcessingTime());
-						dataConfiguration.setPreProcessingChange(jD.getPreProcessingChange());
-						dataConfiguration.setNumberOfPhases(jD.getNumberOfPhases());
-			            
+					ParametersJDialog jDialog=new ParametersJDialog(false);
+					jDialog.setModal(true);
+					jDialog.setVisible(true);
+					if(jDialog.getConfirmation()){
+						dataConfiguration.setConfigurationsForPhases(jDialog);
 			            System.out.println(dataConfiguration.getTimeWeight()+" "+dataConfiguration.getChangeWeight());
-			            
-			            
 			            dataGenerator.createPhaseAnalyserEngine();
 						
-			    		
-						if(dataGenerator.getGlobalDataKeeper().getPhaseCollectors().size() == 0){
+			            
+			            
+			            if(dataGenerator.getGlobalDataKeeper().getPhaseCollectors().size() == 0){
 							JOptionPane.showMessageDialog(null, "Extract Phases first");
 							return;
 						}
-						
 						TableConstructionPhases table=new TableConstructionPhases(dataGenerator.getGlobalDataKeeper());
 						//TODO in service
-						table.constructColumns();
-						table.constructRows();
-						final String[] columns= table.getConstructedColumns();
-						final String[][] rows= table.getConstructedRows();
-						dataConfiguration.setSegmentSize(table.getSegmentSize());
-						System.out.println("Schemas: "+dataGenerator.getGlobalDataKeeper().getAllPPLSchemas().size());
-						System.out.println("C: "+columns.length+" R: "+rows.length);
-	
-						dataConfiguration.setFinalColumns(columns);
-						dataConfiguration.setFinalRows(rows);
-						configuration.getTabbedPane().setSelectedIndex(0);
-						dataGenerator.makeGeneralTablePhases();
+						setGeneralTablePhases(table,dataGenerator,configuration,dataConfiguration);
 						
 						TreeConstructionPhasesUI widget = new TreeConstructionPhasesUI(dataGenerator.getGlobalDataKeeper(), configuration, tablesConfiguration);
 						widget.fillPhasesTree();

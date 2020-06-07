@@ -12,7 +12,7 @@ import data.dataPPL.pplTransition.AtomicChange;
 import data.dataPPL.pplTransition.PPLTransition;
 import data.dataPPL.pplTransition.TableChange;
 
-public class TableConstructionClusterTablesPhasesZoomA implements PldConstruction {
+public class TableConstructionClusterTablesPhasesZoomA extends TableConstruction {
 	
 	private TreeMap<String,PPLSchema> allPPLSchemas=new TreeMap<String,PPLSchema>();
 	private ArrayList<PPLTable>	tables=new ArrayList<PPLTable>();
@@ -28,8 +28,6 @@ public class TableConstructionClusterTablesPhasesZoomA implements PldConstructio
 	private Integer[] segmentSize=new Integer[4];
 	private ArrayList<String> tablesOfCluster=new ArrayList<String>();
 	
-	private String[] constructedColumns;
-	private String[][] constructedRows;
 	
 	public TableConstructionClusterTablesPhasesZoomA(TreeMap<String,PPLSchema> allPPLSchemas, ArrayList<Phase> phases, ArrayList<String> tablesOfCluster){
 		
@@ -39,15 +37,6 @@ public class TableConstructionClusterTablesPhasesZoomA implements PldConstructio
 		
 	}
 	
-	public String[] getConstructedColumns()
-	{
-		return constructedColumns;
-	}
-	
-	public String[][] getConstructedRows()
-	{
-		return constructedRows;
-	}
 	
 	public void constructColumns(){
 		
@@ -81,7 +70,7 @@ public class TableConstructionClusterTablesPhasesZoomA implements PldConstructio
 			
 		}
 		
-		
+		constructedColumns = tmpcolumns;
 		
 	}
 	
@@ -160,7 +149,7 @@ public class TableConstructionClusterTablesPhasesZoomA implements PldConstructio
 		float maxT=(float) maxTotalChangesForOneTr/4;
 		segmentSize[3]=(int) Math.rint(maxT);
 		
-	
+		constructedRows = tmpRows;
 		
 	}
 	

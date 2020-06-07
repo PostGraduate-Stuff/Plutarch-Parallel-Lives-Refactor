@@ -3,9 +3,10 @@ package tableClustering.clusterValidator.clusterValidityMetrics.externalEvaluati
 import java.util.ArrayList;
 
 import tableClustering.clusterExtractor.commons.Cluster;
+import tableClustering.clusterValidator.clusterValidityMetrics.Interface.TotalMetrics;
 import tableClustering.clusterValidator.commons.ClassOfObjects;
 
-public class ClusterPrecisionMetric implements ExternalClusterMetric {
+public class ClusterPrecisionMetric implements TotalMetrics {
 	
 	private Cluster currentCluster = new Cluster();
 	private ClassOfObjects classOfObjects=null;

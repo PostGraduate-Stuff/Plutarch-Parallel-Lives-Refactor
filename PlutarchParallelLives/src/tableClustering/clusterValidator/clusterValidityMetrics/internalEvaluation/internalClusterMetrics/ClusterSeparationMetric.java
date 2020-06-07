@@ -1,8 +1,9 @@
 package tableClustering.clusterValidator.clusterValidityMetrics.internalEvaluation.internalClusterMetrics;
 
+import tableClustering.clusterValidator.clusterValidityMetrics.Interface.TotalMetrics;
 import tableClustering.clusterValidator.commons.Centroid;
 
-public class ClusterSeparationMetric implements InternalClusterMetrics {
+public class ClusterSeparationMetric implements TotalMetrics {
 
 	private Double clusterSeparation = null;
 	private Centroid overallCentroid = null;
@@ -18,7 +19,7 @@ public class ClusterSeparationMetric implements InternalClusterMetrics {
 	
 	
 	@Override
-	public void computeMetric() {
+	public void compute() {
 				
 		clusterSeparation = new Double(0);
 		

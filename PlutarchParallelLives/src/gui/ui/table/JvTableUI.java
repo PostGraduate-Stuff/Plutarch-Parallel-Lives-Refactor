@@ -1,4 +1,4 @@
-package gui.ui;
+package gui.ui.table;
 
 import java.awt.Dimension;
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ public class JvTableUI {
 	private ArrayList<Phase> initialPhases;
 	private JvTable generalTable;
 	
-	public JvTableUI(GuiConfiguration configuration, DataConfiguration dataConfiguration, ArrayList<Phase> initialPhases) {
+	public JvTableUI(final GuiConfiguration configuration, final DataConfiguration dataConfiguration, final ArrayList<Phase> initialPhases) {
 		this.configuration = configuration;
 		this.dataConfiguration = dataConfiguration;
 		this.initialPhases = initialPhases;

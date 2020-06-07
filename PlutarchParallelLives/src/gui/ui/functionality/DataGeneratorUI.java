@@ -1,4 +1,4 @@
-package gui.ui;
+package gui.ui.functionality;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -9,6 +9,10 @@ import gui.configurations.DataTablesConfiguration;
 import gui.configurations.GuiConfiguration;
 import gui.tableElements.tableConstructors.TableConstructionIDU;
 import gui.tableElements.tableConstructors.TableConstructionWithClusters;
+import gui.ui.table.GeneralTableIDUUI;
+import gui.ui.table.GeneralTablePhasesUI;
+import gui.ui.tree.TreeConstructionPhasesWithClustersUI;
+import gui.ui.tree.TreeConstructionUI;
 import phaseAnalyzer.engine.PhaseAnalyzerMainEngine;
 import services.DataService;
 import services.PhasesService;
@@ -25,9 +29,9 @@ public class DataGeneratorUI{
 	private TableConstructionIDU constructedIDUTable;
 	private TableConstructionWithClusters clusterTable;
 	
-	public DataGeneratorUI(GuiConfiguration guiConfiguration,
-								DataConfiguration dataConfiguration,
-								DataTablesConfiguration dataTableConfiguration) 
+	public DataGeneratorUI(final GuiConfiguration guiConfiguration,
+							final DataConfiguration dataConfiguration,
+							final DataTablesConfiguration dataTableConfiguration) 
 	{
 		this.guiConfiguration = guiConfiguration;
 		this.dataConfiguration = dataConfiguration;
@@ -35,7 +39,7 @@ public class DataGeneratorUI{
 	}
 
 	public void importData(File file){
-		initiateLoadState();
+		dataConfiguration.initiateLoadState();
 		importDataFromFile(file);
 		TableService service = new TableService();
 		constructedIDUTable = service.createTableConstructionIDU(globalDataKeeper.getAllPPLSchemas(), globalDataKeeper.getAllPPLTransitions());
@@ -54,12 +58,6 @@ public class DataGeneratorUI{
 		fillTree();
 	}
 	
-	public void initiateLoadState(){
-		dataConfiguration.setTimeWeight((float)0.5); 
-		dataConfiguration.setChangeWeight((float)0.5);
-		dataConfiguration.setPreProcessingTime(false);
-		dataConfiguration.setPreProcessingChange(false);
-	}
 	
 	public void setIDUPanel(){
 		dataConfiguration.setFinalColumnsZoomArea(constructedIDUTable.getConstructedColumns());
@@ -80,9 +78,7 @@ public class DataGeneratorUI{
 		}
 		constructTableWithClusters();
 		
-		guiConfiguration.getTabbedPane().setSelectedIndex(0);
-		guiConfiguration.getUniformlyDistributedButton().setVisible(true);
-		guiConfiguration.getNotUniformlyDistributedButton().setVisible(true);
+		guiConfiguration.setDistributedButton();
 		
 		makeGeneralTablePhases();
 		fillClustersTree( globalDataKeeper.getClusterCollectors().get(0).getClusters());

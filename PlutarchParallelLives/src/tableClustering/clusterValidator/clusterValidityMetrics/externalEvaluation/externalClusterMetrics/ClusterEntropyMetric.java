@@ -3,9 +3,10 @@ package tableClustering.clusterValidator.clusterValidityMetrics.externalEvaluati
 import java.util.ArrayList;
 
 import tableClustering.clusterExtractor.commons.Cluster;
+import tableClustering.clusterValidator.clusterValidityMetrics.Interface.TotalMetrics;
 import tableClustering.clusterValidator.commons.ClassOfObjects;
 
-public class ClusterEntropyMetric implements ExternalClusterMetric {
+public class ClusterEntropyMetric implements TotalMetrics {
 
 	private ArrayList<ClassOfObjects> classesOfObjects = new ArrayList<ClassOfObjects>();
 	//private Cluster currentCluster = new Cluster();
@@ -23,21 +24,7 @@ public class ClusterEntropyMetric implements ExternalClusterMetric {
 	
 	@Override
 	public void compute() {
-		/*
-		 * for current cluster (j)!!!!
-		 * 
-		 * pij = mij/mi
-		 * 
-		 * mi:  the number of objects in cluster i
-		 * mij: the number of objects of class j in cluster i
-		 * 
-		 * the entropy of each cluster i is calculated using 
-		 * the standard formula, 
-		 * 
-		 * ei = -Sum(j=1 ews L)pij*log2(pij)
-		 * where L is the number of classes
-		 * 
-		 */
+		
 		Double mi = new Double(0);
 		Double mij = new Double(0);
 		Double pij = new Double(0);

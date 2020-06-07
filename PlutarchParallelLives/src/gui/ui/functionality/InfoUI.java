@@ -1,4 +1,4 @@
-package gui.ui;
+package gui.ui.functionality;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,8 +14,6 @@ public class InfoUI {
 		JMenuItem infoItem = new JMenuItem("Info");
 		infoItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				
 				if(dataGenerator.getPplFile() == null){
 					JOptionPane.showMessageDialog(null, "Select a Project first");
 					return;	

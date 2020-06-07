@@ -1,6 +1,8 @@
 package tableClustering.clusterValidator.clusterValidityMetrics.externalEvaluation.externalClusterMetrics;
 
-public class ClusterFMeasureMetric implements ExternalClusterMetric {
+import tableClustering.clusterValidator.clusterValidityMetrics.Interface.TotalMetrics;
+
+public class ClusterFMeasureMetric implements TotalMetrics {
 
 	private Double precision = new Double(0);
 	private Double recall = new Double(0);

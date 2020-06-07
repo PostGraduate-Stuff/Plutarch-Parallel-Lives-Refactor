@@ -1,4 +1,4 @@
-package gui.ui;
+package gui.ui.zoom;
 
 import java.util.ArrayList;
 
@@ -7,21 +7,23 @@ import gui.configurations.DataConfiguration;
 import gui.configurations.DataTablesConfiguration;
 import gui.configurations.GuiConfiguration;
 import gui.tableElements.tableConstructors.PldConstruction;
+import gui.ui.table.ZoomAreaTableForClusterUI;
 import services.TableService;
 
 public class ClusterSelectionToZoomAreaUI 
 {
-
 	private GuiConfiguration configuration;
 	private DataConfiguration dataConfiguration;
 	private DataTablesConfiguration tablesConfiguration;
 	private GlobalDataKeeper globalDataKeeper;
 	private int selectedColumn; 
 	
-	public ClusterSelectionToZoomAreaUI(GuiConfiguration configuration, GlobalDataKeeper globalDataKeeper,int selectedColumn, DataTablesConfiguration tablesConfiguration, DataConfiguration dataConfiguration) {
+	public ClusterSelectionToZoomAreaUI(final GuiConfiguration configuration, final GlobalDataKeeper globalDataKeeper,int selectedColumn, final DataTablesConfiguration tablesConfiguration, final DataConfiguration dataConfiguration) {
 		this.configuration = configuration;
 		this.globalDataKeeper = globalDataKeeper;
 		this.selectedColumn = selectedColumn;
+		this.dataConfiguration = dataConfiguration;
+		this.tablesConfiguration = tablesConfiguration;
 	}
 	
 	public void showClusterSelectionToZoomArea()

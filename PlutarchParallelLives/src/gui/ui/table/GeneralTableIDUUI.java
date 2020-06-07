@@ -1,4 +1,4 @@
-package gui.ui;
+package gui.ui.table;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -26,7 +26,7 @@ public class GeneralTableIDUUI extends TableUI{
 	
 	private GlobalDataKeeper globalDataKeeper;
 	
-	public GeneralTableIDUUI(GuiConfiguration configuration,DataConfiguration dataConfiguration,DataTablesConfiguration tablesConfiguration,GlobalDataKeeper globalDataKeeper) {
+	public GeneralTableIDUUI(final GuiConfiguration configuration, final DataConfiguration dataConfiguration, final DataTablesConfiguration tablesConfiguration,GlobalDataKeeper globalDataKeeper) {
 
 		super(configuration,dataConfiguration,tablesConfiguration);
 		this.globalDataKeeper = globalDataKeeper;
@@ -36,7 +36,7 @@ public class GeneralTableIDUUI extends TableUI{
 		DataService service = new DataService();
 		String[][] sortedRows = service.sortRows(dataConfiguration.getFinalRowsZoomArea(), globalDataKeeper.getAllPPLTables());
 		setSortedRows(sortedRows);
-		setPLDVisibility(true);
+		configuration.setPLDVisibility(true);
 	}
 	
 	public void setSortedRows(String[][] sortedRows)
@@ -45,13 +45,7 @@ public class GeneralTableIDUUI extends TableUI{
 		configuration.setSelectedRows(new ArrayList<Integer>());
 	}
 	
-	public void setPLDVisibility(boolean action)
-	{
-		configuration.setShowingPld(action);
-		configuration.getZoomInButton().setVisible(action);
-		configuration.getZoomOutButton().setVisible(action);
-		configuration.getShowThisToPopup().setVisible(action); 
-	}
+
 	
 	public JvTable constructGeneralTableIDU() 
 	{
@@ -84,7 +78,6 @@ public class GeneralTableIDUUI extends TableUI{
 		        String tmpValue=dataConfiguration.getFinalRowsZoomArea()[row][column];
 		        String columnName=table.getColumnName(column);
 		        Color fr=new Color(0,0,0);
-		        
 		        c.setForeground(fr);
 		        setOpaque(true);
 		      
@@ -93,21 +86,20 @@ public class GeneralTableIDUUI extends TableUI{
 		        	Description descriptionTag = new Description(globalDataKeeper);
 		        	String description= descriptionTag.getTransitionDescription(column);
         			configuration.getDescriptionText().setText(description);
-		        	Color cl = new Color(255,69,0,100);
-	        		c.setBackground(cl);
-	        		return c;
+        			Color cl = new Color(255,69,0,100);
+        			c.setBackground(cl);
+        			return c;
 		        }
 		        else if(configuration.getSelectedColumnZoomArea()==0){
 		    		
 		        	if (isSelected){
-		        		Color cl = new Color(255,69,0,100);
-		        		c.setBackground(cl);
-		        		
 		        		Description descriptionTag = new Description(globalDataKeeper);
 			        	String description= descriptionTag.getBirthDeathDescription(dataConfiguration.getFinalRowsZoomArea()[row][0]);
 			        	description=description+"Total Changes:"+globalDataKeeper.getAllPPLTables().get(dataConfiguration.getFinalRowsZoomArea()[row][0]).getTotalChanges()+"\n";
 	        			configuration.getDescriptionText().setText(description);
-		        		
+	        			
+	        			Color cl = new Color(255,69,0,100);
+		        		c.setBackground(cl);
 		        		return c;
 		        	}
 		        }
@@ -140,25 +132,8 @@ public class GeneralTableIDUUI extends TableUI{
 		        
 		        try{
 		        	int numericValue=Integer.parseInt(tmpValue);
-		        	Color insersionColor=null;
 					setToolTipText(Integer.toString(numericValue));
-
-	        		if(numericValue==0){
-	        			insersionColor=new Color(154,205,50,200);
-	        		}
-	        		else if(numericValue> 0&& numericValue<=dataConfiguration.getSegmentSizeZoomArea()[3]){
-	        			insersionColor=new Color(176,226,255);
-		        	}
-	        		else if(numericValue>dataConfiguration.getSegmentSizeZoomArea()[3] && numericValue<=2*dataConfiguration.getSegmentSizeZoomArea()[3]){
-	        			insersionColor=new Color(92,172,238);
-	        		}
-	        		else if(numericValue>2*dataConfiguration.getSegmentSizeZoomArea()[3] && numericValue<=3*dataConfiguration.getSegmentSizeZoomArea()[3]){
-	        			
-	        			insersionColor=new Color(28,134,238);
-	        		}
-	        		else{
-	        			insersionColor=new Color(16,78,139);
-	        		}
+					Color insersionColor=setInsertionColourForTable(numericValue, dataConfiguration.getSegmentSizeZoomArea()[3]);
 	        		c.setBackground(insersionColor);
 		        	
 		        	return c;
@@ -168,17 +143,15 @@ public class GeneralTableIDUUI extends TableUI{
 	        			c.setBackground(Color.GRAY);
 	        			return c; 
 	        		}
-	        		else{
-	        			if(columnName.contains("v")){
-	        				c.setBackground(Color.lightGray);
-	        				setToolTipText(columnName);
-	        			}
-	        			else{
-	        				Color tableNameColor=new Color(205,175,149);
-	        				c.setBackground(tableNameColor);
-	        			}
-		        		return c; 
-	        		}
+        			if(columnName.contains("v")){
+        				c.setBackground(Color.lightGray);
+        				setToolTipText(columnName);
+    	        		return c; 
+        			}
+    				Color tableNameColor=new Color(205,175,149);
+    				c.setBackground(tableNameColor);
+    			
+	        		return c; 
 		        }
 		    }
 		});

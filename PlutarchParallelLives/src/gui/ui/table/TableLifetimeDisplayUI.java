@@ -1,4 +1,4 @@
-package gui.ui;
+package gui.ui.table;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -27,19 +27,15 @@ import gui.configurations.GuiConfiguration;
 import gui.tableElements.commons.JvTable;
 import gui.tableElements.commons.MyTableModel;
 import gui.tableElements.tableConstructors.TableConstructionAllSquaresIncluded;
+import gui.ui.functionality.DataGeneratorUI;
 
-public class TableLifetimeDisplayUI {
-	private final GuiConfiguration configuration;
-	private final DataConfiguration dataConfiguration;
+public class TableLifetimeDisplayUI extends TableUI{
 	private final DataGeneratorUI dataGenerator;
-	private final DataTablesConfiguration tablesConfiguration;
 	
 	public TableLifetimeDisplayUI(final GuiConfiguration configuration, final DataConfiguration dataConfiguration,
 			final DataGeneratorUI dataGenerator, final DataTablesConfiguration tablesConfiguration) {
-		this.configuration = configuration;
-		this.dataConfiguration = dataConfiguration;
+		super(configuration,dataConfiguration,tablesConfiguration);
 		this.dataGenerator = dataGenerator;
-		this.tablesConfiguration = tablesConfiguration;
 	}
 
 	public JMenuItem createShowTableMenuItem(){
@@ -119,19 +115,15 @@ public class TableLifetimeDisplayUI {
 		        if(configuration.getSelectedColumn()==0){
 		        	if (isSelected){
 		        		Color cl = new Color(255,69,0, 100);
-
 		        		c.setBackground(cl);
-		        		
 		        		return c;
 		        	}
 		        }
 		        else{
 		        	if (isSelected && hasFocus){
-			        	
 		        		c.setBackground(Color.YELLOW);
 		        		return c;
 			        }
-		        	
 		        }
 		        
 		        try{
@@ -148,26 +140,22 @@ public class TableLifetimeDisplayUI {
 		        }
 		        catch(Exception e){
 		        		
-		        		if(tmpValue.equals("")){
-		        			c.setBackground(Color.black);
-			        		return c; 
-		        		}
-		        		else{
-		        			if(columnName.contains("v")){
-		        				c.setBackground(Color.lightGray);
-		        				if(levelized==false){
-		        					setToolTipText(columnName);
-		        				}
-		        			}
-		        			else{
-		        				Color tableNameColor=new Color(205,175,149);
-		        				c.setBackground(tableNameColor);
-		        			}
-			        		return c; 
-		        		}
-		        		
-		        		
-		        }
+	        		if(tmpValue.equals("")){
+	        			c.setBackground(Color.black);
+		        		return c; 
+	        		}
+        			if(columnName.contains("v")){
+        				c.setBackground(Color.lightGray);
+        				if(levelized==false){
+        					setToolTipText(columnName);
+        				}
+    	        		return c; 
+        			}
+    				Color tableNameColor=new Color(205,175,149);
+    				c.setBackground(tableNameColor);
+        			
+	        		return c; 
+        		}
 		    }
 		});
 		

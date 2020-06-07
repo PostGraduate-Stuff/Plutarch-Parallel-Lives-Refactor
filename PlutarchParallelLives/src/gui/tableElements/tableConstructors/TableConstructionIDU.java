@@ -11,15 +11,12 @@ import data.dataPPL.pplTransition.AtomicChange;
 import data.dataPPL.pplTransition.PPLTransition;
 import data.dataPPL.pplTransition.TableChange;
 
-public class TableConstructionIDU implements PldConstruction {
+public class TableConstructionIDU extends TableConstruction {
 
 	private TreeMap<String,PPLSchema> allPPLSchemas=new TreeMap<String,PPLSchema>();
 	private ArrayList<PPLTable>	tables=new ArrayList<PPLTable>();
 	private TreeMap<Integer,PPLTransition> allPPLTransitions = new TreeMap<Integer,PPLTransition>();
 	
-	private String[] constructedColumns;
-	private String[][] constructedRows;
-
 	private int columnsNumber=0;
 	private Integer[][] schemaColumnId=null;
 	private int maxDeletions=1;
@@ -38,16 +35,6 @@ public class TableConstructionIDU implements PldConstruction {
 		this.allPPLTransitions = allPPLTransitions;
 		
 		
-	}
-	
-	public String[] getConstructedColumns()
-	{
-		return constructedColumns;
-	}
-	
-	public String[][] getConstructedRows()
-	{
-		return constructedRows;
 	}
 	
 	public void constructColumns(){
@@ -76,7 +63,6 @@ public class TableConstructionIDU implements PldConstruction {
 		{
 			this.constructedColumns[j]=columnsList.get(j);
 		}	
-		
 	}
 	
 

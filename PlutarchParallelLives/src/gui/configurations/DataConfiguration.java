@@ -1,5 +1,7 @@
 package gui.configurations;
 
+import gui.dialogs.ParametersJDialog;
+
 public class DataConfiguration
 {
 	private Float timeWeight=null; 
@@ -33,8 +35,15 @@ public class DataConfiguration
 	this.deathWeight=deathWeight;
 	this.changeWeightCl=changeWeightCl;
 	}
-
+	
 	public DataConfiguration(){}
+	
+	public void initiateLoadState(){
+		timeWeight = (float)0.5; 
+		changeWeight = (float)0.5;
+		preProcessingTime = false;
+		preProcessingChange = false;
+	}
 	
 	public Float getTimeWeight() {
 		return timeWeight;
@@ -179,4 +188,21 @@ public class DataConfiguration
 	public void setSegmentSizeDetailedTable(Integer[] segmentSizeDetailedTable) {
 		this.segmentSizeDetailedTable = segmentSizeDetailedTable;
 	}
+
+	public void setConfigurationsForPhases(ParametersJDialog jDialog) {
+		timeWeight = jDialog.getTimeWeight();
+		changeWeight = jDialog.getChangeWeight();
+		preProcessingTime = jDialog.getPreProcessingTime();
+		preProcessingChange = jDialog.getPreProcessingChange();
+        numberOfPhases = jDialog.getNumberOfPhases();
+		
+	}
+	public void setConfigurationsForClusters(ParametersJDialog jDialog) {
+        numberOfClusters = jDialog.getNumberOfClusters();
+        birthWeight = jDialog.geBirthWeight();
+        deathWeight = jDialog.getDeathWeight();
+        changeWeightCl = jDialog.getChangeWeightCluster();
+		
+	}
 }
+

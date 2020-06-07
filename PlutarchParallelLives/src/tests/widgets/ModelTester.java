@@ -7,25 +7,19 @@ import java.io.IOException;
 import org.antlr.v4.runtime.RecognitionException;
 import org.junit.Test;
 
-import data.dataKeeper.GlobalDataKeeper;
-import data.dataKeeper.PPLFile;
 import gui.configurations.DataConfiguration;
 import gui.configurations.DataTablesConfiguration;
 import gui.configurations.GuiConfiguration;
 import gui.mainEngine.Gui;
 import gui.tableElements.commons.MyTableModel;
 import gui.tableElements.tableConstructors.TableConstructionAllSquaresIncluded;
-import gui.tableElements.tableConstructors.TableConstructionWithClusters;
-import gui.ui.DataGeneratorUI;
-import gui.ui.TableLifetimeDisplayUI;
-import phaseAnalyzer.engine.PhaseAnalyzerMainEngine;
-import services.DataService;
-import services.TableService;
+import gui.ui.functionality.DataGeneratorUI;
+import gui.ui.table.TableLifetimeDisplayUI;
 
 public class ModelTester 
 {
 	@Test
-	public void testDataGeneratorWidget() throws RecognitionException, IOException 
+	public void testDetailedModel() throws RecognitionException, IOException 
 	{
 		Gui gui = new Gui();
 		DataGeneratorUI dataUI = new DataGeneratorUI(gui.getConfiguration(), gui.getDataConfiguration(), gui.getTablesConfiguration());

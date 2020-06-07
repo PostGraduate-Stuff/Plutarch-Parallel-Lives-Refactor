@@ -11,7 +11,7 @@ import data.dataPPL.pplTransition.AtomicChange;
 import data.dataPPL.pplTransition.PPLTransition;
 import data.dataPPL.pplTransition.TableChange;
 
-public class TableConstructionWithClusters implements PldConstruction{
+public class TableConstructionWithClusters extends TableConstruction{
 	
 	private ArrayList<Phase> phases = new ArrayList<Phase>();
 	private ArrayList<Cluster> clusters = new ArrayList<Cluster>();
@@ -25,8 +25,7 @@ public class TableConstructionWithClusters implements PldConstruction{
 	private int maxTotalChangesForOneTr=1;
 	private Integer[] segmentSize=new Integer[4];
 	
-	private String[] constructedColumns;
-	private String[][] constructedRows;
+	
 	
 	public TableConstructionWithClusters(GlobalDataKeeper globalDataKeeper){
 		
@@ -35,16 +34,6 @@ public class TableConstructionWithClusters implements PldConstruction{
 		clusters=globalDataKeeper.getClusterCollectors().get(0).getClusters();
 		
 		
-	}
-	
-	public String[] getConstructedColumns()
-	{
-		return constructedColumns;
-	}
-	
-	public String[][] getConstructedRows()
-	{
-		return constructedRows;
 	}
 	
 	public void constructColumns(){

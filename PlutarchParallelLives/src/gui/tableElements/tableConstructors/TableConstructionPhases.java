@@ -12,7 +12,7 @@ import data.dataPPL.pplTransition.AtomicChange;
 import data.dataPPL.pplTransition.PPLTransition;
 import data.dataPPL.pplTransition.TableChange;
 
-public class TableConstructionPhases implements PldConstruction {
+public class TableConstructionPhases extends TableConstruction {
 
 	
 	private static TreeMap<String,PPLSchema> allPPLSchemas=new TreeMap<String,PPLSchema>();
@@ -28,9 +28,6 @@ public class TableConstructionPhases implements PldConstruction {
 	private int maxTotalChangesForOneTr=1;
 	private Integer[] segmentSize=new Integer[4];
 	
-	private String[] constructedColumns;
-	private String[][] constructedRows;
-
 	
 	public TableConstructionPhases(GlobalDataKeeper globalDataKeeper){
 		
@@ -39,17 +36,8 @@ public class TableConstructionPhases implements PldConstruction {
 		
 	}
 	
-	public String[] getConstructedColumns()
-	{
-		return constructedColumns;
-	}
 	
-	public String[][] getConstructedRows()
-	{
-		return constructedRows;
-	}
-	
-public void constructColumns(){
+	public void constructColumns(){
 		
 		ArrayList<String> columnsList=new ArrayList<String>();
 		

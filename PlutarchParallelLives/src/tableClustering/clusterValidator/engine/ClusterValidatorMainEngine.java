@@ -9,9 +9,8 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import tableClustering.clusterExtractor.commons.Cluster;
-import tableClustering.clusterValidator.clusterValidityMetrics.externalEvaluation.externalTotalMetrics.ExternalTotalMetrics;
+import tableClustering.clusterValidator.clusterValidityMetrics.Interface.TotalMetrics;
 import tableClustering.clusterValidator.clusterValidityMetrics.externalEvaluation.externalTotalMetrics.TotalEntropyMetric;
-import tableClustering.clusterValidator.clusterValidityMetrics.internalEvaluation.internalTotalMetrics.InternalTotalMetrics;
 import tableClustering.clusterValidator.clusterValidityMetrics.internalEvaluation.internalTotalMetrics.TotalCohesionMetric;
 import tableClustering.clusterValidator.clusterValidityMetrics.internalEvaluation.internalTotalMetrics.TotalSeparationMetric;
 import tableClustering.clusterValidator.commons.Centroid;
@@ -39,16 +38,16 @@ public class ClusterValidatorMainEngine {
 	
 	public void run(){
 
-		InternalTotalMetrics totalCohesionMetricCalculator = new TotalCohesionMetric(clusterInfoKeepers);
+		TotalMetrics totalCohesionMetricCalculator = new TotalCohesionMetric(clusterInfoKeepers);
 		totalCohesionMetricCalculator.compute();
 		totalCohesion=totalCohesionMetricCalculator.getResult();
 		
-		InternalTotalMetrics totalSeparationMetricCalculator = new TotalSeparationMetric(clusterInfoKeepers);
+		TotalMetrics totalSeparationMetricCalculator = new TotalSeparationMetric(clusterInfoKeepers);
 		totalSeparationMetricCalculator.compute();
 		totalSeparation=totalSeparationMetricCalculator.getResult();
 		
 		
-		ExternalTotalMetrics totalEntropyCalculator = new TotalEntropyMetric(clusterInfoKeepers, globalDataKeeper.getAllPPLTables().size());
+		TotalMetrics totalEntropyCalculator = new TotalEntropyMetric(clusterInfoKeepers, globalDataKeeper.getAllPPLTables().size());
 		totalEntropyCalculator.compute();
 		totalEntropy = totalEntropyCalculator.getResult();
 		
