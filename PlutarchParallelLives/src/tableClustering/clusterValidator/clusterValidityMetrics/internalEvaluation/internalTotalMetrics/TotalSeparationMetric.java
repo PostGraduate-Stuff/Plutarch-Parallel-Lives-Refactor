@@ -12,34 +12,22 @@ public class TotalSeparationMetric implements TotalMetrics {
 	private Double totalSeparation=null;
 	
 	public TotalSeparationMetric(ArrayList<ClusterInfoKeeper> clusterInfoKeepers) {
-	
 		this.clusterInfoKeepers=clusterInfoKeepers;
-		
 	}
 	
 	@Override
 	public void compute(){
-		
 		Iterator<ClusterInfoKeeper> iteratorClusterInfoKeeper = clusterInfoKeepers.iterator();
 		totalSeparation = new Double(0);
-
-		// totalSeparation = Sum1-K(mi*validity(Ci)) , mi= datapoints that are represented by cluster centroid
  		while(iteratorClusterInfoKeeper.hasNext()){
-			
-			ClusterInfoKeeper currClusterInfoKeeper = iteratorClusterInfoKeeper.next();
-			
-			totalSeparation= totalSeparation + currClusterInfoKeeper.getClusterSeparation();
+			ClusterInfoKeeper currentClusterInfoKeeper = iteratorClusterInfoKeeper.next();
+			totalSeparation= totalSeparation + currentClusterInfoKeeper.getClusterSeparation();
 		}
 		System.err.println("Total Separation"+totalSeparation);
-
 	}
-	
 	
 	@Override
 	public Double getResult() {
-		// TODO Auto-generated method stub
 		return totalSeparation;
 	}
-
-	
 }

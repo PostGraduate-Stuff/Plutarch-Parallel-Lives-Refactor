@@ -16,63 +16,58 @@ public class PPLTransitionConstruction {
 	private static TreeMap<String,PPLSchema> allPPLSchemas = new TreeMap<String,PPLSchema>();
 	private static TreeMap<String,TableChange> allTableChanges = new  TreeMap<String,TableChange>();
 
-	public PPLTransitionConstruction(TreeMap<String,PPLSchema> tmpSc, TreeMap<String,TableChange> tmpTbs){
+	public PPLTransitionConstruction(TreeMap<String,PPLSchema> tempSchema, TreeMap<String,TableChange> tempTables){
 		allPPLTransitions = new TreeMap<Integer,PPLTransition>();
-		allPPLSchemas=tmpSc;
-		allTableChanges = tmpTbs;
-		
+		allPPLSchemas=tempSchema;
+		allTableChanges = tempTables;
 	}
 	
 	public void makePPLTransitions(){
 		
+		ArrayList<TableChange> tableChanges = extractPPLTransitions();
+		setTableChanges(tableChanges);
+	}
+	
+	private ArrayList<TableChange> extractPPLTransitions(){
+		
 		allPPLTransitions  = new TreeMap<Integer,PPLTransition>();
 		
-		ArrayList<TableChange> tmpTableChanges = new ArrayList<TableChange>();
+		ArrayList<TableChange> tableChanges = new ArrayList<TableChange>();
 		
-		Set<String> tmpKeys = allPPLSchemas.keySet();
+		Set<String> keys = allPPLSchemas.keySet();
 		ArrayList<String> assistantKeys = new ArrayList<String>();
 		
-		for(String k: tmpKeys){
+		for(String k: keys){
 			assistantKeys.add(k);
 		}
 		
 		for(int i=0; i<assistantKeys.size()-1; i++){
 			
-			PPLTransition tmpPPLTransition = new PPLTransition(assistantKeys.get(i),assistantKeys.get(i+1),i);
+			PPLTransition pplTransition = new PPLTransition(assistantKeys.get(i),assistantKeys.get(i+1),i);
 			
-			allPPLTransitions.put(i,tmpPPLTransition);
-			
-		}
-		
-		
-		for (Map.Entry<Integer,PPLTransition> tr : allPPLTransitions.entrySet()) {
-
-			for (Map.Entry<String, TableChange> t : allTableChanges.entrySet()) {
-				
-				TableChange tmpTableChange = t.getValue();
-				
-				TreeMap<Integer,ArrayList<AtomicChange>> tmpAtomicChanges = tmpTableChange.getTableAtomicChanges();
-				
-				for (Map.Entry<Integer,ArrayList<AtomicChange>> at : tmpAtomicChanges.entrySet()) {
-	
-					if(at.getKey().equals(tr.getKey())){
-					
-						TableChange tmpTableChange1 = new TableChange(t.getKey(),tmpTableChange.getTableAtChForOneTransition(tr.getKey()));
-						
-						tmpTableChanges.add(tmpTableChange1);
-						
-					}
-				
-				}
-					
-			}
-		
-			tr.getValue().setTableChanges(tmpTableChanges);
-			tmpTableChanges = new ArrayList<TableChange>();
+			allPPLTransitions.put(i,pplTransition);
 			
 		}
-
+		return tableChanges;
 	}
+	
+	private void setTableChanges(ArrayList<TableChange> tableChanges){
+		for (Map.Entry<Integer,PPLTransition> transition : allPPLTransitions.entrySet()) {
+			for (Map.Entry<String, TableChange> tableChange : allTableChanges.entrySet()) {
+				TableChange tmpTableChange = tableChange.getValue();
+				TreeMap<Integer,ArrayList<AtomicChange>> atomicChanges = tmpTableChange.getTableAtomicChanges();
+				for (Map.Entry<Integer,ArrayList<AtomicChange>> atomicChange : atomicChanges.entrySet()) {
+					if(atomicChange.getKey().equals(transition.getKey())){
+						TableChange tempTableChange = new TableChange(tableChange.getKey(),tmpTableChange.getTableAtomicChangeForOneTransition(transition.getKey()));
+						tableChanges.add(tempTableChange);
+					}
+				}
+			}
+			transition.getValue().setTableChanges(tableChanges);
+			tableChanges = new ArrayList<TableChange>();
+		}
+	}
+	
 	
 	public  TreeMap<Integer,PPLTransition> getAllPPLTransitions(){
 		

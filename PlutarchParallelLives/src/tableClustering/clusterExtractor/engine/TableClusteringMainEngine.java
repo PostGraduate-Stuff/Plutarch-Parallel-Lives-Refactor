@@ -14,8 +14,8 @@ public class TableClusteringMainEngine {
 	private Double deathWeight;
 	private Double changeWeight;
 	private ArrayList<ClusterCollector> clusterCollectors;
-	private ClusterExtractor clusterExtractor;
-	private ArrayList<ClusterCollector> allClusterCollectors;
+	private ClusterExtractor clusterExtractor = new AgglomerativeClusterExtractor();
+	private ArrayList<ClusterCollector> allClusterCollectors = new ArrayList<ClusterCollector>();
 
 	public TableClusteringMainEngine(GlobalDataKeeper dataKeeper,Double birthWeight, Double deathWeight,
 			Double changeWeight){
@@ -24,10 +24,7 @@ public class TableClusteringMainEngine {
 		this.birthWeight=birthWeight;
 		this.deathWeight=deathWeight;
 		this.changeWeight=changeWeight;
-		
-		clusterExtractor = new AgglomerativeClusterExtractor();
-		
-		allClusterCollectors = new ArrayList<ClusterCollector>();
+
 
 	}
 	
@@ -48,9 +45,8 @@ public class TableClusteringMainEngine {
 		String toPrint="";
 		
 		for(int i=0; i<allClusterCollectors.size(); i++){
-			ClusterCollector clusterCollector=allClusterCollectors.get(i);
-			toPrint=toPrint+clusterCollector.toString();
-			
+			ClusterCollector clusterCollector = allClusterCollectors.get(i);
+			toPrint = toPrint+clusterCollector.toString();	
 		}
 		
 		System.out.println(toPrint);

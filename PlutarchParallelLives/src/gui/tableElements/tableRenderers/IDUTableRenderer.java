@@ -55,9 +55,10 @@ public class IDUTableRenderer extends DefaultTableCellRenderer{
     				get(Integer.parseInt(table.getColumnName(column))).getNewVersionName()+"\n";		        		
     		
 			description=description+"Transition Changes:"+globalDataKeeper.getAllPPLTransitions().get(Integer.parseInt(table.getColumnName(column))).getNumberOfChangesForOneTr()+"\n";
-			description=description+"Additions:"+globalDataKeeper.getAllPPLTransitions().get(Integer.parseInt(table.getColumnName(column))).getNumberOfAdditionsForOneTr()+"\n";
-			description=description+"Deletions:"+globalDataKeeper.getAllPPLTransitions().get(Integer.parseInt(table.getColumnName(column))).getNumberOfDeletionsForOneTr()+"\n";
-			description=description+"Updates:"+globalDataKeeper.getAllPPLTransitions().get(Integer.parseInt(table.getColumnName(column))).getNumberOfUpdatesForOneTr()+"\n";
+			description=description+"Additions:"+globalDataKeeper.getAllPPLTransitions().get(Integer.parseInt(table.getColumnName(column))).getNumberOfActionsForOneTr("Addition")+"\n";
+			description=description+"Deletions:"+globalDataKeeper.getAllPPLTransitions().get(Integer.parseInt(table.getColumnName(column))).getNumberOfActionsForOneTr("Deletion")+"\n";
+			description=description+"Updates:"+globalDataKeeper.getAllPPLTransitions().get(Integer.parseInt(table.getColumnName(column))).getNumberOfActionsForOneTr("Change")+"\n";
+
 
 			
 			configuration.getDescriptionText().setText(description);
@@ -116,16 +117,16 @@ public class IDUTableRenderer extends DefaultTableCellRenderer{
 	        				get(Integer.parseInt(table.getColumnName(column))).getNewVersionName()+"\n";	
 	        		
 	        		if(globalDataKeeper.getAllPPLTables().get(finalRows[row][0]).
-	        				getTableChanges().getTableAtChForOneTransition(Integer.parseInt(table.getColumnName(column)))!=null)
+	        				getTableChanges().getTableAtomicChangeForOneTransition(Integer.parseInt(table.getColumnName(column)))!=null)
 	        		{
 	        			description=description+"Transition Changes:"+globalDataKeeper.getAllPPLTables().get(finalRows[row][0]).
-	        				getTableChanges().getTableAtChForOneTransition(Integer.parseInt(table.getColumnName(column))).size()+"\n";
+	        				getTableChanges().getTableAtomicChangeForOneTransition(Integer.parseInt(table.getColumnName(column))).size()+"\n";
 	        			description=description+"Additions:"+globalDataKeeper.getAllPPLTables().get(finalRows[row][0]).
-	        					getNumberOfAdditionsForOneTr(Integer.parseInt(table.getColumnName(column)))+"\n";
+	        					getNumberOfAdditionsForOneTransition(Integer.parseInt(table.getColumnName(column)))+"\n";
 	        			description=description+"Deletions:"+globalDataKeeper.getAllPPLTables().get(finalRows[row][0]).
-	        					getNumberOfDeletionsForOneTr(Integer.parseInt(table.getColumnName(column)))+"\n";
+	        					getNumberOfDeletionsForOneTransition(Integer.parseInt(table.getColumnName(column)))+"\n";
 	        			description=description+"Updates:"+globalDataKeeper.getAllPPLTables().get(finalRows[row][0]).
-	        					getNumberOfUpdatesForOneTr(Integer.parseInt(table.getColumnName(column)))+"\n";
+	        					getNumberOfUpdatesForOneTransition(Integer.parseInt(table.getColumnName(column)))+"\n";
 	        			
 	        		}
 	        		else{

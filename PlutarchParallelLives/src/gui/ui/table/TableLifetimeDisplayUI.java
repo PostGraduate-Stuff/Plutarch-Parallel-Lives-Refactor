@@ -52,7 +52,6 @@ public class TableLifetimeDisplayUI extends TableUI{
 				}
 				
 				TableConstructionAllSquaresIncluded table=new TableConstructionAllSquaresIncluded(dataGenerator.getGlobalDataKeeper());
-				//TODO in service
 				table.constructColumns();
 				table.constructRows();
 				final String[] columns= table.getConstructedColumns();

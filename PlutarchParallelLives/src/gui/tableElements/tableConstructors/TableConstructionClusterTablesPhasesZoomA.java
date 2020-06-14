@@ -18,96 +18,72 @@ public class TableConstructionClusterTablesPhasesZoomA extends TableConstruction
 	private ArrayList<PPLTable>	tables=new ArrayList<PPLTable>();
 	private ArrayList<Phase> phases = new ArrayList<Phase>();
 
-
 	private int columnsNumber=0;
 	private Integer[][] schemaColumnId=null;
 	private int maxDeletions=1;
 	private int maxInsersions=1;
 	private int maxUpdates=1;
-	private int maxTotalChangesForOneTr=1;
+	private int maxTotalChangesForOneTransition=1;
 	private Integer[] segmentSize=new Integer[4];
 	private ArrayList<String> tablesOfCluster=new ArrayList<String>();
 	
-	
 	public TableConstructionClusterTablesPhasesZoomA(TreeMap<String,PPLSchema> allPPLSchemas, ArrayList<Phase> phases, ArrayList<String> tablesOfCluster){
-		
 		this.allPPLSchemas=allPPLSchemas;
 		this.phases=phases;
 		this.tablesOfCluster=tablesOfCluster;
-		
 	}
 	
-	
 	public void constructColumns(){
-		
-		ArrayList<String> columnsList=new ArrayList<String>();
-		
+		setSchemaColumnId();
+		ArrayList<String> columnsList=setColumnsList();
+		columnsNumber=columnsList.size();
+		String[] tmpcolumns=new String[columnsList.size()];
+		for(int j=0; j<columnsList.size(); j++ ){
+			tmpcolumns[j]=columnsList.get(j);
+		}
+		constructedColumns = tmpcolumns;
+	}
+	
+	private void setSchemaColumnId(){
 		schemaColumnId=new Integer[phases.size()][2];
 		
-		for(int i=0;i<phases.size();i++){
+		schemaColumnId[0][0]=0;
+		schemaColumnId[0][1]=1;
+		
+		for(int i=1;i<phases.size();i++){
 			schemaColumnId[i][0]=i;
-			if(i==0){
-				schemaColumnId[i][1]=1;
-			}
-			else{
-				schemaColumnId[i][1]=schemaColumnId[i-1][1]+1;
-			}
+			schemaColumnId[i][1]=schemaColumnId[i-1][1]+1;
 		}
-		
+	}
+	
+	private ArrayList<String> setColumnsList(){
+		ArrayList<String> columnsList=new ArrayList<String>();
 		columnsList.add("Table name");
-		
 		for(int i=0;i<phases.size(); i++){
 			String label="Phase "+i;
 			columnsList.add(label);
 		}
-		
-		columnsNumber=columnsList.size();
-		String[] tmpcolumns=new String[columnsList.size()];
-		
-		for(int j=0; j<columnsList.size(); j++ ){
-			
-			tmpcolumns[j]=columnsList.get(j);
-			
-		}
-		
-		constructedColumns = tmpcolumns;
-		
+		return columnsList;
 	}
 	
 	public void constructRows(){
-		
 		ArrayList<String[]> allRows=new ArrayList<String[]>();
 	    ArrayList<String>	allTables=new ArrayList<String>();
-
-		int found=0;
 		int i=0;
-		
-		for (Map.Entry<String,PPLSchema> pplSc : allPPLSchemas.entrySet()) {
-			
-			PPLSchema oneSchema=pplSc.getValue();
-			
+		for (Map.Entry<String,PPLSchema> pplSchema : allPPLSchemas.entrySet()) {
+			PPLSchema oneSchema=pplSchema.getValue();
 			for(int j=0; j<oneSchema.getTables().size(); j++){
-				
+				boolean found = false;
 				PPLTable oneTable=oneSchema.getTableAt(j);
-				
 				String tmpTableName=oneTable.getName();
 				for(int k=0; k<allTables.size(); k++){
-					
-					
-					if(!tmpTableName.equals(allTables.get(k))){
-						found=0;
-						
-					}
-					else{
-						found=1;
+					if(tmpTableName.equals(allTables.get(k))){
+						found=true;
 						break;
-						
 					}
-					
 				}
 				
-				if(found==0 && tablesOfCluster.contains(tmpTableName) ){
-					
+				if(!found && tablesOfCluster.contains(tmpTableName)){
 					allTables.add(tmpTableName);
 					tables.add(oneTable);
 					String[] tmpOneRow=constructOneRow(oneTable,i,oneSchema.getName());
@@ -115,28 +91,14 @@ public class TableConstructionClusterTablesPhasesZoomA extends TableConstruction
 					oneTable=new PPLTable();
 					tmpOneRow=new String[columnsNumber];
 				}
-				else{
-					found=0;
-				}
-				
 			}
-			
 			i++;
 		}
-		
-		String[][] tmpRows=new String[allRows.size()][columnsNumber];
-		
-		for(int z=0; z<allRows.size(); z++){
-			
-			String[] tmpOneRow=allRows.get(z);
-			for(int j=0; j<tmpOneRow.length; j++ ){
-				
-				tmpRows[z][j]=tmpOneRow[j];
-				
-			}
-			
-		}
-		
+		calculateSegmentSize();
+		constructedRows = getFinalizedConstructedRows(allRows);
+	}
+	
+	private void calculateSegmentSize(){
 		float maxI=(float) maxInsersions/4;
 		segmentSize[0]=(int) Math.rint(maxI);
 		
@@ -146,11 +108,19 @@ public class TableConstructionClusterTablesPhasesZoomA extends TableConstruction
 		float maxD=(float) maxDeletions/4;
 		segmentSize[2]=(int) Math.rint(maxD);
 		
-		float maxT=(float) maxTotalChangesForOneTr/4;
+		float maxT=(float) maxTotalChangesForOneTransition/4;
 		segmentSize[3]=(int) Math.rint(maxT);
-		
-		constructedRows = tmpRows;
-		
+	}
+	
+	private String[][] getFinalizedConstructedRows(ArrayList<String[]> allRows){
+		String[][] rows=new String[allRows.size()][columnsNumber];
+		for(int i=0; i<allRows.size(); i++){
+			String[] tmpOneRow=allRows.get(i);
+			for(int j=0; j<tmpOneRow.length; j++ ){
+				rows[i][j]=tmpOneRow[j];
+			}
+		}
+		return rows;
 	}
 	
 	private String[] constructOneRow(PPLTable oneTable,int schemaVersion,String schemaName){
@@ -158,9 +128,9 @@ public class TableConstructionClusterTablesPhasesZoomA extends TableConstruction
 		String[] oneRow=new String[columnsNumber];
 		int deletedAllTable=0;
 		int pointerCell=0;
-		int updn=0;
-		int deln=0;
-		int insn=0;
+		int updatesNumber=0;
+		int deletionsNumber=0;
+		int insertionsNumber=0;
 		int totalChangesForOnePhase=0;
 		boolean reborn = true;
 
@@ -173,9 +143,9 @@ public class TableConstructionClusterTablesPhasesZoomA extends TableConstruction
 			for(int p=0; p<phases.size(); p++){
 				
 				TreeMap<Integer,PPLTransition> phasePPLTransitions=phases.get(p).getPhasePPLTransitions();
-				for(Map.Entry<Integer, PPLTransition> tr:phasePPLTransitions.entrySet()){
+				for(Map.Entry<Integer, PPLTransition> transitionElement:phasePPLTransitions.entrySet()){
 					
-					if(tr.getValue().getNewVersionName().equals(schemaName)){	
+					if(transitionElement.getValue().getNewVersionName().equals(schemaName)){	
 						pointerCell=p+1;
 						break;
 					}
@@ -193,24 +163,24 @@ public class TableConstructionClusterTablesPhasesZoomA extends TableConstruction
 		for(int p=initialization; p<phases.size(); p++){
 			TreeMap<Integer,PPLTransition> phasePPLTransitions=phases.get(p).getPhasePPLTransitions();
 
-			if (totalChangesForOnePhase>maxTotalChangesForOneTr) {
-				maxTotalChangesForOneTr=totalChangesForOnePhase;
+			if (totalChangesForOnePhase>maxTotalChangesForOneTransition) {
+				maxTotalChangesForOneTransition=totalChangesForOnePhase;
 			}
 			totalChangesForOnePhase=0;
 			
-			for(Map.Entry<Integer, PPLTransition> tmpTL:phasePPLTransitions.entrySet()){
+			for(Map.Entry<Integer, PPLTransition> tempTransition:phasePPLTransitions.entrySet()){
 
-				String sc=tmpTL.getValue().getNewVersionName();
+				String newVersionName=tempTransition.getValue().getNewVersionName();
 				
-				ArrayList<TableChange> tmpTR=tmpTL.getValue().getTableChanges();
+				ArrayList<TableChange> tempTableChange=tempTransition.getValue().getTableChanges();
 				
 				
 				
-				if(tmpTR!=null){
+				if(tempTableChange!=null){
 					
-					for(int j=0; j<tmpTR.size(); j++){
+					for(int j=0; j<tempTableChange.size(); j++){
 						
-						TableChange tableChange=tmpTR.get(j);
+						TableChange tableChange=tempTableChange.get(j);
 						
 						if(tableChange.getAffectedTableName().equals(oneTable.getName())){
 							if(deletedAllTable==1){
@@ -218,30 +188,30 @@ public class TableConstructionClusterTablesPhasesZoomA extends TableConstruction
 							}
 							deletedAllTable=0;
 							
-							ArrayList<AtomicChange> atChs = tableChange.getTableAtChForOneTransition();
+							ArrayList<AtomicChange> atomicChanges = tableChange.getTableAtomicChangeForOneTransition();
 							
-							for(int k=0; k<atChs.size(); k++){
+							for(int k=0; k<atomicChanges.size(); k++){
 								
-								if (atChs.get(k).getType().contains("Addition")){
+								if (atomicChanges.get(k).getType().contains("Addition")){
 									deletedAllTable=0;
 
-									insn++;
+									insertionsNumber++;
 									
-									if(insn>maxInsersions){
-										maxInsersions=insn;
+									if(insertionsNumber>maxInsersions){
+										maxInsersions=insertionsNumber;
 									}
 									
 								}
-								else if(atChs.get(k).getType().contains("Deletion")){
+								else if(atomicChanges.get(k).getType().contains("Deletion")){
 									
-									deln++;
+									deletionsNumber++;
 									
-									 if(deln>maxDeletions){
-											maxDeletions=deln;
+									 if(deletionsNumber>maxDeletions){
+											maxDeletions=deletionsNumber;
 											
 									 }
 									 
-									 boolean existsLater=getNumOfAttributesOfNextSchema(sc, oneTable.getName());
+									 boolean existsLater=getNumberOfAttributesOfNextSchema(newVersionName, oneTable.getName());
 									 
 									 if(!existsLater){
 										 
@@ -250,10 +220,10 @@ public class TableConstructionClusterTablesPhasesZoomA extends TableConstruction
 								}
 								else{
 									
-									updn++;
+									updatesNumber++;
 									
-									if(updn>maxUpdates){
-										maxUpdates=updn;
+									if(updatesNumber>maxUpdates){
+										maxUpdates=updatesNumber;
 									}
 									
 								}
@@ -272,7 +242,7 @@ public class TableConstructionClusterTablesPhasesZoomA extends TableConstruction
 				
 				break;
 			}
-			totalChangesForOnePhase=insn+updn+deln;
+			totalChangesForOnePhase=insertionsNumber+updatesNumber+deletionsNumber;
 			if(totalChangesForOnePhase>=0 && reborn){
 
 				oneRow[pointerCell]=Integer.toString(totalChangesForOnePhase);
@@ -292,9 +262,9 @@ public class TableConstructionClusterTablesPhasesZoomA extends TableConstruction
 				
 			}
 			
-			insn=0;
-			updn=0;
-			deln=0;
+			insertionsNumber=0;
+			updatesNumber=0;
+			deletionsNumber=0;
 			
 		}
 		
@@ -304,28 +274,21 @@ public class TableConstructionClusterTablesPhasesZoomA extends TableConstruction
 			}
 		}
 
-		String lala="";
+		String helper="";
 		for (int i = 0; i < oneRow.length; i++) {
-			lala=lala+oneRow[i]+",";
+			helper=helper+oneRow[i]+",";
 		}
 
 		return oneRow;
 
 	}
-	
 	public Integer[] getSegmentSize(){
 		return segmentSize;
 	}
 	
-	private boolean getNumOfAttributesOfNextSchema(String schema,String table){
-		PPLSchema sc=allPPLSchemas.get(schema);
-		
-		if(sc.getTables().containsKey(table)){
-			return true;
-		}
-		else {
-			return false;
-		}
+	private boolean getNumberOfAttributesOfNextSchema(String schema,String table){
+		PPLSchema schemaPpl=allPPLSchemas.get(schema);
+		return schemaPpl.getTables().containsKey(table);
 		
 	}
 

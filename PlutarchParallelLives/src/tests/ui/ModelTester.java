@@ -1,4 +1,4 @@
-package tests.widgets;
+package tests.ui;
 import static org.junit.Assert.*;
 
 import java.io.File;
@@ -18,12 +18,13 @@ import gui.ui.table.TableLifetimeDisplayUI;
 
 public class ModelTester 
 {
+	private String path = "filesHandler/inis/biosql.ini";
 	@Test
 	public void testDetailedModel() throws RecognitionException, IOException 
 	{
 		Gui gui = new Gui();
 		DataGeneratorUI dataUI = new DataGeneratorUI(gui.getConfiguration(), gui.getDataConfiguration(), gui.getTablesConfiguration());
-		dataUI.importData(new File("C:\\Users\\Christina\\git\\Plutarch-Parallel-Lives-Refactor\\PlutarchParallelLives\\filesHandler\\inis\\biosql.ini"));
+		dataUI.importData(new File(path));
 		
 		DataTablesConfiguration config = gui.getTablesConfiguration();
 		DataConfiguration dataconfig = gui.getDataConfiguration();

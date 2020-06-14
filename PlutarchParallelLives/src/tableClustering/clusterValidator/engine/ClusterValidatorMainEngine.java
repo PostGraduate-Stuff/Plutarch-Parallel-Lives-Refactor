@@ -84,33 +84,33 @@ public class ClusterValidatorMainEngine {
 	private void initializeOverallCentroid(){
 		
 		TreeMap<String, PPLTable> tables= globalDataKeeper.getAllPPLTables();
-		double x=0;
-		double y=0;
-		double z=0;
-		for(Map.Entry<String,PPLTable> pplTab:tables.entrySet()){
-			x = x +pplTab.getValue().getBirthVersionID();
-			y = y+pplTab.getValue().getDeathVersionID();
-			z= z+pplTab.getValue().getTotalChanges();
+		double xBirth=0;
+		double yDeath=0;
+		double zTotalChanges=0;
+		for(Map.Entry<String,PPLTable> pplTable:tables.entrySet()){
+			xBirth = xBirth +pplTable.getValue().getBirthVersionID();
+			yDeath = yDeath+pplTable.getValue().getDeathVersionID();
+			zTotalChanges= zTotalChanges+pplTable.getValue().getTotalChanges();
 		}
 		
-		x= x/tables.size();
-		y= y/tables.size();
-		z= z/tables.size();
+		xBirth= xBirth/tables.size();
+		yDeath= yDeath/tables.size();
+		zTotalChanges= zTotalChanges/tables.size();
 		
-		this.overallCentroid=new Centroid(x, y, z);
+		this.overallCentroid=new Centroid(xBirth, yDeath, zTotalChanges);
 		
-		System.out.println(this.overallCentroid.getX()+" "+this.overallCentroid.getY()+" "+this.overallCentroid.getZ());
+		System.out.println(this.overallCentroid.getBirtVersionID() +" "+this.overallCentroid.getDeathVersionID() +" "+this.overallCentroid.getTotalChanges());
 		
 	}
 	
 	private void initializeClassesOfObjects() throws IOException{
 		
-		BufferedReader br = new BufferedReader(new FileReader("filesHandler/input/phpbbclassesForValidity.csv"));
+		BufferedReader bufferedReader = new BufferedReader(new FileReader("filesHandler/input/phpbbclassesForValidity.csv"));
 		
 		String line;
 		ClassOfObjects classToAdd=null;
 		ArrayList<String> objectsOfClass = new ArrayList<String>();
-		while((line = br.readLine()) != null) {
+		while((line = bufferedReader.readLine()) != null) {
 			
 			if(line.contains("Class ")){
 				if (classToAdd!=null) {
@@ -132,7 +132,7 @@ public class ClusterValidatorMainEngine {
 		classToAdd.setObjects(objectsOfClass);
 		classesOfObjects.add(classToAdd);
 
-		br.close();
+		bufferedReader.close();
 		
 		
 		

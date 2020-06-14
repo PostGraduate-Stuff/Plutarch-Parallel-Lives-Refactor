@@ -12,8 +12,6 @@ import data.dataPPL.pplSQLSchema.PPLTable;
 
 public class AgglomerativeClusterExtractor implements ClusterExtractor{
 
-	
-
 	@Override
 	public ClusterCollector extractAtMostKClusters(GlobalDataKeeper dataKeeper,
 			int numClusters, Double birthWeight, Double deathWeight, Double changeWeight) {
@@ -33,7 +31,6 @@ public class AgglomerativeClusterExtractor implements ClusterExtractor{
 	public ClusterCollector newClusterCollector(ClusterCollector prevCollector,Double birthWeight, Double deathWeight ,Double changeWeight,int dbDuration){
 		
 		ClusterCollector newCollector = new ClusterCollector();
-		ArrayList<Cluster> newClusters = new ArrayList<Cluster>();
 		ArrayList<Cluster> oldClusters = prevCollector.getClusters();
 
 		int oldSize = oldClusters.size();
@@ -42,28 +39,13 @@ public class AgglomerativeClusterExtractor implements ClusterExtractor{
 			System.exit(-10);
 		}
 
-		//compute the distances for all the bloody clusters
-		//TODO add it at cluster collector to move on !$#@$#%$^$%&%&
-		double distances[][] = new double[oldSize][oldSize];
-		
-	    for(int oldI=0; oldI<oldClusters.size(); oldI++){
-	    	Cluster currentCluster=oldClusters.get(oldI);
-		    for(int oldI1=0; oldI1<oldClusters.size(); oldI1++){
-	    		Cluster clusterToCompare=oldClusters.get(oldI1);
-	    		distances[oldI][oldI1] = currentCluster.distance(clusterToCompare,birthWeight,deathWeight,changeWeight,dbDuration);
-	    	}
-	    }
+		double distances[][] = calculateDistance(oldClusters, birthWeight, deathWeight , changeWeight, dbDuration);
+
 	    
-	    for(int i=0; i<distances.length; i++){
-	    	for(int j=0; j<distances[0].length; j++){
-		    }
-	    }
-	    
-		//find the two most similar clusters in the old collection
-	    
-	    int posI=-1; 
-	    double minDist = Double.MAX_VALUE;
+		int posI=-1; 
 	    int posJ=-1;
+	    //double minDist = getminDistance(distances, oldSize, posI, posJ);
+	    double minDist = Double.MAX_VALUE;
 	    for(int i=0; i<oldSize; i++){
 	    	 for(int j=0; j<oldSize; j++){
 	    		if(i!=j){
@@ -76,17 +58,10 @@ public class AgglomerativeClusterExtractor implements ClusterExtractor{
 	    		}
 	    	 }
 	    }
-	    
-
-	    //merge them in a new cluster.
 		Cluster toMerge = oldClusters.get(posI);
 		Cluster newCluster = toMerge.mergeWithNextCluster(oldClusters.get(posJ));
-		for(int i=0; i < oldSize; i++){
-			if(i!=posI && i!=posJ){
-				Cluster c = oldClusters.get(i);
-				newClusters.add(c);
-			}
-		}
+		
+		ArrayList<Cluster> newClusters = createNewCulusters(posI, posJ, oldClusters);
 		newClusters.add(newCluster);
 		
 		newCollector.setClusters(newClusters);
@@ -95,6 +70,48 @@ public class AgglomerativeClusterExtractor implements ClusterExtractor{
 	}
 	
 	
+	private ArrayList<Cluster> createNewCulusters(int posI, int posJ, ArrayList<Cluster> oldClusters) {
+		ArrayList<Cluster> newClusters = new ArrayList<Cluster>();
+		for(int i=0; i < oldClusters.size(); i++){
+			if(i!=posI && i!=posJ){
+				Cluster c = oldClusters.get(i);
+				newClusters.add(c);
+			}
+		}
+		return newClusters;
+	}
+
+	private double getminDistance(double[][] distances, int oldSize, int posI, int posJ) {
+	
+		double minDist = Double.MAX_VALUE;
+	    for(int i=0; i<oldSize; i++){
+	    	 for(int j=0; j<oldSize; j++){
+	    		if(i!=j){
+			    	if(distances[i][j]<minDist){
+			    		posI = i;
+			    		posJ = j;
+			    		minDist = distances[i][j];
+	
+			    	}
+	    		}
+	    	 }
+	    }
+	    return minDist;
+	}
+
+	private double[][] calculateDistance(ArrayList<Cluster> oldClusters, Double birthWeight, Double deathWeight, Double changeWeight, int dbDuration) {
+		double[][] distances = new double[oldClusters.size()][oldClusters.size()];
+		
+	    for(int i=0; i<oldClusters.size(); i++){
+	    	Cluster currentCluster=oldClusters.get(i);
+		    for(int j=0; j<oldClusters.size(); j++){
+	    		Cluster clusterToCompare=oldClusters.get(j);
+	    		distances[i][j] = currentCluster.calculateDistance(clusterToCompare,birthWeight,deathWeight,changeWeight,dbDuration);
+	    	}
+	    }
+	    return distances;
+	}
+
 	public ClusterCollector init(GlobalDataKeeper dataKeeper, ClusterCollector clusterCollector){
 		
 		TreeMap<String, PPLTable> tables=dataKeeper.getAllPPLTables();

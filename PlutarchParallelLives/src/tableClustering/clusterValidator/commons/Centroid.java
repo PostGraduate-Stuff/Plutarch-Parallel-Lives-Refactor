@@ -2,26 +2,26 @@ package tableClustering.clusterValidator.commons;
 
 public class Centroid {
 
-	private double x;
-	private double y;
-	private double z;
-
+	private double birtVersionID;
+	private double deathVersionID;
+	private double totalChanges;
+	
 	public Centroid(double x,double y, double z){
-		this.x=x;
-		this.y=y;
-		this.z=z;
+		this.birtVersionID = x;
+		this.deathVersionID = y;
+		this.totalChanges = z;
 	}
 	
-	public double getX(){
-		return x;
+	public double getBirtVersionID(){
+		return birtVersionID;
 	}
 	
-	public double getY(){
-		return y;
+	public double getDeathVersionID(){
+		return deathVersionID;
 	}
 	
-	public double getZ(){
-		return z;
+	public double getTotalChanges(){
+		return totalChanges;
 	}
 	
 }

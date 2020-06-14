@@ -171,16 +171,16 @@ public class ZoomAreaTableUI extends TableUI{
 		        		String description="";
 		        		if(!table.getColumnName(column).contains("Table name")){
 			        		        		
-			        		if(globalDataKeeper.getAllPPLTables().get(dataConfiguration.getFinalRowsZoomArea()[row][0]).getTableChanges().getTableAtChForOneTransition(Integer.parseInt(table.getColumnName(column)))!=null)
+			        		if(globalDataKeeper.getAllPPLTables().get(dataConfiguration.getFinalRowsZoomArea()[row][0]).getTableChanges().getTableAtomicChangeForOneTransition(Integer.parseInt(table.getColumnName(column)))!=null)
 			        		{
 			        			description=description+"Transition Changes:"+globalDataKeeper.getAllPPLTables().get(dataConfiguration.getFinalRowsZoomArea()[row][0]).
-			        				getTableChanges().getTableAtChForOneTransition(Integer.parseInt(table.getColumnName(column))).size()+"\n";
+			        				getTableChanges().getTableAtomicChangeForOneTransition(Integer.parseInt(table.getColumnName(column))).size()+"\n";
 			        			description=description+"Additions:"+globalDataKeeper.getAllPPLTables().get(dataConfiguration.getFinalRowsZoomArea()[row][0]).
-			        					getNumberOfAdditionsForOneTr(Integer.parseInt(table.getColumnName(column)))+"\n";
+			        					getNumberOfAdditionsForOneTransition(Integer.parseInt(table.getColumnName(column)))+"\n";
 			        			description=description+"Deletions:"+globalDataKeeper.getAllPPLTables().get(dataConfiguration.getFinalRowsZoomArea()[row][0]).
-			        					getNumberOfDeletionsForOneTr(Integer.parseInt(table.getColumnName(column)))+"\n";
+			        					getNumberOfDeletionsForOneTransition(Integer.parseInt(table.getColumnName(column)))+"\n";
 			        			description=description+"Updates:"+globalDataKeeper.getAllPPLTables().get(dataConfiguration.getFinalRowsZoomArea()[row][0]).
-			        					getNumberOfUpdatesForOneTr(Integer.parseInt(table.getColumnName(column)))+"\n";
+			        					getNumberOfUpdatesForOneTransition(Integer.parseInt(table.getColumnName(column)))+"\n";
 			        			
 			        		}
 			        		else{

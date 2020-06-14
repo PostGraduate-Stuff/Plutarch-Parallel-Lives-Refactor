@@ -15,54 +15,43 @@ import data.dataProccessing.Worker;
 
 public class GlobalDataKeeper {
 
-	private TreeMap<String,PPLSchema> allPPLSchemas = null;
-	private TreeMap<String,PPLTable> allTables = null;
-	private ArrayList<AtomicChange> atomicChanges = null;
-	private TreeMap<String,TableChange> tableChanges = null;
-	private TreeMap<String,TableChange> tableChangesForTwo = null;
-	private TreeMap<Integer,PPLTransition> allPPLTransitions = null;
-	private ArrayList<PhaseCollector> phaseCollectors = null;
-	private ArrayList<ClusterCollector> clusterCollectors = null;
+	private TreeMap<String,PPLSchema> allPPLSchemas  = new TreeMap<String,PPLSchema>();
+	private TreeMap<String,PPLTable> allTables = new  TreeMap<String,PPLTable>();
+	private ArrayList<AtomicChange> atomicChanges = new ArrayList<AtomicChange>();
+	private TreeMap<String,TableChange> tableChanges = new TreeMap<String,TableChange>();
+	private TreeMap<String,TableChange> tableChangesForTwo = new TreeMap<String,TableChange>();
+	private TreeMap<Integer,PPLTransition> allPPLTransitions = new TreeMap<Integer,PPLTransition>();
+	private ArrayList<PhaseCollector> phaseCollectors = new ArrayList<PhaseCollector>();
+	private ArrayList<ClusterCollector> clusterCollectors = new ArrayList<ClusterCollector>();
 
 	private String 	projectDataFolder=null;
 	private String filename=null;
 	private String transitionsFile="";
 	
 
-	public GlobalDataKeeper(String fl,String transitionsFile){
-		allPPLSchemas = new TreeMap<String,PPLSchema>();
-		allTables = new  TreeMap<String,PPLTable>();
-		atomicChanges = new ArrayList<AtomicChange>();
-		tableChanges = new TreeMap<String,TableChange>();
-		tableChangesForTwo = new TreeMap<String,TableChange>();
-		allPPLTransitions = new TreeMap<Integer,PPLTransition>();
-		phaseCollectors = new ArrayList<PhaseCollector>();
-		clusterCollectors = new ArrayList<ClusterCollector>();
-		filename=fl;
-		this.transitionsFile=transitionsFile;
+	public GlobalDataKeeper(String fileName,String transitionsFile){
+		this.filename = fileName;
+		this.transitionsFile = transitionsFile;
 	}
 	
 	public GlobalDataKeeper(){
-		
-		
 	}
 	
 	public void setData(){
 		
-		Worker w = new Worker(filename,transitionsFile);
+		Worker worker = new Worker(filename,transitionsFile);
 		try {
-			w.work();
+			worker.work();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		setAllPPLSchemas(w.getAllPPLSchemas());
-		setAllPPLTables(w.getAllPPLTables());
-		setAllPPLTransitions(w.getAllPPLTransitions());
-		setAllTableChanges(w.getAllTableChanges());
-		setAtomicChanges(w.getAtomicChanges());
-		setDataFolder(w.getDataFolder());
+		setAllPPLSchemas(worker.getAllPPLSchemas());
+		setAllPPLTables(worker.getAllPPLTables());
+		setAllPPLTransitions(worker.getAllPPLTransitions());
+		setAllTableChanges(worker.getAllTableChanges());
+		setAtomicChanges(worker.getAtomicChanges());
+		setDataFolder(worker.getDataFolder());
 		
 	}
 	
@@ -81,74 +70,52 @@ public class GlobalDataKeeper {
 	}
 	
 	private void setAllPPLSchemas(TreeMap<String,PPLSchema> tmpAllPPLSchemas){
-		
-		allPPLSchemas=tmpAllPPLSchemas;
-		
+		allPPLSchemas=tmpAllPPLSchemas;	
 	}
 	
 	private void setAllPPLTables(TreeMap<String,PPLTable> tmpAllTables){
 		 allTables=tmpAllTables;
-
-		
 	}
 	
 	private void setAtomicChanges(ArrayList<AtomicChange> tmpAtomicChanges){
-		
-		 atomicChanges=tmpAtomicChanges;
-		
+		 atomicChanges=tmpAtomicChanges;	
 	}
 	
 	private void setAllTableChanges(TreeMap<String,TableChange> tmpTableChanges){
-		
 		 tableChanges=tmpTableChanges;
-		
 	}
 	
 	
 	private void setAllPPLTransitions(TreeMap<Integer,PPLTransition> tmpAllPPLTransitions){
-		
 		 allPPLTransitions=tmpAllPPLTransitions;
-		
 	}
 	
 	private void setDataFolder(String tmpProjectDataFolder){
 		 projectDataFolder=tmpProjectDataFolder;
 	}
 	
-	public TreeMap<String,PPLSchema> getAllPPLSchemas(){
-		
+	public TreeMap<String,PPLSchema> getAllPPLSchemas(){		
 		return allPPLSchemas;
-		
 	}
 	
 	public TreeMap<String,PPLTable> getAllPPLTables(){
-		
 		return allTables;
-		
 	}
 	
 	public ArrayList<AtomicChange> getAtomicChanges(){
-		
 		return atomicChanges;
-		
 	}
 	
 	public TreeMap<String,TableChange> getAllTableChanges(){
-		
 		return tableChanges;
-		
 	}
 	
 	public TreeMap<String,TableChange> getTmpTableChanges(){
-		
 		return tableChangesForTwo;
-		
 	}
 	
 	public TreeMap<Integer,PPLTransition> getAllPPLTransitions(){
-		
 		return allPPLTransitions;
-		
 	}
 	
 	public String getDataFolder(){
@@ -162,7 +129,4 @@ public class GlobalDataKeeper {
 	public ArrayList<ClusterCollector> getClusterCollectors(){
 		return this.clusterCollectors;
 	}
-	
-	
-	
 }

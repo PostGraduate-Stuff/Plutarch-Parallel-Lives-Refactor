@@ -17,59 +17,37 @@ public class PPLSchemasConstruction {
 	private static ArrayList<Schema> allSchemas = new ArrayList<Schema>();
 	private static TreeMap<String,PPLSchema> allPPLSchemas = null;
 
-	public PPLSchemasConstruction(ArrayList<Schema> tmpAllSchemas){
+	public PPLSchemasConstruction(ArrayList<Schema> tempAllSchemas){
 		allPPLSchemas = new TreeMap<String,PPLSchema>();
 		allSchemas = new ArrayList<Schema>();
-		allSchemas=tmpAllSchemas;
-
+		allSchemas=tempAllSchemas;
 	}
 	
 	
 	public void makePPLSchemas(){
-		
-
 		for(int i=0; i<allSchemas.size(); i++){
-			
-			Schema tmpHecSchema = new Schema();
-			
-			tmpHecSchema=allSchemas.get(i);
-			
-			
-			PPLSchema tmpPPLSchema = new PPLSchema(tmpHecSchema.getName(),tmpHecSchema);
-			
-			
-			TreeMap<String,Table> tmpHecTables = new TreeMap<String,Table>();
-			
-			tmpHecTables=tmpHecSchema.getTables();
-			
-			for (Map.Entry<String, Table> t : tmpHecTables.entrySet()) {
-				
-				PPLTable tmpPPLTable = new PPLTable(t.getValue().getName(),t.getValue());
-				
-				
-				TreeMap<String,Attribute> tmpHecAttributes = new TreeMap<String,Attribute>();
-				
-				tmpHecAttributes=t.getValue().getAttrs();
-				
-				for (Map.Entry<String, Attribute> a : tmpHecAttributes.entrySet()) {
-
-					PPLAttribute tmpPPLAttribute = new PPLAttribute(a.getValue());
-					
-					tmpPPLTable.addAttribute(tmpPPLAttribute);
-					
-				}
-				
-				tmpPPLSchema.addTable(tmpPPLTable);
-
-			}
-
-			allPPLSchemas.put(tmpPPLSchema.getName(),tmpPPLSchema);
-
-			
+			Schema hecSchema = new Schema();
+			hecSchema=allSchemas.get(i);
+			PPLSchema tempPPLSchema =createPPLSchema(hecSchema);
+			allPPLSchemas.put(tempPPLSchema.getName(),tempPPLSchema);
 		}
-		
-
-		
+	}
+	
+	private PPLSchema createPPLSchema(Schema hecateSchema){
+		TreeMap<String,Table> hecateTables = new TreeMap<String,Table>();
+		hecateTables=hecateSchema.getTables();
+		PPLSchema tmpPPLSchema = new PPLSchema(hecateSchema.getName(),hecateSchema);
+		for (Map.Entry<String, Table> table : hecateTables.entrySet()) {
+			PPLTable tmpPPLTable = new PPLTable(table.getValue().getName(),table.getValue());
+			TreeMap<String,Attribute> hecateAttributes = new TreeMap<String,Attribute>();
+			hecateAttributes=table.getValue().getAttrs();
+			for (Map.Entry<String, Attribute> a : hecateAttributes.entrySet()) {
+				PPLAttribute tmpPPLAttribute = new PPLAttribute(a.getValue());
+				tmpPPLTable.addAttribute(tmpPPLAttribute);
+			}
+			tmpPPLSchema.addTable(tmpPPLTable);
+		}
+		return tmpPPLSchema;
 	}
 	
 	public TreeMap<String,PPLSchema> getAllPPLSchemas(){

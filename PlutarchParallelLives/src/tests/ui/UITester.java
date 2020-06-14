@@ -1,4 +1,4 @@
-package tests.widgets;
+package tests.ui;
 import static org.junit.Assert.*;
 
 import java.io.File;
@@ -17,24 +17,25 @@ import phaseAnalyzer.engine.PhaseAnalyzerMainEngine;
 import services.DataService;
 import services.TableService;
 
-public class WidgetTester {
+public class UITester {
+	private String path = "filesHandler/inis/biosql.ini";
 	
 	@Test
-	public void testDataGeneratorWidget() throws RecognitionException, IOException 
+	public void testDataGeneratorUI() throws RecognitionException, IOException 
 	{
 		Gui gui = new Gui();
-		DataGeneratorUI dataWidget = new DataGeneratorUI(gui.getConfiguration(), gui.getDataConfiguration(), gui.getTablesConfiguration());
+		DataGeneratorUI dataUI = new DataGeneratorUI(gui.getConfiguration(), gui.getDataConfiguration(), gui.getTablesConfiguration());
 		gui.getDataConfiguration().initiateLoadState();
-		dataWidget.importDataFromFile(new File("C:\\Users\\Christina\\git\\Plutarch-Parallel-Lives-Refactor\\PlutarchParallelLives\\filesHandler\\inis\\biosql.ini"));
+		dataUI.importDataFromFile(new File(path));
 		TableService service = new TableService();
-		dataWidget.setConstructedIDUTable(service.createTableConstructionIDU(dataWidget.getGlobalDataKeeper().getAllPPLSchemas(), dataWidget.getGlobalDataKeeper().getAllPPLTransitions()));
-		dataWidget.setIDUPanel();
-		dataWidget.makeGeneralTableIDU();
-		dataWidget.createPhaseAnalyserEngine();
-		dataWidget.createTableClusteringMainEngine(14);
+		dataUI.setConstructedIDUTable(service.createTableConstructionIDU(dataUI.getGlobalDataKeeper().getAllPPLSchemas(), dataUI.getGlobalDataKeeper().getAllPPLTransitions()));
+		dataUI.setIDUPanel();
+		dataUI.makeGeneralTableIDU();
+		dataUI.createPhaseAnalyserEngine();
+		dataUI.createTableClusteringMainEngine(14);
 		
 		//fillTable
-		TableConstructionWithClusters clusterTable = dataWidget.constructClustersTable();
+		TableConstructionWithClusters clusterTable = dataUI.constructClustersTable();
 		testClusterColumns(clusterTable);
 		testClusterRows(clusterTable);
 	}

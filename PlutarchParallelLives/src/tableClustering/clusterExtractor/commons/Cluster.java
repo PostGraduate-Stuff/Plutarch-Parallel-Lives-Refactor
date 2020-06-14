@@ -16,20 +16,74 @@ public class Cluster {
 	private TreeMap<String,PPLTable> tables=null;
 	
 	public Cluster(){
-		
 		tables=new TreeMap<String, PPLTable>();
 	}
 	
 	public Cluster(int birth,String birthVersion, int death,String deathVersion, int totalChanges){
-		
 		this.birth=birth;
 		this.birthVersion=birthVersion;
 		this.death=death;
 		this.deathVersion=deathVersion;
 		this.totalChanges=totalChanges;
 		tables=new TreeMap<String, PPLTable>();
-
-		
+	}
+	
+	public double calculateDistance(Cluster anotherCluster,Double birthWeight, Double deathWeight ,Double changeWeight,int dbDuration){
+		double normalizedChangeDistance= Math.abs((this.totalChanges - anotherCluster.totalChanges)/((double)(this.totalChanges + anotherCluster.totalChanges)));
+		double normalizedBirthDistance = Math.abs((this.birth-anotherCluster.birth)/(double)dbDuration);
+		double normalizedDeathDistance = Math.abs((this.death-anotherCluster.death)/(double)dbDuration);
+		double normalizedTotalDistance = changeWeight * normalizedChangeDistance + birthWeight * normalizedBirthDistance + deathWeight * normalizedDeathDistance;
+		return normalizedTotalDistance;
+	}
+	
+	public Cluster mergeWithNextCluster(Cluster nextCluster){
+		Cluster newCluster = new Cluster();
+		newCluster.birth = getMinimum(this.birth,nextCluster.birth);
+		newCluster.birthVersion = getMinimumDescription(this.birth, this.birthVersion, nextCluster.birth, nextCluster.birthVersion);
+		newCluster.death = getMaximum(this.death,nextCluster.death);
+		newCluster.deathVersion = getMaximumDescription(this.death,this.deathVersion, nextCluster.death, nextCluster.deathVersion);
+		newCluster.totalChanges = this.totalChanges + nextCluster.totalChanges;
+		for (Map.Entry<String,PPLTable> tab : tables.entrySet()) {
+			newCluster.addTable(tab.getValue());
+		}
+		for (Map.Entry<String,PPLTable> tabNext : nextCluster.getTables().entrySet()) {
+			newCluster.addTable(tabNext.getValue());
+		}
+		return newCluster;
+	}
+	
+	private int getMinimum(int firstComparable, int secondComparable)
+	{
+		if(firstComparable<=secondComparable){
+			return firstComparable;
+		}
+		return secondComparable;
+	}
+	
+	private String getMinimumDescription(int firstComparable, String firstComparableString,
+									  int secondComparable, String secondComparableString)
+	{
+		if(firstComparable<=secondComparable){
+			return firstComparableString;
+		}
+		return secondComparableString;
+	}
+	
+	private int getMaximum(int firstComparable, int secondComparable)
+	{
+		if(firstComparable>=secondComparable){
+			return firstComparable;
+		}
+		return secondComparable;
+	}
+	
+	private String getMaximumDescription(int firstComparable, String firstComparableString,
+									  int secondComparable, String secondComparableString)
+	{
+		if(firstComparable>=secondComparable){
+			return firstComparableString;
+		}
+		return secondComparableString;
 	}
 	
 	public TreeMap<String,PPLTable> getTables(){
@@ -38,8 +92,8 @@ public class Cluster {
 	
 	public ArrayList<String> getNamesOfTables(){
 		ArrayList<String> tablesNames = new ArrayList<String>();
-		for(Map.Entry<String, PPLTable> pplTb:tables.entrySet()){
-			tablesNames.add(pplTb.getKey());
+		for(Map.Entry<String, PPLTable> table:tables.entrySet()){
+			tablesNames.add(table.getKey());
 		}
 		return tablesNames;
 	}
@@ -68,95 +122,13 @@ public class Cluster {
 		return totalChanges;
 	}
 	
-	public double distance(Cluster anotherCluster,Double birthWeight, Double deathWeight ,Double changeWeight,int dbDuration){
-		
-		//double changeDistance = Math.abs(this.totalChanges - anotherCluster.totalChanges);
-		double normalizedChangeDistance= Math.abs((this.totalChanges - anotherCluster.totalChanges)/((double)(this.totalChanges + anotherCluster.totalChanges)));
-		//System.out.println("C:"+changeDistance+"-"+normalizedChangeDistance);
-		
-		//double birthDistance = Math.abs(this.birth-anotherCluster.birth);
-		double normalizedBirthDistance = Math.abs((this.birth-anotherCluster.birth)/(double)dbDuration);
-		//System.out.println("B:"+birthDistance+"-"+normalizedBirthDistance);
-
-		//double deathDistance = Math.abs(this.death-anotherCluster.death);
-		double normalizedDeathDistance = Math.abs((this.death-anotherCluster.death)/(double)dbDuration);
-		//System.out.println("D:"+deathDistance+"-"+normalizedDeathDistance);
-
-		//double totalDistance = changeWeight * changeDistance + birthWeight * birthDistance + deathWeight * deathDistance;
-		double normalizedTotalDistance = changeWeight * normalizedChangeDistance + birthWeight * normalizedBirthDistance + deathWeight * normalizedDeathDistance;
-		//System.out.println("TD:"+totalDistance+"-"+normalizedTotalDistance);
-		
-		return normalizedTotalDistance;
-		
-	}
-	
-	public Cluster mergeWithNextCluster(Cluster nextCluster){
-		
-		Cluster newCluster = new Cluster();
-	
-		int minBirth;
-		String minBirthVersion="";
-		if(this.birth<=nextCluster.birth){
-			minBirth=this.birth;
-			minBirthVersion=this.birthVersion;
-		}
-		else {
-			minBirth=nextCluster.birth;
-			minBirthVersion=nextCluster.birthVersion;
-		}
-		
-		int maxDeath;
-		String maxDeathVersion="";
-		if(this.death>=nextCluster.death){
-			maxDeath=this.death;
-			maxDeathVersion=this.deathVersion;
-		}
-		else {
-			maxDeath=nextCluster.death;
-			maxDeathVersion=nextCluster.deathVersion;
-
-		}
-		
-		newCluster.birth = minBirth;
-		newCluster.birthVersion = minBirthVersion;
-		newCluster.death =maxDeath;
-		newCluster.deathVersion = maxDeathVersion;
-		
-		newCluster.totalChanges = this.totalChanges + nextCluster.totalChanges;
-		
-		for (Map.Entry<String,PPLTable> tab : tables.entrySet()) {
-			
-			newCluster.addTable(tab.getValue());
-			
-		}
-		
-		for (Map.Entry<String,PPLTable> tabNext : nextCluster.getTables().entrySet()) {
-			
-			newCluster.addTable(tabNext.getValue());
-			
-		}
-		
-		
-		return newCluster;
-	}
-	
 	public String toString(){
-		
-
 		String toReturn="Cluster";
-		
-		
 		toReturn=toReturn+"\t"+this.birth+"\t"+this.death+"\t"+this.totalChanges+"\n";
 		
-		
-		for(Map.Entry<String, PPLTable> t: this.tables.entrySet()){
-			toReturn=toReturn+t.getKey()+"\t"+t.getValue().getBirthVersionID()+"\t"+t.getValue().getDeathVersionID()+"\t"+t.getValue().getTotalChanges()+"\n";
+		for(Map.Entry<String, PPLTable> tableset: this.tables.entrySet()){
+			toReturn=toReturn+tableset.getKey()+"\t"+tableset.getValue().getBirthVersionID()+"\t"+tableset.getValue().getDeathVersionID()+"\t"+tableset.getValue().getTotalChanges()+"\n";
 		}
-		
-		
 		return toReturn;
-		
 	}
-	
-	
 }

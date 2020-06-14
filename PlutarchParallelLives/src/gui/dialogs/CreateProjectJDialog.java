@@ -32,20 +32,13 @@ public class CreateProjectJDialog extends JDialog {
 	private JTextField textFieldProjectName;
 	private JTextField textFieldDatasetTxt;
 	private JTextField textFieldInputCsv;
-	private JTextField textFieldAss1;
-	private JTextField textFieldAss2;
+	private JTextField textFieldAssessment1;
+	private JTextField textFieldAssessment2;
 	private JTextField textFieldTransXml;
 	private File fileToCreate=null;
 	private boolean confirm=false;
 
-
-	/**
-	 * Launch the application.
-	 */
-	
 	public CreateProjectJDialog(String projectName,String datasetTxt,String inputCsv,String ass1,String ass2,String transXml) {
-		
-		
 		setBounds(100, 100, 450, 300);
 		getContentPane().setLayout(new BorderLayout());
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -72,11 +65,11 @@ public class CreateProjectJDialog extends JDialog {
 		textFieldInputCsv = new JTextField();
 		textFieldInputCsv.setColumns(10);
 		
-		textFieldAss1 = new JTextField();
-		textFieldAss1.setColumns(10);
+		textFieldAssessment1 = new JTextField();
+		textFieldAssessment1.setColumns(10);
 		
-		textFieldAss2 = new JTextField();
-		textFieldAss2.setColumns(10);
+		textFieldAssessment2 = new JTextField();
+		textFieldAssessment2.setColumns(10);
 		
 		textFieldTransXml = new JTextField();
 		textFieldTransXml.setColumns(10);
@@ -84,8 +77,8 @@ public class CreateProjectJDialog extends JDialog {
 		this.textFieldProjectName.setText(projectName);
 		this.textFieldDatasetTxt.setText(datasetTxt);
 		this.textFieldInputCsv.setText(inputCsv);
-		this.textFieldAss1.setText(ass1);
-		this.textFieldAss2.setText(ass2);
+		this.textFieldAssessment1.setText(ass1);
+		this.textFieldAssessment2.setText(ass2);
 		this.textFieldTransXml.setText(transXml);
 		
 		JButton buttonDatasetTxt = new JButton("...");
@@ -141,7 +134,7 @@ public class CreateProjectJDialog extends JDialog {
 					
 		            File file = fcAss1.getSelectedFile();
 		            System.out.println(file.toString());
-		            textFieldAss1.setText(file.toString());
+		            textFieldAssessment1.setText(file.toString());
 
 				}
 				else{
@@ -162,7 +155,7 @@ public class CreateProjectJDialog extends JDialog {
 					
 		            File file = fcAss2.getSelectedFile();
 		            System.out.println(file.toString());
-		            textFieldAss2.setText(file.toString());
+		            textFieldAssessment2.setText(file.toString());
 
 		            
 				}
@@ -211,8 +204,8 @@ public class CreateProjectJDialog extends JDialog {
 							.addGap(55))
 						.addComponent(textFieldDatasetTxt, Alignment.LEADING)
 						.addComponent(textFieldInputCsv, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)
-						.addComponent(textFieldAss1, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)
-						.addComponent(textFieldAss2, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)
+						.addComponent(textFieldAssessment1, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)
+						.addComponent(textFieldAssessment2, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)
 						.addComponent(textFieldTransXml, Alignment.LEADING, GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_contentPanel.createParallelGroup(Alignment.TRAILING, false)
@@ -246,11 +239,11 @@ public class CreateProjectJDialog extends JDialog {
 					.addGap(7)
 					.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
 						.addComponent(lblNewLabel_3)
-						.addComponent(textFieldAss1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(textFieldAssessment1, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(buttonAss1))
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addGroup(gl_contentPanel.createParallelGroup(Alignment.BASELINE)
-						.addComponent(textFieldAss2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
+						.addComponent(textFieldAssessment2, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE)
 						.addComponent(lblAssessementoutput)
 						.addComponent(buttonAss2))
 					.addPreferredGap(ComponentPlacement.RELATED)
@@ -284,11 +277,11 @@ public class CreateProjectJDialog extends JDialog {
 							JOptionPane.showMessageDialog(null,"Input Csv cannot be empty!");
 							empty=true;
 						}
-						if(textFieldAss1.getText().isEmpty()){
+						if(textFieldAssessment1.getText().isEmpty()){
 							JOptionPane.showMessageDialog(null,"Assessment 1 Output cannot be empty!");
 							empty=true;
 						}
-						if(textFieldAss2.getText().isEmpty()){
+						if(textFieldAssessment2.getText().isEmpty()){
 							JOptionPane.showMessageDialog(null,"Assessment 2 Output cannot be empty!");
 							empty=true;
 						}
@@ -307,8 +300,8 @@ public class CreateProjectJDialog extends JDialog {
 							String toWrite="Project-name:"+textFieldProjectName.getText()+"\n";
 							toWrite=toWrite+"Dataset-txt:"+textFieldDatasetTxt.getText()+"\n";
 							toWrite=toWrite+"Input-csv:"+textFieldInputCsv.getText()+"\n";
-							toWrite=toWrite+"Assessement1-output:"+textFieldAss1.getText()+"\n";
-							toWrite=toWrite+"Assessement2-output:"+textFieldAss2.getText()+"\n";
+							toWrite=toWrite+"Assessement1-output:"+textFieldAssessment1.getText()+"\n";
+							toWrite=toWrite+"Assessement2-output:"+textFieldAssessment2.getText()+"\n";
 							toWrite=toWrite+"Transition-xml:"+textFieldTransXml.getText();
 							
 							System.out.println(toWrite);
@@ -317,13 +310,11 @@ public class CreateProjectJDialog extends JDialog {
 							
 							System.out.print(fileToCreate.getAbsolutePath());
 							 
-							// if file doesnt exists, then create it
 							if (!fileToCreate.exists()) {
 								
 								try {
 									fileToCreate.createNewFile();
 								} catch (IOException e1) {
-									// TODO Auto-generated catch block
 									e1.printStackTrace();
 								}
 								
@@ -339,7 +330,6 @@ public class CreateProjectJDialog extends JDialog {
 
 
 							} catch (IOException e2) {
-								// TODO Auto-generated catch block
 								e2.printStackTrace();
 							}	
 							

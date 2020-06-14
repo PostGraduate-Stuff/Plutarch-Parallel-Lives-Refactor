@@ -16,9 +16,9 @@ public class Description {
 	public String getTransitionDescription(int columnNumber){
 		String description= getTransitionTitle(columnNumber);     
 		description=description+"Transition Changes:"+globalDataKeeper.getAllPPLTransitions().get(columnNumber).getNumberOfChangesForOneTr()+"\n";
-		description=description+"Additions:"+globalDataKeeper.getAllPPLTransitions().get(columnNumber).getNumberOfAdditionsForOneTr()+"\n";
-		description=description+"Deletions:"+globalDataKeeper.getAllPPLTransitions().get(columnNumber).getNumberOfDeletionsForOneTr()+"\n";
-		description=description+"Updates:"+globalDataKeeper.getAllPPLTransitions().get(columnNumber).getNumberOfUpdatesForOneTr()+"\n";
+		description=description+"Additions:"+globalDataKeeper.getAllPPLTransitions().get(columnNumber).getNumberOfActionsForOneTr("Addition")+"\n";
+		description=description+"Deletions:"+globalDataKeeper.getAllPPLTransitions().get(columnNumber).getNumberOfActionsForOneTr("Deletion")+"\n";
+		description=description+"Updates:"+globalDataKeeper.getAllPPLTransitions().get(columnNumber).getNumberOfActionsForOneTr("Change")+"\n";
 		return description;
 	}
 	

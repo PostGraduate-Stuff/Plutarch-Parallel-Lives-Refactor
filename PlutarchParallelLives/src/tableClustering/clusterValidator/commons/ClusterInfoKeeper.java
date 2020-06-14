@@ -46,21 +46,21 @@ public class ClusterInfoKeeper {
 	
 	private void initializeCentroid(){
 		
-		TreeMap<String, PPLTable> tables=this.cluster.getTables();
-		double x=0;
-		double y=0;
-		double z=0;
+		TreeMap<String, PPLTable> tables = this.cluster.getTables();
+		double birtVersionID = 0;
+		double deathVersionID = 0;
+		double totalChanges = 0;
 		for(Map.Entry<String,PPLTable> pplTab:tables.entrySet()){
-			x = x +pplTab.getValue().getBirthVersionID();
-			y = y+pplTab.getValue().getDeathVersionID();
-			z= z+pplTab.getValue().getTotalChanges();
+			birtVersionID = birtVersionID + pplTab.getValue().getBirthVersionID();
+			deathVersionID = deathVersionID + pplTab.getValue().getDeathVersionID();
+			totalChanges = totalChanges + pplTab.getValue().getTotalChanges();
 		}
 		
-		x= x/tables.size();
-		y= y/tables.size();
-		z= z/tables.size();
+		birtVersionID = birtVersionID/tables.size();
+		deathVersionID = deathVersionID/tables.size();
+		totalChanges = totalChanges/tables.size();
 		
-		this.clusterCentroid=new Centroid(x, y, z);
+		this.clusterCentroid=new Centroid(birtVersionID, deathVersionID, totalChanges);
 				
 	}
 	
@@ -69,7 +69,6 @@ public class ClusterInfoKeeper {
 		TotalMetrics cohesionMetricCalculator = new ClusterCohesionMetric(this);
 		cohesionMetricCalculator.compute();
 		clusterCohesion=cohesionMetricCalculator.getResult();
-		//System.out.println(clusterCohesion);
 		
 	}
 	
@@ -78,7 +77,6 @@ public class ClusterInfoKeeper {
 		TotalMetrics separationMetricCalculator = new ClusterSeparationMetric(clusterCentroid,overallCentroid);
 		separationMetricCalculator.compute();
 		clusterSeparation=(double)this.cluster.getTables().size()*separationMetricCalculator.getResult();
-		//System.out.println(clusterSeparation+"\n");
 		
 	}
 	
@@ -87,7 +85,6 @@ public class ClusterInfoKeeper {
 		TotalMetrics entropyMetricCalculator = new ClusterEntropyMetric(classesOfObjects,clusters,classIndex);
 		entropyMetricCalculator.compute();
 		clusterEntropy = entropyMetricCalculator.getResult();
-		//System.err.println("-------------->"+clusterEntropy);
 		
 	}
 	

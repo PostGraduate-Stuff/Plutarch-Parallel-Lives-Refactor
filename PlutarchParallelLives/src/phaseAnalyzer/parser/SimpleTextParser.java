@@ -13,25 +13,33 @@ import phaseAnalyzer.commons.TransitionHistory;
 import phaseAnalyzer.commons.TransitionStats;
 
 public class SimpleTextParser implements IParser {
-
+	
+	private int transitionId; 
+	private int time; 
+	private String oldVersionFile; 
+	private String newVersionFile; 
+	private int numberOfOldTables; 
+	private int numberOfNewTables;
+	private int numberOfOldAtributes; 
+	private int numberOfNewAttributes; 
+	private int numberOfTablesInsertions; 
+	private int numberOfTablesDeletions; 
+	private int numberOfAttributeInsertions; 
+	private int numberOfAttributeDeletions;
+	private int numberOfAttributesWithTypeAlt; 
+	private int numberOfAttributesInKeyAlt;
+	private int numberOfAttributeInsertionsInNewTables; 
+	private int numberOfAttributeDeletionsWithDeletedTables;
+	private int totalUpdatesInOneTransition;
+	private int totalUpdates=0;
+	
+	private final int _NumFields = 16;
+	
+	private Scanner inputStream = null;
+	
 	@Override
 	public TransitionHistory parse(String fileName, String delimeter) {
-		int transitionId; int time; 
-		String oldVersionFile; String newVersionFile; 
-		int numOldTables; int numNewTables;
-		int numOldAtributes; int numNewAttributes; 
-		int numTablesIns; int numTablesDel; 
-		int numAttrIns; int numAttrDel;
-		int numAttrWithTypeAlt; int numAttrInKeyAlt;
-		int numAttrInsInNewTables; int numAttrDelWithDelTables;int totalUpdatesInOneTr;
-		int totalUpdates=0;
 		
-		final int _NumFields = 16;
-		
-		Scanner inputStream = null;
-		TransitionHistory transitionHistory =  new TransitionHistory();
-		
-		//Opening files for read and write, checking exception
 		try {
 			System.out.println("csv:"+fileName);
 			inputStream = new Scanner(new FileInputStream(fileName));
@@ -40,90 +48,85 @@ public class SimpleTextParser implements IParser {
 			System.out.println("Problem opening files.");
 			System.exit(0);
 		}
-		
-		int count = 0;
-		//process the title of the csv
+		TransitionHistory transitionHistory = readData(delimeter);
+		inputStream.close();
+	    if (transitionHistory.getValues().size() == 0)
+    	{
+    		return transitionHistory;
+    	}
+	    setTransitions(transitionHistory);
+		return transitionHistory;
+	}
+	
+	
+	private TransitionHistory readData(String delimeter){
+		TransitionHistory transitionHistory =  new TransitionHistory();
 		String line = inputStream.nextLine();
-		count++;
-
-		//process the actual rows one by one
-		//TODO add a method parseRows (including header row) and a method getNextRow
+		int count =1;
 		while (inputStream.hasNextLine()) {
 			line = inputStream.nextLine();
 			count++;
-			
 			StringTokenizer tokenizer = new StringTokenizer(line, delimeter);
 			if(tokenizer.countTokens() != _NumFields){
 				System.out.println("Wrong Input format. I found " + tokenizer.countTokens() + " values, but I expect " + _NumFields + " values per row!");
 				System.exit(0);				
 			}
-			
-			
-			String s = tokenizer.nextToken();
-			transitionId = Integer.parseInt(s);
-			s = tokenizer.nextToken();
-			time = Integer.parseInt(s);		
-			oldVersionFile = tokenizer.nextToken();
-			newVersionFile = tokenizer.nextToken();
-			s = tokenizer.nextToken();
-			numOldTables = Integer.parseInt(s);		
-			s = tokenizer.nextToken();
-			numNewTables= Integer.parseInt(s);  
-			s = tokenizer.nextToken();
-			numOldAtributes= Integer.parseInt(s);  
-			s = tokenizer.nextToken();
-			numNewAttributes= Integer.parseInt(s);  
-			s = tokenizer.nextToken();
-			numTablesIns= Integer.parseInt(s);  
-			s = tokenizer.nextToken();
-			numTablesDel= Integer.parseInt(s);  
-			s = tokenizer.nextToken();
-			numAttrIns= Integer.parseInt(s); 
-			s = tokenizer.nextToken();
-			numAttrDel= Integer.parseInt(s); 
-			s = tokenizer.nextToken();
-			numAttrWithTypeAlt= Integer.parseInt(s);  
-			s = tokenizer.nextToken();
-			numAttrInKeyAlt= Integer.parseInt(s);  
-			s = tokenizer.nextToken();
-			numAttrInsInNewTables= Integer.parseInt(s);  
-			s = tokenizer.nextToken();
-			numAttrDelWithDelTables= Integer.parseInt(s); 
-			
-			totalUpdatesInOneTr=numAttrIns+numAttrDel+numAttrWithTypeAlt+numAttrInKeyAlt+numAttrInsInNewTables+numAttrDelWithDelTables;
-			
-			TransitionStats v = new TransitionStats(transitionId, time, oldVersionFile, newVersionFile, numOldTables, numNewTables, numOldAtributes, numNewAttributes, numTablesIns, numTablesDel, numAttrIns,numAttrDel,numAttrWithTypeAlt, numAttrInKeyAlt, numAttrInsInNewTables, numAttrDelWithDelTables,totalUpdatesInOneTr);
-			transitionHistory.addValue(v);
-			totalUpdates= totalUpdates+numAttrIns+numAttrDel+numAttrWithTypeAlt+numAttrInKeyAlt+numAttrInsInNewTables+numAttrDelWithDelTables;
+			readFields(tokenizer);
+			totalUpdatesInOneTransition=numberOfAttributeInsertions+numberOfAttributeDeletions+numberOfAttributesWithTypeAlt+numberOfAttributesInKeyAlt+numberOfAttributeInsertionsInNewTables+numberOfAttributeDeletionsWithDeletedTables;
+			TransitionStats stats = new TransitionStats(transitionId, time, oldVersionFile, newVersionFile, numberOfOldTables, numberOfNewTables, numberOfOldAtributes, numberOfNewAttributes, numberOfTablesInsertions, numberOfTablesDeletions, numberOfAttributeInsertions,numberOfAttributeDeletions,numberOfAttributesWithTypeAlt, numberOfAttributesInKeyAlt, numberOfAttributeInsertionsInNewTables, numberOfAttributeDeletionsWithDeletedTables,totalUpdatesInOneTransition);
+			transitionHistory.addValue(stats);
+			totalUpdates= totalUpdates+numberOfAttributeInsertions+numberOfAttributeDeletions+numberOfAttributesWithTypeAlt+numberOfAttributesInKeyAlt+numberOfAttributeInsertionsInNewTables+numberOfAttributeDeletionsWithDeletedTables;
 		}
-		
 		transitionHistory.setTotalUpdates(totalUpdates);
 		transitionHistory.setTotalTime();
 		System.out.println(count + " lines parsed");
-		inputStream.close();
+		return transitionHistory;
+	}
+	
+	private void readFields(StringTokenizer tokenizer){
+		String token = tokenizer.nextToken();
+		transitionId = Integer.parseInt(token);
+		token = tokenizer.nextToken();
+		time = Integer.parseInt(token);		
+		oldVersionFile = tokenizer.nextToken();
+		newVersionFile = tokenizer.nextToken();
+		token = tokenizer.nextToken();
+		numberOfOldTables = Integer.parseInt(token);		
+		token = tokenizer.nextToken();
+		numberOfNewTables= Integer.parseInt(token);  
+		token = tokenizer.nextToken();
+		numberOfOldAtributes= Integer.parseInt(token);  
+		token = tokenizer.nextToken();
+		numberOfNewAttributes= Integer.parseInt(token);  
+		token = tokenizer.nextToken();
+		numberOfTablesInsertions= Integer.parseInt(token);  
+		token = tokenizer.nextToken();
+		numberOfTablesDeletions= Integer.parseInt(token);  
+		token = tokenizer.nextToken();
+		numberOfAttributeInsertions= Integer.parseInt(token); 
+		token = tokenizer.nextToken();
+		numberOfAttributeDeletions= Integer.parseInt(token); 
+		token = tokenizer.nextToken();
+		numberOfAttributesWithTypeAlt= Integer.parseInt(token);  
+		token = tokenizer.nextToken();
+		numberOfAttributesInKeyAlt= Integer.parseInt(token);  
+		token = tokenizer.nextToken();
+		numberOfAttributeInsertionsInNewTables= Integer.parseInt(token);  
+		token = tokenizer.nextToken();
+		numberOfAttributeDeletionsWithDeletedTables= Integer.parseInt(token);
+	}
 
-		/*
-		 * Now, we complete the distance from previous, for all the transitions
-		 */
-		//TODO add a dedicated method for the task
-	    Iterator<TransitionStats> transitionsIter = transitionHistory.getValues().iterator();
-	    if (transitionHistory.getValues().size() == 0)
-	    	return transitionHistory;
-	    
+	private void setTransitions(TransitionHistory transitionHistory){
+		Iterator<TransitionStats> transitionsIter = transitionHistory.getValues().iterator();
 	    TransitionStats previousTransition, currentTransition;
-	    //Do the first
 	    currentTransition = transitionsIter.next();
-	    currentTransition.setTimeDistFromPrevious(0);
+	    currentTransition.setTimeDistanceFromPrevious(0);
 	    previousTransition = currentTransition;
 	    
 	    while (transitionsIter.hasNext()){
 		    currentTransition = transitionsIter.next();
-		    currentTransition.setTimeDistFromPrevious(currentTransition.getTime() - previousTransition.getTime());
+		    currentTransition.setTimeDistanceFromPrevious(currentTransition.getTime() - previousTransition.getTime());
 		    previousTransition = currentTransition;
 	    }
-	  
-		
-		return transitionHistory;
 	}
-
 }

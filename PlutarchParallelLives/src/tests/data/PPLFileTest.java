@@ -8,19 +8,18 @@ import org.junit.Test;
 
 import data.dataKeeper.GlobalDataKeeper;
 import data.dataKeeper.PPLFile;
-import gui.mainEngine.Gui;
 import phaseAnalyzer.engine.PhaseAnalyzerMainEngine;
 import services.DataService;
 
 public class PPLFileTest {
 	
 	//Testing is for the biosql.ini project
-	
+	private String path = "filesHandler/inis/biosql.ini";
 	@Test
 	public void testFile() throws RecognitionException, IOException 
 	{
 		PPLFile file = new PPLFile();
-		file.importData("C:\\Users\\Christina\\git\\Plutarch-Parallel-Lives-Refactor\\PlutarchParallelLives\\filesHandler\\inis\\biosql.ini");
+		file.importData(path);
 		
 		assertEquals("filesHandler/datasets/biosql.txt", file.getDatasetTxt());     
 	    assertEquals("filesHandler/input/biosql.csv", file.getInputCsv());     
@@ -37,7 +36,7 @@ public class PPLFileTest {
 		PPLFile file = new PPLFile();
 		DataService service = new DataService();
 		
-		file.importData("C:\\Users\\Christina\\git\\Plutarch-Parallel-Lives-Refactor\\PlutarchParallelLives\\filesHandler\\inis\\biosql.ini");
+		file.importData(path);
 		
 		GlobalDataKeeper globalDataKeeper= service.initiateGlobalData(file.getDatasetTxt(), file.getTransitionsFile());
 
@@ -54,7 +53,7 @@ public class PPLFileTest {
 		PPLFile pplFile = new PPLFile();
 		DataService service = new DataService();
 		
-		pplFile.importData("C:\\Users\\Christina\\git\\Plutarch-Parallel-Lives-Refactor\\PlutarchParallelLives\\filesHandler\\inis\\biosql.ini");
+		pplFile.importData(path);
 		
 		GlobalDataKeeper globalDataKeeper= service.initiateGlobalData(pplFile.getDatasetTxt(), pplFile.getTransitionsFile());
 		PhaseAnalyzerMainEngine mainEngine = new PhaseAnalyzerMainEngine(pplFile.getInputCsv(),

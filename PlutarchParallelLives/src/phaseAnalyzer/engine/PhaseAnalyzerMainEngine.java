@@ -29,20 +29,15 @@ public class PhaseAnalyzerMainEngine {
 	public PhaseAnalyzerMainEngine(String inputCsv,String outputAssessment1,String outputAssessment2,Float tmpTimeWeight, Float tmpChangeWeight,
 														Boolean tmpPreProcessingTime,Boolean tmpPreProcessingChange){
 		
-		timeWeight=tmpTimeWeight;
-		changeWeight=tmpChangeWeight;
-		preProcessingTime=tmpPreProcessingTime;
-		preProcessingChange=tmpPreProcessingChange;
-		
+		this.timeWeight=tmpTimeWeight;
+		this.changeWeight=tmpChangeWeight;
+		this.preProcessingTime=tmpPreProcessingTime;
+		this.preProcessingChange=tmpPreProcessingChange;
 		this.inputCsv=inputCsv;
-
-		parser = new SimpleTextParser();
-		
-		phaseExtractor = new BottomUpPhaseExtractor();
-		
-		transitionHistory = new TransitionHistory();
-		
-		allPhaseCollectors = new HashMap<String, ArrayList<PhaseCollector>>();
+		this.parser = new SimpleTextParser();
+		this.phaseExtractor = new BottomUpPhaseExtractor();
+		this.transitionHistory = new TransitionHistory();
+		this.allPhaseCollectors = new HashMap<String, ArrayList<PhaseCollector>>();
 		
 	}
 
@@ -52,11 +47,9 @@ public class PhaseAnalyzerMainEngine {
 	
 	public void extractPhases(int numPhases){
 		phaseCollectors = new ArrayList<PhaseCollector>();
-		
 		PhaseCollector phaseCollector = new PhaseCollector();
-		phaseCollector = phaseExtractor.extractAtMostKPhases(transitionHistory, numPhases,timeWeight,changeWeight,preProcessingTime,preProcessingChange);
+		phaseCollector = phaseExtractor.extractAtMostKPhases(transitionHistory, numPhases, timeWeight, changeWeight, preProcessingTime, preProcessingChange);
 		phaseCollectors.add(phaseCollector);
-		
 		allPhaseCollectors.put(inputCsv, phaseCollectors);
 	}
 

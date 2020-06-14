@@ -4,35 +4,70 @@
 package phaseAnalyzer.commons;
 
 public class TransitionStats {
-	public TransitionStats(int transitionId, int time, String oldVersionFile,
-			String newVersionFile, int numOldTables, int numNewTables,
-			int numOldAtributes, int numNewAttributes, int numTablesIns,
-			int numTablesDel, int numAttrIns, int numAttrDel,
-			int numAttrWithTypeAlt, int numAttrInKeyAlt,
-			int numAttrInsInNewTables, int numAttrDelWithDelTables,int totalUpdatesInTr) {
+	private int transitionId;
+	private int time;
+	private String oldVersionFile;
+	private String newVersionFile;
+	private int numberOfOldTables;
+	private int numberOfNewTables;
+	private int numberOfOldAtributes;
+	private int numberOfNewAttributes;
+	private int numberOfTablesInsertions;
+	private int numberOfTablesDeletions;
+	private int numberOfAttributeInsertions;
+	private int numberOfAttributeDeletions;
+	private int numberOfAttributeWithTypeAlt;
+	private int numberOfAttributeInKeyAlt;
+	private int numberOfAttributeInsertionsInNewTables;
+	private int numberOfAttributeDeletionsWithDeletedTables; 
+	
+	private int totalTableInsertionsDeletions;
+	private int totalAttributeInsertionsDeletions;
+	private int totalAttributeUpdates;
+	private int totalAttributeChange;
+	private int timeDistanceFromPrevious;
+	private int totalUpdatesInTransition;
+	
+	public TransitionStats(int transitionId, 
+			int time, 
+			String oldVersionFile,
+			String newVersionFile, 
+			int numberOfOldTables, 
+			int numberOfNewTables,
+			int numberOfOldAttributes, 
+			int numberOfNewAttributes, 
+			int numberOfTablesInsertions,
+			int numberOfTablesDeletions, 
+			int numberOfAttributeInsertions, 
+			int numberOfAttributeDeletions,
+			int numberOfAttributesWithTypeAlt, 
+			int numberOfAttributesInKeyAlt,
+			int numberOfAttributeInsertionsInNewTables, 
+			int numberOfAttributeDeletionsWithDeletedTables,
+			int totalUpdatesInTransitions) {
 		
 		this.transitionId = transitionId;
 		this.time = time;
 		this.oldVersionFile = oldVersionFile;
 		this.newVersionFile = newVersionFile;
-		this.numOldTables = numOldTables;
-		this.numNewTables = numNewTables;
-		this.numOldAtributes = numOldAtributes;
-		this.numNewAttributes = numNewAttributes;
-		this.numTablesIns = numTablesIns;
-		this.numTablesDel = numTablesDel;
-		this.numAttrIns = numAttrIns;
-		this.numAttrDel = numAttrDel;
-		this.numAttrWithTypeAlt = numAttrWithTypeAlt;
-		this.numAttrInKeyAlt = numAttrInKeyAlt;
-		this.numAttrInsInNewTables = numAttrInsInNewTables;
-		this.numAttrDelWithDelTables = numAttrDelWithDelTables;
-		this.totalUpdatesInTr = totalUpdatesInTr;
+		this.numberOfOldTables = numberOfOldTables;
+		this.numberOfNewTables = numberOfNewTables;
+		this.numberOfOldAtributes = numberOfOldAttributes;
+		this.numberOfNewAttributes = numberOfNewAttributes;
+		this.numberOfTablesInsertions = numberOfTablesInsertions;
+		this.numberOfTablesDeletions = numberOfTablesDeletions;
+		this.numberOfAttributeInsertions = numberOfAttributeInsertions;
+		this.numberOfAttributeDeletions = numberOfAttributeDeletions;
+		this.numberOfAttributeWithTypeAlt = numberOfAttributesWithTypeAlt;
+		this.numberOfAttributeInKeyAlt = numberOfAttributesInKeyAlt;
+		this.numberOfAttributeInsertionsInNewTables = numberOfAttributeInsertionsInNewTables;
+		this.numberOfAttributeDeletionsWithDeletedTables = numberOfAttributeDeletionsWithDeletedTables;
+		this.totalUpdatesInTransition = totalUpdatesInTransitions;
 		
-		this.totalTableInsDel = this.numTablesIns+ this.numTablesDel;
-		this.totalAttrInsDel = this.numAttrIns + this.numAttrDel;
-		this.totalAttrUpd = this.numAttrWithTypeAlt + this.numAttrInKeyAlt;
-		this.totalAttrChange = this.totalAttrInsDel + this.totalAttrUpd +   this.numAttrInsInNewTables + this.numAttrDelWithDelTables;
+		this.totalTableInsertionsDeletions = this.numberOfTablesInsertions+ this.numberOfTablesDeletions;
+		this.totalAttributeInsertionsDeletions = this.numberOfAttributeInsertions + this.numberOfAttributeDeletions;
+		this.totalAttributeUpdates = this.numberOfAttributeWithTypeAlt + this.numberOfAttributeInKeyAlt;
+		this.totalAttributeChange = this.totalAttributeInsertionsDeletions + this.totalAttributeUpdates +   this.numberOfAttributeInsertionsInNewTables + this.numberOfAttributeDeletionsWithDeletedTables;
 	}
 	
 
@@ -48,96 +83,69 @@ public class TransitionStats {
 	public String getNewVersionFile() {
 		return newVersionFile;
 	}
-	public int getNumOldTables() {
-		return numOldTables;
+	public int getNumberOfOldTables() {
+		return numberOfOldTables;
 	}
-	public int getNumNewTables() {
-		return numNewTables;
+	public int getNumberOfNewTables() {
+		return numberOfNewTables;
 	}
-	public int getNumOldAtributes() {
-		return numOldAtributes;
+	public int getNumberOfOldAttributes() {
+		return numberOfOldAtributes;
 	}
-	public int getNumNewAttributes() {
-		return numNewAttributes;
+	public int getNumberOfNewAttributes() {
+		return numberOfNewAttributes;
 	}
-	public int getNumTablesIns() {
-		return numTablesIns;
+	public int getNumberOfTablesInsertions() {
+		return numberOfTablesInsertions;
 	}
-	public int getNumTablesDel() {
-		return numTablesDel;
+	public int getNumberOfTablesDeletions() {
+		return numberOfTablesDeletions;
 	}
-	public int getNumAttrIns() {
-		return numAttrIns;
+	public int getNumberOfAttributeInsertions() {
+		return numberOfAttributeInsertions;
 	}
-	public int getNumAttrDel() {
-		return numAttrDel;
+	public int getNumberOfAttributeDeletions() {
+		return numberOfAttributeDeletions;
 	}
-	public int getNumAttrWithTypeAlt() {
-		return numAttrWithTypeAlt;
+	public int getNumberOfAttributesWithTypeAlt() {
+		return numberOfAttributeWithTypeAlt;
 	}
-	public int getNumAttrInKeyAlt() {
-		return numAttrInKeyAlt;
+	public int getNumberOfAttributesInKeyAlt() {
+		return numberOfAttributeInKeyAlt;
 	}
-	public int getNumAttrInsInNewTables() {
-		return numAttrInsInNewTables;
+	public int getNumberOfAttributeInsertionsInNewTables() {
+		return numberOfAttributeInsertionsInNewTables;
 	}
-	public int getNumAttrDelWithDelTables() {
-		return numAttrDelWithDelTables;
+	public int getNumberOfAttributeDeletionsWithDeletedTables() {
+		return numberOfAttributeDeletionsWithDeletedTables;
 	}
-	public int getTotalTableInsDel() {
-		return totalTableInsDel;
+	public int getTotalTableInsertionsDeletions() {
+		return totalTableInsertionsDeletions;
 	}
-	public int getTotalAttrInsDel() {
-		return totalAttrInsDel;
+	public int getTotalAttributeInsertionsDeletions() {
+		return totalAttributeInsertionsDeletions;
 	}
-	public int getTotalAttrUpd() {
-		return totalAttrUpd;
+	public int getTotalAttributeUpdates() {
+		return totalAttributeUpdates;
 	}
-	public int getTimeDistFromPrevious() {
-		return timeDistFromPrevious;
+	public int getTimeDistanceFromPrevious() {
+		return timeDistanceFromPrevious;
 	}
-	public int getTotalAttrChange() {
-		return totalAttrChange;
+	public int getTotalAttributeChange() {
+		return totalAttributeChange;
 	}
-	public int getTotalUpdInTr(){
-		return totalUpdatesInTr;
+	public int getTotalUpdatesInTransition(){
+		return totalUpdatesInTransition;
 	}
-	public void setTimeDistFromPrevious(int timeDistFromPrevious) {
-		this.timeDistFromPrevious = timeDistFromPrevious;
+	public void setTimeDistanceFromPrevious(int timeDistanceFromPrevious) {
+		this.timeDistanceFromPrevious = timeDistanceFromPrevious;
 	}
 	
 	public String toStringShort(){
-		String shortDescr = new String();
-		
-		shortDescr =  transitionId + "\t" + time + "\t" + timeDistFromPrevious + "\t" + numTablesIns + "\t" + numTablesDel + "\t" + numAttrIns + "\t" + numAttrDel + "\t" + numAttrWithTypeAlt + "\t" + numAttrInKeyAlt + "\t" + numAttrInsInNewTables + "\t" + numAttrDelWithDelTables; 
-		return shortDescr;
+		String shortDescription = new String();
+		shortDescription =  transitionId + "\t" + time + "\t" + timeDistanceFromPrevious + "\t" + numberOfTablesInsertions + "\t" + numberOfTablesDeletions + "\t" + numberOfAttributeInsertions + "\t" + numberOfAttributeDeletions + "\t" + numberOfAttributeWithTypeAlt + "\t" + numberOfAttributeInKeyAlt + "\t" + numberOfAttributeInsertionsInNewTables + "\t" + numberOfAttributeDeletionsWithDeletedTables; 
+		return shortDescription;
 	}
-	
-	private int transitionId;
-	private int time;
-	private String oldVersionFile;
-	private String newVersionFile;
-	private int numOldTables;
-	private int numNewTables;
-	private int numOldAtributes;
-	private int numNewAttributes;
-	private int numTablesIns;
-	private int numTablesDel;
-	private int numAttrIns;
-	private int numAttrDel;
-	private int numAttrWithTypeAlt;
-	private int numAttrInKeyAlt;
-	private int numAttrInsInNewTables;
-	private int numAttrDelWithDelTables; 
-	
-	private int totalTableInsDel;
-	private int totalAttrInsDel;
-	private int totalAttrUpd;
-	private int totalAttrChange;
-	private int timeDistFromPrevious;
-	private int totalUpdatesInTr;
-
-	
 
 }
 

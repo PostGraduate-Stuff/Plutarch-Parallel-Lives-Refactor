@@ -12,34 +12,22 @@ public class TotalCohesionMetric implements TotalMetrics {
 	private Double totalCohesion=null;
 	
 	public TotalCohesionMetric(ArrayList<ClusterInfoKeeper> clusterInfoKeepers) {
-	
 		this.clusterInfoKeepers=clusterInfoKeepers;
-		
 	}
 	
 	@Override
 	public void compute(){
-		
 		Iterator<ClusterInfoKeeper> iteratorClusterInfoKeeper = clusterInfoKeepers.iterator();
 		totalCohesion = new Double(0);
-
-		// totalCohesion = Sum1-K(wi*validity(Ci))
  		while(iteratorClusterInfoKeeper.hasNext()){
-			
-			ClusterInfoKeeper currClusterInfoKeeper = iteratorClusterInfoKeeper.next();
-			
-			totalCohesion= totalCohesion + currClusterInfoKeeper.getClusterCohesion();
-			
+			ClusterInfoKeeper currentClusterInfoKeeper = iteratorClusterInfoKeeper.next();
+			totalCohesion= totalCohesion + currentClusterInfoKeeper.getClusterCohesion();
 		}
 		System.err.println("Total Cohesion:"+totalCohesion);
-
 	}
-
-	
 	
 	@Override
 	public Double getResult() {
-		
 		return this.totalCohesion;
 	}
 

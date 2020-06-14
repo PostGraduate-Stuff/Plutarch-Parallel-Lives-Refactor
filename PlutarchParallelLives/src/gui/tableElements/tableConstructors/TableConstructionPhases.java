@@ -38,76 +38,55 @@ public class TableConstructionPhases extends TableConstruction {
 	
 	
 	public void constructColumns(){
-		
-		ArrayList<String> columnsList=new ArrayList<String>();
-		
+		setSchemaColumnId();
+		ArrayList<String> columnsList=setColumnsList();
+		columnsNumber=columnsList.size();
+		String[] tmpcolumns=new String[columnsList.size()];
+		for(int j=0; j<columnsList.size(); j++ ){
+			tmpcolumns[j]=columnsList.get(j);
+		}
+		constructedColumns = tmpcolumns;
+	}
+	
+	private void setSchemaColumnId(){
 		schemaColumnId=new Integer[phases.size()][2];
 		
-		for(int i=0;i<phases.size();i++){
+		schemaColumnId[0][0]=0;
+		schemaColumnId[0][1]=1;
+		
+		for(int i=1;i<phases.size();i++){
 			schemaColumnId[i][0]=i;
-			if(i==0){
-				schemaColumnId[i][1]=1;
-			}
-			else{
-				schemaColumnId[i][1]=schemaColumnId[i-1][1]+1;
-			}
+			schemaColumnId[i][1]=schemaColumnId[i-1][1]+1;
 		}
-		
+	}
+	
+	private ArrayList<String> setColumnsList(){
+		ArrayList<String> columnsList=new ArrayList<String>();
 		columnsList.add("Table name");
-		
 		for(int i=0;i<phases.size(); i++){
 			String label="Phase "+i;
 			columnsList.add(label);
 		}
-		
-		columnsNumber=columnsList.size();
-		String[] tmpcolumns=new String[columnsList.size()];
-		
-		for(int j=0; j<columnsList.size(); j++ ){
-			
-			tmpcolumns[j]=columnsList.get(j);
-			
-		}
-		
-		constructedColumns = tmpcolumns;
+		return columnsList;
 	}
 	
 	public void constructRows(){
-		
 		ArrayList<String[]> allRows=new ArrayList<String[]>();
-	    ArrayList<String>	allTables=new ArrayList<String>();
-
-		
-		int found=0;
+	    ArrayList<String> allTables=new ArrayList<String>();
 		int i=0;
-		
 		for (Map.Entry<String,PPLSchema> pplSc : allPPLSchemas.entrySet()) {
-			
 			PPLSchema oneSchema=pplSc.getValue();
-			
-			
 			for(int j=0; j<oneSchema.getTables().size(); j++){
-				
+				boolean found = false;
 				PPLTable oneTable=oneSchema.getTableAt(j);
-				
 				String tmpTableName=oneTable.getName();
 				for(int k=0; k<allTables.size(); k++){
-					
-					
-					if(!tmpTableName.equals(allTables.get(k))){
-						found=0;
-						
-					}
-					else{
-						found=1;
+					if(tmpTableName.equals(allTables.get(k))){
+						found=true;
 						break;
-						
 					}
-					
 				}
-				
-				if(found==0){
-					
+				if(!found){
 					allTables.add(tmpTableName);
 					tables.add(oneTable);
 					String[] tmpOneRow=constructOneRow(oneTable,i,oneSchema.getName());
@@ -115,29 +94,14 @@ public class TableConstructionPhases extends TableConstruction {
 					oneTable=new PPLTable();
 					tmpOneRow=new String[columnsNumber];
 				}
-				else{
-					found=0;
-				}
-				
-				
 			}
-			
 			i++;
 		}
-		
-		String[][] tmpRows=new String[allRows.size()][columnsNumber];
-		
-		for(int z=0; z<allRows.size(); z++){
-			
-			String[] tmpOneRow=allRows.get(z);
-			
-			for(int j=0; j<tmpOneRow.length; j++ ){
-				
-				tmpRows[z][j]=tmpOneRow[j];
-				
-			}
-		}
-		
+		calculateSegmentSize();
+		constructedRows = getFinalizedConstructedRows(allRows);
+	}
+	
+	private void calculateSegmentSize(){
 		float maxI=(float) maxInsersions/4;
 		segmentSize[0]=(int) Math.rint(maxI);
 		
@@ -149,8 +113,17 @@ public class TableConstructionPhases extends TableConstruction {
 		
 		float maxT=(float) maxTotalChangesForOneTr/4;
 		segmentSize[3]=(int) Math.rint(maxT);
-		
-		constructedRows = tmpRows;
+	}
+	
+	private String[][] getFinalizedConstructedRows(ArrayList<String[]> allRows){
+		String[][] rows=new String[allRows.size()][columnsNumber];
+		for(int i=0; i<allRows.size(); i++){
+			String[] tmpOneRow=allRows.get(i);
+			for(int j=0; j<tmpOneRow.length; j++ ){
+				rows[i][j]=tmpOneRow[j];
+			}
+		}
+		return rows;
 	}
 	
 	private String[] constructOneRow(PPLTable oneTable,int schemaVersion,String schemaName){
@@ -158,9 +131,9 @@ public class TableConstructionPhases extends TableConstruction {
 		String[] oneRow=new String[columnsNumber];
 		int deletedAllTable=0;
 		int pointerCell=0;
-		int updn=0;
-		int deln=0;
-		int insn=0;
+		int updatesNumber=0;
+		int deletionsNumber=0;
+		int insertionsNumber=0;
 		int totalChangesForOnePhase=0;
 		boolean reborn = true;
 
@@ -174,9 +147,9 @@ public class TableConstructionPhases extends TableConstruction {
 			for(int p=0; p<phases.size(); p++){
 				
 				TreeMap<Integer,PPLTransition> phasePPLTransitions=phases.get(p).getPhasePPLTransitions();
-				for(Map.Entry<Integer, PPLTransition> tr:phasePPLTransitions.entrySet()){
+				for(Map.Entry<Integer, PPLTransition> currentTransition:phasePPLTransitions.entrySet()){
 					
-					if(tr.getValue().getNewVersionName().equals(schemaName)){	
+					if(currentTransition.getValue().getNewVersionName().equals(schemaName)){	
 						pointerCell=p+1;
 						break;
 					}
@@ -199,19 +172,19 @@ public class TableConstructionPhases extends TableConstruction {
 			}
 			totalChangesForOnePhase=0;
 			
-			for(Map.Entry<Integer, PPLTransition> tmpTL:phasePPLTransitions.entrySet()){
+			for(Map.Entry<Integer, PPLTransition> tempTransition:phasePPLTransitions.entrySet()){
 
-				String sc=tmpTL.getValue().getNewVersionName();
+				String newVersionName=tempTransition.getValue().getNewVersionName();
 				
-				ArrayList<TableChange> tmpTR=tmpTL.getValue().getTableChanges();
+				ArrayList<TableChange> tempTableChange=tempTransition.getValue().getTableChanges();
 				
 				
 				
-				if(tmpTR!=null){
+				if(tempTableChange!=null){
 					
-					for(int j=0; j<tmpTR.size(); j++){
+					for(int j=0; j<tempTableChange.size(); j++){
 						
-						TableChange tableChange=tmpTR.get(j);
+						TableChange tableChange=tempTableChange.get(j);
 						
 						if(tableChange.getAffectedTableName().equals(oneTable.getName())){
 							if(deletedAllTable==1){
@@ -219,31 +192,31 @@ public class TableConstructionPhases extends TableConstruction {
 							}
 							deletedAllTable=0;
 							
-							ArrayList<AtomicChange> atChs = tableChange.getTableAtChForOneTransition();
+							ArrayList<AtomicChange> atomicChanges = tableChange.getTableAtomicChangeForOneTransition();
 							
-							for(int k=0; k<atChs.size(); k++){
+							for(int k=0; k<atomicChanges.size(); k++){
 								
 								
-								if (atChs.get(k).getType().contains("Addition")){
+								if (atomicChanges.get(k).getType().contains("Addition")){
 									deletedAllTable=0;
 
-									insn++;
+									insertionsNumber++;
 									
-									if(insn>maxInsersions){
-										maxInsersions=insn;
+									if(insertionsNumber>maxInsersions){
+										maxInsersions=insertionsNumber;
 									}
 									
 								}
-								else if(atChs.get(k).getType().contains("Deletion")){
+								else if(atomicChanges.get(k).getType().contains("Deletion")){
 									
-									deln++;
+									deletionsNumber++;
 									
-									 if(deln>maxDeletions){
-											maxDeletions=deln;
+									 if(deletionsNumber>maxDeletions){
+											maxDeletions=deletionsNumber;
 											
 									 }
 									 
-									 boolean existsLater=getNumOfAttributesOfNextSchema(sc, oneTable.getName());
+									 boolean existsLater=getNumOfAttributesOfNextSchema(newVersionName, oneTable.getName());
 									 
 									 if(!existsLater){
 										 
@@ -252,10 +225,10 @@ public class TableConstructionPhases extends TableConstruction {
 								}
 								else{
 									
-									updn++;
+									updatesNumber++;
 									
-									if(updn>maxUpdates){
-										maxUpdates=updn;
+									if(updatesNumber>maxUpdates){
+										maxUpdates=updatesNumber;
 									}
 									
 								}
@@ -276,7 +249,7 @@ public class TableConstructionPhases extends TableConstruction {
 				
 				break;
 			}
-			totalChangesForOnePhase=insn+updn+deln;
+			totalChangesForOnePhase=insertionsNumber+updatesNumber+deletionsNumber;
 			if(totalChangesForOnePhase>=0 && reborn){
 
 				oneRow[pointerCell]=Integer.toString(totalChangesForOnePhase);
@@ -297,9 +270,9 @@ public class TableConstructionPhases extends TableConstruction {
 				
 			}
 			
-			insn=0;
-			updn=0;
-			deln=0;
+			insertionsNumber=0;
+			updatesNumber=0;
+			deletionsNumber=0;
 			
 		}
 		
@@ -309,28 +282,19 @@ public class TableConstructionPhases extends TableConstruction {
 			}
 		}
 
-		String lala="";
+		String helper="";
 		for (int i = 0; i < oneRow.length; i++) {
-			lala=lala+oneRow[i]+",";
+			helper=helper+oneRow[i]+",";
 		}
 		return oneRow;
 
 	}
-	
 	public Integer[] getSegmentSize(){
 		return segmentSize;
 	}
 	
 	private boolean getNumOfAttributesOfNextSchema(String schema,String table){
-		PPLSchema sc=allPPLSchemas.get(schema);
-		
-		if(sc.getTables().containsKey(table)){
-			return true;
-		}
-		else {
-			return false;
-		}
-		
+		PPLSchema nextSchema=allPPLSchemas.get(schema);
+		return nextSchema.getTables().containsKey(table);
 	}
-
 }

@@ -9,7 +9,6 @@ import tableClustering.clusterValidator.commons.ClassOfObjects;
 public class ClusterEntropyMetric implements TotalMetrics {
 
 	private ArrayList<ClassOfObjects> classesOfObjects = new ArrayList<ClassOfObjects>();
-	//private Cluster currentCluster = new Cluster();
 	private Double clusterEntropy = new Double(0);
 	private ArrayList<Cluster> clusters  = new ArrayList<Cluster>();
 	private int classIndexOfThisCluster;
@@ -17,7 +16,6 @@ public class ClusterEntropyMetric implements TotalMetrics {
 	public ClusterEntropyMetric(ArrayList<ClassOfObjects> classesOfObjects, 
 								ArrayList<Cluster> clusters,int classIndexOfThisCluster) {
 		this.classesOfObjects = classesOfObjects;
-		//this.currentCluster = currentCluster;
 		this.clusters = clusters;
 		this.classIndexOfThisCluster = classIndexOfThisCluster;
 	}
@@ -25,44 +23,32 @@ public class ClusterEntropyMetric implements TotalMetrics {
 	@Override
 	public void compute() {
 		
-		Double mi = new Double(0);
-		Double mij = new Double(0);
-		Double pij = new Double(0);
-		Double ei= new Double(0);
-		
+		Double tablesize = new Double(0);
+		Double itemsInTable = new Double(0);
+		Double ratio = new Double(0);
+		Double entropy= new Double(0);
 		for(int i=0 ; i<this.clusters.size(); i++){
-			
-			mi = (double)this.clusters.get(i).getTables().size();
-			mij=0.0;
-			pij=0.0;
-			
+			tablesize = (double)this.clusters.get(i).getTables().size();
+			itemsInTable=0.0;
+			ratio=0.0;
 			ArrayList<String> tablesOfCompared = this.clusters.get(i).getNamesOfTables();
 			ClassOfObjects classOfThisCluster = classesOfObjects.get(classIndexOfThisCluster);
 			ArrayList<String> objects = classOfThisCluster.getObjects();
-			
-			
 			for(int j=0; j<objects.size(); j++){
 				if(tablesOfCompared.contains(objects.get(j))){
-					mij++;
+					itemsInTable++;
 				}
 			}
-			
-			pij=mij/mi;
-			
-			if(mi!=0 && mij!=0){
-				
-				ei = ei + (pij * (Math.log(pij)/Math.log(2.0d)));
-
+			ratio=itemsInTable/tablesize;
+			if(tablesize!=0 && itemsInTable!=0){
+				entropy = entropy + (ratio * (Math.log(ratio)/Math.log(2.0d)));
 			}
-			
 		}
-		
-		clusterEntropy = -ei;
+		clusterEntropy = -entropy;
 	}
 
 	@Override
 	public Double getResult() {
-		// TODO Auto-generated method stub
 		return clusterEntropy;
 	}
 

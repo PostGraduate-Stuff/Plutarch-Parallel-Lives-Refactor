@@ -1,8 +1,7 @@
 package gui.configurations;
 
 import java.awt.Color;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+
 import java.util.ArrayList;
 
 import javax.swing.GroupLayout;
@@ -19,20 +18,12 @@ import javax.swing.JTree;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.border.EmptyBorder;
 
-import data.dataKeeper.GlobalDataKeeper;
-import data.dataKeeper.PPLFile;
-import gui.dialogs.EnlargeTable;
 import gui.tableElements.commons.JvTable;
-import gui.tableElements.commons.MyTableModel;
-import gui.tableElements.tableConstructors.TableConstructionIDU;
-import gui.tableElements.tableConstructors.TableConstructionWithClusters;
-import gui.ui.table.ZoomAreaTableForClusterUI;
-import services.DataService;
 
 public class GuiConfiguration extends JFrame
 {
+	private static final long serialVersionUID = 1L;
 	
-	//gui
 	private int rowHeight=1;
 	private int columnWidth=1;
 	private int wholeCol=-1;

@@ -6,7 +6,6 @@ import data.dataKeeper.GlobalDataKeeper;
 import data.dataKeeper.PPLFile;
 import data.dataPPL.pplTransition.PPLTransition;
 import gui.configurations.DataConfiguration;
-import gui.configurations.GuiConfiguration;
 import phaseAnalyzer.engine.PhaseAnalyzerMainEngine;
 
 public class PhasesService implements IPhasesService

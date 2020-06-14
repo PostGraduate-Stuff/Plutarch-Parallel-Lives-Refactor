@@ -1,6 +1,5 @@
 package data.dataPPL.pplSQLSchema;
 
-
 import gr.uoi.cs.daintiness.hecate.sql.Table;
 
 import java.util.ArrayList;
@@ -22,7 +21,7 @@ public class PPLTable {
 	private ArrayList<Integer> changesForChart = new ArrayList<Integer>();
 	private TableChange tableChanges;
 	private Table hecTable;
-	private TreeMap<String, PPLAttribute> attrs;
+	private TreeMap<String, PPLAttribute> attributes;
 	private String name="";
 	private String birth=null;
 	private int birthVersionID;
@@ -32,15 +31,12 @@ public class PPLTable {
 
 	
 	public PPLTable(String tmpName,Table tmpHecTable){
-		
 		hecTable=tmpHecTable;
 		name=tmpName;
-		this.attrs = new TreeMap<String, PPLAttribute>();
-
+		this.attributes = new TreeMap<String, PPLAttribute>();
 	}
 	
 	public PPLTable(){
-			
 	}
 	
 	public void setBirth(String birth){
@@ -83,37 +79,15 @@ public class PPLTable {
 		return this.death;
 	}
 	
-	public void addAttribute(PPLAttribute attr) {
-		
-		this.attrs.put(attr.getName(), attr);
-		
+	public void addAttribute(PPLAttribute attribute) {
+		this.attributes.put(attribute.getName(), attribute);
 	}
 	
-	public TreeMap<String, PPLAttribute> getAttrs() {
-		return this.attrs;
-	}
-	
-	public PPLAttribute getAttrAt(int i) {
-		int c = 0;
-		if (i >= 0 && i < attrs.size()){
-			for (Map.Entry<String, PPLAttribute> t : attrs.entrySet()) {
-				if (c == i) {
-					return t.getValue();
-				}
-				c++;
-			}
-		}
-		return null;
-	}
-	
-	public int getAge(){
-		
-		return age;
-		
+	public TreeMap<String, PPLAttribute> getAttributes() {
+		return this.attributes;
 	}
 	
 	public String getName(){
-		
 		return name;
 	}
 	
@@ -121,103 +95,41 @@ public class PPLTable {
 		return totalChanges;
 	}
 	
-	public int getCurrentChanges(){
-		return currentChanges;
-	}
-	
-	public HashMap<String,Integer> getCoChanges(){
-		return coChanges;
-	}
-	
-	public HashMap<String,Integer> getSequenceCoChanges(){
-		return sequenceCoChanges;
-	}
-	
-	public HashMap<String,Integer> getWindowCoChanges(){
-		return windowCoChanges;
-	}
-	
-	public ArrayList<Integer> getChangesForChart(){
-		return changesForChart;
-	}
-
-
 	public TableChange getTableChanges(){
 		return tableChanges;
 	}
 
-	public void setTableChanges(TableChange tmpTableChanges){
-		tableChanges=tmpTableChanges;
+	public void setTableChanges(TableChange tempTableChanges){
+		tableChanges=tempTableChanges;
 	}
-	
-	public void setAge(int tmpAge){
-		age=tmpAge;
-	}
-	
 	
 	public void setTotalChanges(){
-		TreeMap<Integer,ArrayList<AtomicChange>> tc=tableChanges.getTableAtomicChanges();
-		for(Map.Entry<Integer, ArrayList<AtomicChange>> tcr:tc.entrySet()){
-			totalChanges=totalChanges+tcr.getValue().size();
+		TreeMap<Integer,ArrayList<AtomicChange>> totalchanges=tableChanges.getTableAtomicChanges();
+		for(Map.Entry<Integer, ArrayList<AtomicChange>> change:totalchanges.entrySet()){
+			totalChanges=totalChanges+change.getValue().size();
 		}
 	}
 	
-	public void setChangesForChart(ArrayList<Integer> tmpChangesForChart){
-		changesForChart=tmpChangesForChart;
-	}
-	
-	public void setCurrentChanges(int tmpCurrentChanges){
-		currentChanges=tmpCurrentChanges;
-	}
-	
-	public void setCoChanges(HashMap<String,Integer> tmpCoChanges){
-		coChanges=tmpCoChanges;
-	}
-	
-	public void setSequenceCoChanges(HashMap<String,Integer> tmpSequenceCoChanges){
-		sequenceCoChanges=tmpSequenceCoChanges;
-	}
-	
-	public void setWindowCoChanges(HashMap<String,Integer> tmpWindowCoChanges){
-		windowCoChanges=tmpWindowCoChanges;
-	}
-	
-	
-	public Table getHecTable(){
-		
-		return hecTable;
-		
-	}
-	
-	public int getSize() {
-		return attrs.size();
-	}
-	
-	public int getTotalChangesForOnePhase(int startPos,int LastPos){
+	public int getTotalChangesForOnePhase(int startPosition,int LastPosition){
 		
 		int counter=0;
-		for(int i=startPos;i<=LastPos;i++){
-			if(tableChanges.getTableAtChForOneTransition(i)!=null){
-				counter=counter+tableChanges.getTableAtChForOneTransition(i).size();
+		for(int i=startPosition;i<=LastPosition;i++){
+			if(tableChanges.getTableAtomicChangeForOneTransition(i)!=null){
+				counter=counter+tableChanges.getTableAtomicChangeForOneTransition(i).size();
 			}
 		}
 		return(counter);
 	}
 	
-	public int getNumberOfAdditionsForOneTr(Integer transition){
-		int additions=tableChanges.getNumberOfAdditionsForOneTr(transition);
-		return additions;
+	public int getNumberOfAdditionsForOneTransition(Integer transition){
+		return tableChanges.getNumberOfActionForOneTransition(transition, "Addition");
 	}
 	
-	public int getNumberOfDeletionsForOneTr(Integer transition){
-		int deletions=tableChanges.getNumberOfDeletionsForOneTr(transition);
-		return deletions;
+	public int getNumberOfDeletionsForOneTransition(Integer transition){
+		return tableChanges.getNumberOfActionForOneTransition(transition, "Deletion");
 	}
 	
-	public int getNumberOfUpdatesForOneTr(Integer transition){
-		int updates=tableChanges.getNumberOfUpdatesForOneTr(transition);
-		return updates;
+	public int getNumberOfUpdatesForOneTransition(Integer transition){
+		return tableChanges.getNumberOfActionForOneTransition(transition, "Change");
 	}
-	
-	
 }

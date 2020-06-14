@@ -11,7 +11,8 @@ import gui.dialogs.CreateProjectJDialog;
 
 public class ProjectHandler extends JFrame
 {
-	
+	private static final long serialVersionUID = 1L;
+
 	public void initiateDatagenerator(final CreateProjectJDialog createProjectDialog, final DataGeneratorUI dataGenerator, File file)
 	{
 		createProjectDialog.setModal(true);

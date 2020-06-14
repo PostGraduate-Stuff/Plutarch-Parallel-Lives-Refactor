@@ -4,22 +4,17 @@ import javax.swing.table.AbstractTableModel;
 
 public class MyTableModel extends AbstractTableModel {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
+	
 	private boolean DEBUG=false;
-	
-
 	private String[] columns=null;
-	
 	private String[][] rows=null;
 
 	
 	public MyTableModel(String[] tmpColumns, String [][] tmpRows){
 		
-		columns=tmpColumns;
-		rows=tmpRows;
+		this.columns = tmpColumns;
+		this.rows = tmpRows;
 		
 	}
 	public MyTableModel(){}
@@ -27,16 +22,13 @@ public class MyTableModel extends AbstractTableModel {
 	
 	public void initializeZoomModel(String[] finalColumnsZoomArea,  String[][] finalRowsZoomArea) 
 	{
-	
 		this.columns = finalColumnsZoomArea;
-		
-		int numberOfColumns=finalRowsZoomArea[0].length;
-		int numberOfRows=finalRowsZoomArea.length;
+		int numberOfColumns = finalRowsZoomArea[0].length;
+		int numberOfRows = finalRowsZoomArea.length;
 		
 		this.rows=new String[numberOfRows][numberOfColumns];
 		
-		for(int i=0; i<numberOfRows; i++)
-		{
+		for(int i=0; i<numberOfRows; i++){
 			this.rows[i][0]=finalRowsZoomArea[i][0];
 		}
 	
@@ -69,15 +61,7 @@ public class MyTableModel extends AbstractTableModel {
         return rows[row][col];
     }
     
-    
-    
-
-    /*
-     * JTable uses this method to determine the default renderer/
-     * editor for each cell.  If we didn't implement this method,
-     * then the last column would contain text ("true"/"false"),
-     * rather than a check box.
-     */
+  
     public Class<? extends Object> getColumnClass(int c) {
     	
     	Object object=getValueAt(0, c);
@@ -89,8 +73,6 @@ public class MyTableModel extends AbstractTableModel {
     }
 
     public boolean isCellEditable(int row, int col) {
-        //Note that the data/cell address is constant,
-        //no matter where the cell appears onscreen.
         return false;
     }
 
@@ -128,9 +110,6 @@ public class MyTableModel extends AbstractTableModel {
         }
         System.out.println("--------------------------");
         OldDetailedModel+= "--------------------------";
-    return OldDetailedModel;
+        return OldDetailedModel;
     }
-	
-	
-
 }

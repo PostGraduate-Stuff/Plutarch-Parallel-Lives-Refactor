@@ -17,20 +17,9 @@ import java.awt.event.ActionEvent;
 
 public class ProjectInfoDialog extends JDialog {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
 
-	/**
-	 * Launch the application.
-	 */
-	
-
-	/**
-	 * Create the dialog.
-	 */
 	public ProjectInfoDialog(String project, String dataset, String inputCsv, String transitionsXml, 
 					int numberOfSchemas, int numberOfTransitions, int numberOfTables) {
 		setBounds(100, 100, 479, 276);

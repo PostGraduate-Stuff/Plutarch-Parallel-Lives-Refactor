@@ -15,22 +15,19 @@ public class ClusterCohesionMetric implements TotalMetrics {
 	private Double sumClusterCohesion = null;
 	
 	public ClusterCohesionMetric(ClusterInfoKeeper clusterInfoKeeper){
-		
 		this.clusterInfoKeeper=clusterInfoKeeper;
-		
 	}
 	
 	@Override
 	public void compute() {
-		Cluster currCluster = clusterInfoKeeper.getCluster();
-		TreeMap<String, PPLTable> currClusterTables = currCluster.getTables();
+		Cluster currentCluster = clusterInfoKeeper.getCluster();
+		TreeMap<String, PPLTable> currentClusterTables = currentCluster.getTables();
 		Centroid clusterCentroid = clusterInfoKeeper.getCentroid();
 		
 		sumClusterCohesion = new Double(0);
 		
-		//cohesion(Ci)= Sum(distance(x,ci)) xECi, ci is centroid of cluster Ci
-		for(Map.Entry<String,PPLTable> pplTab:currClusterTables.entrySet()){
-			sumClusterCohesion = sumClusterCohesion+computeDistanceFromDataPointToCentroid(pplTab.getValue(),clusterCentroid);
+		for(Map.Entry<String,PPLTable> pplTable:currentClusterTables.entrySet()){
+			sumClusterCohesion = sumClusterCohesion+computeDistanceFromDataPointToCentroid(pplTable.getValue(),clusterCentroid);
 		}
 		
 	}
@@ -39,21 +36,15 @@ public class ClusterCohesionMetric implements TotalMetrics {
 		
 		Double distance = null;
 		
-		Double distanceX = null;
-		Double distanceY = null;
-		Double distanceZ = null;
+		Double distanceBirthVersionID = null;
+		Double distanceDeathVersionID = null;
+		Double distanceTotalChanges = null;
 
-		//(x-xi)^2
-		distanceX=Math.pow((double)(tableToComputeDistance.getBirthVersionID()-centroidOfCluster.getX()),2.0);
-		
-		//(y-yi)^2
-		distanceY=Math.pow((double)(tableToComputeDistance.getDeathVersionID()-centroidOfCluster.getY()),2.0);
-		
-		//(z-zi)^2
-		distanceZ=Math.pow((double)(tableToComputeDistance.getTotalChanges()-centroidOfCluster.getZ()),2.0);
+		distanceBirthVersionID=Math.pow((double)(tableToComputeDistance.getBirthVersionID()-centroidOfCluster.getBirtVersionID()),2.0);
+		distanceDeathVersionID=Math.pow((double)(tableToComputeDistance.getDeathVersionID()-centroidOfCluster.getDeathVersionID()),2.0);
+		distanceTotalChanges=Math.pow((double)(tableToComputeDistance.getTotalChanges()-centroidOfCluster.getTotalChanges()),2.0);
 
-		//Euclidean Distance
-		distance=Math.sqrt(distanceX+distanceY+distanceZ);
+		distance=Math.sqrt(distanceBirthVersionID+distanceDeathVersionID+distanceTotalChanges);
 		
 		return distance;
 		

@@ -114,7 +114,7 @@ public class GeneralTableIDUUI extends TableUI{
 		        		Description descriptionTag = new Description(globalDataKeeper);
 		        		String description="";
 		        		if(!table.getColumnName(column).contains("Table name")){
-		        			if(globalDataKeeper.getAllPPLTables().get(dataConfiguration.getFinalRowsZoomArea()[row][0]).getTableChanges().getTableAtChForOneTransition(Integer.parseInt(table.getColumnName(column)))!=null){
+		        			if(globalDataKeeper.getAllPPLTables().get(dataConfiguration.getFinalRowsZoomArea()[row][0]).getTableChanges().getTableAtomicChangeForOneTransition(Integer.parseInt(table.getColumnName(column)))!=null){
 		    		        	description= descriptionTag.getTransitionDescription(column);
 		            			configuration.getDescriptionText().setText(description);
 			        		}

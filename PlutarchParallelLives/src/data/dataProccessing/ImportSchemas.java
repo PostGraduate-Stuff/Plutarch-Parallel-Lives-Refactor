@@ -31,113 +31,90 @@ public class ImportSchemas {
 	private String transitionsFile=null;
 	private static ArrayList<TransitionList> allTransitions = null;
 	
-	public ImportSchemas(String tmpFilepath,String transitionsFile) {
+	public ImportSchemas(String filepath,String transitionsFile) {
 		allTransitions = new ArrayList<TransitionList>();
 		allSchemas = new ArrayList<Schema>();
-		filepath=tmpFilepath;
+		this.filepath=filepath;
 		this.transitionsFile=transitionsFile;
 	}
 
 	@SuppressWarnings("static-access")
 	public void loadDataset() throws IOException{
 
-		BufferedReader br = new BufferedReader(new FileReader(filepath));
-		File f = new File(filepath);
-		String dataset = (f.getName().split("\\."))[0];
-		String d = f.getParent();
-		f = new File(d);
-		String path = f.getAbsolutePath() + File.separator + dataset;
-
-		ArrayList<String> sAllSchemas = new ArrayList<String>();
-		String line;
-		
-		while(true) {
-			line = br.readLine();
-			if (line == null) 
-				break;
-			sAllSchemas.add(line);
-		};
-
-		String sStandardString = path + File.separator;
-
-		Transitions trs = new Transitions();
-
-		
-		
-		for(int i=0; i<sAllSchemas.size(); i++) {
-			if(i==sAllSchemas.size()-1) {
-				String sFinalString2=sStandardString+sAllSchemas.get(i);
-				Schema schema=HecateParser.parse(sFinalString2);
-				allSchemas.add(schema);
-				break;
-			}
-			String sFinalString=sStandardString+sAllSchemas.get(i).trim();
-
-			allSchemas.add(HecateParser.parse(sFinalString));
-			
-			String sFinalString2=sStandardString+sAllSchemas.get(i+1).trim();
-
-			Schema oldSchema = HecateParser.parse(sFinalString);
-			
-			
-			Schema newSchema = HecateParser.parse(sFinalString2);
-
-			
-			Delta delta = new Delta();
-
-			TransitionList tmpTransitionList =new TransitionList();
-			DiffResult tmpDiffResult=new DiffResult();
-			tmpDiffResult=delta.minus(oldSchema, newSchema); 
-
-			tmpTransitionList=tmpDiffResult.tl;
-			trs.add(tmpTransitionList);
-
-		}
-		br.close();
-		makeTransitions(trs);
+		File file = new File(filepath);
+		String dataset = (file.getName().split("\\."))[0];
+		String parent = file.getParent();
+		file = new File(parent);
+		String path = file.getAbsolutePath() + File.separator + dataset;
+		ArrayList<String> allTempSchemas = readAllSchemas();
+		String standardString = path + File.separator;
+		Transitions transitions = readTransitions(standardString, allTempSchemas);
+		makeTransitions(transitions);
 		
 	}
+	
+	private ArrayList<String> readAllSchemas() throws IOException{
+		ArrayList<String> allTempSchemas = new ArrayList<String>();
+		
+		BufferedReader bufferedReader = new BufferedReader(new FileReader(filepath));
+		String line;
+		
+		line = bufferedReader.readLine();
+		while(line != null) {
+			allTempSchemas.add(line);
+			line = bufferedReader.readLine();
+		}
+		
+		bufferedReader.close();
+		return allTempSchemas;
+	}
+	
+	private Transitions readTransitions(String standardString, ArrayList<String> allTempSchemas){
+		Transitions transitions = new Transitions();
+		for(int i=0; i<allTempSchemas.size()-1; i++) {
+			String firstFinalString=standardString+allTempSchemas.get(i).trim();
+			allSchemas.add(HecateParser.parse(firstFinalString));
+			String nextFinalString=standardString+allTempSchemas.get(i+1).trim();
+			Schema oldSchema = HecateParser.parse(firstFinalString);
+			Schema newSchema = HecateParser.parse(nextFinalString);
+			Delta delta = new Delta();
+			TransitionList transitionList =new TransitionList();
+			DiffResult diffResult=new DiffResult();
+			diffResult=delta.minus(oldSchema, newSchema); 
+			transitionList=diffResult.tl;
+			transitions.add(transitionList);
+		}
+		String finalString=standardString+allTempSchemas.get(allTempSchemas.size()-1);
+		Schema schema=HecateParser.parse(finalString);
+		allSchemas.add(schema);
+		return transitions;
+	}
 
-
-	public  void makeTransitions(Transitions tl) throws IOException {
+	public  void makeTransitions(Transitions transitions) throws IOException {
 		try {
-
-
-
 			JAXBContext jaxbContext = JAXBContext.newInstance(Update.class,Deletion.class, Insersion.class, TransitionList.class, Transitions.class);
 			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
 			jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-			jaxbMarshaller.marshal(tl, new FileOutputStream(transitionsFile));
+			jaxbMarshaller.marshal(transitions, new FileOutputStream(transitionsFile));
 
-
-			//***********************************************
-
-			JAXBContext jaxbContext1 = JAXBContext.newInstance(Update.class,Deletion.class, Insersion.class, TransitionList.class, Transitions.class);
-			Unmarshaller u=jaxbContext1.createUnmarshaller();
+			JAXBContext newJaxbContext = JAXBContext.newInstance(Update.class,Deletion.class, Insersion.class, TransitionList.class, Transitions.class);
+			Unmarshaller unmarshaller=newJaxbContext.createUnmarshaller();
 			File inputFile=new File(transitionsFile);
-			Transitions root = (Transitions) u.unmarshal(inputFile);
-
-
-			allTransitions=(ArrayList<TransitionList>) root.getList();
-
+			Transitions root = (Transitions) unmarshaller.unmarshal(inputFile);
 			
-
-		} catch (JAXBException e) {
+			allTransitions=(ArrayList<TransitionList>) root.getList();
+		} 
+		catch (JAXBException e) {
 			JOptionPane.showMessageDialog(null, "Something seems wrong with this file");
 			return;
 		}
 	}
 	
 	public ArrayList<Schema> getAllHecSchemas(){
-
 		return allSchemas;
-
 	}
 
 	public ArrayList<TransitionList> getAllTransitions(){
-
 		return allTransitions;
-
 	}
-
 }

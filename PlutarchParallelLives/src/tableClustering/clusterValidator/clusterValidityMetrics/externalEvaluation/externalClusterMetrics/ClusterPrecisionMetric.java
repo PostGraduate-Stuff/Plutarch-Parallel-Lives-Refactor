@@ -16,39 +16,32 @@ public class ClusterPrecisionMetric implements TotalMetrics {
 	public ClusterPrecisionMetric(Cluster currentCluster,ClassOfObjects classOfObjects) {
 		this.currentCluster = currentCluster;
 		this.classOfObjects = classOfObjects;
-		
 	}
 	
 	@Override
 	public void compute() {
 
-		//precision(i,j) = pij = mij/mi
+		Double tableSize = new Double(0);
+		Double itemsInTable = new Double(0);
 		
-		Double mi = new Double(0);
-		Double mij = new Double(0);
-		
-		mi = (double)currentCluster.getTables().size();
-		mij=0.0;
+		tableSize = (double)currentCluster.getTables().size();
+		itemsInTable=0.0;
 		
 		ArrayList<String> tablesToCompare = currentCluster.getNamesOfTables();
 		ArrayList<String> objects = classOfObjects.getObjects();
 		
-		
 		for(int j=0; j<objects.size(); j++){
 			if(tablesToCompare.contains(objects.get(j))){
-				mij++;
+				itemsInTable++;
 			}
 		}
 		
-		
-		precision=mij/mi;
-		
+		precision=itemsInTable/tableSize;
 		
 	}
 
 	@Override
 	public Double getResult() {
-		// TODO Auto-generated method stub
 		return precision;
 	}
 

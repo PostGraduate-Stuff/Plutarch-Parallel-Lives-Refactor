@@ -7,10 +7,8 @@ import java.util.TreeMap;
 import data.dataKeeper.GlobalDataKeeper;
 import data.dataKeeper.PPLFile;
 import data.dataPPL.pplSQLSchema.PPLTable;
-import data.dataPPL.pplTransition.PPLTransition;
 import data.dataSorters.PldRowSorter;
-import gui.configurations.GuiConfiguration;
-import phaseAnalyzer.engine.PhaseAnalyzerMainEngine;
+
 
 public class DataService implements IDataService 
 {
@@ -23,7 +21,6 @@ public class DataService implements IDataService
 			pplFile.readFile(file);
 			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return pplFile;
@@ -38,8 +35,6 @@ public class DataService implements IDataService
 			globalDataKeeper=new GlobalDataKeeper(datasetTxt, transitionsFile);
 			globalDataKeeper.setData();
 			System.out.println(globalDataKeeper.getAllPPLTables().size());
-			//System.out.println(pplFile.getFile().toString());
-
 	      
 		}
 		catch(Exception ex){
@@ -52,11 +47,4 @@ public class DataService implements IDataService
 		PldRowSorter sorter=new PldRowSorter();
 		return sorter.sortRows(finalRows, pplTables);
 	}
-	
-
-	
-	
-	
-
-
 }

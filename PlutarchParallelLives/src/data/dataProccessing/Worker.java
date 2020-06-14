@@ -25,13 +25,13 @@ public class Worker {
 	private TreeMap<String,TableChange> tableChanges = null;
 	private TreeMap<Integer,PPLTransition> allPPLTransitions = null;
 	
-	public Worker(String tmpFilename,String transitionsFile){
+	public Worker(String filename,String transitionsFile){
 		allPPLSchemas = new TreeMap<String,PPLSchema>();
 		allTables = new TreeMap<String,PPLTable>();
 		atomicChanges = new ArrayList<AtomicChange>();
 		tableChanges = new TreeMap<String,TableChange>();
 		allPPLTransitions = new TreeMap<Integer,PPLTransition>();
-		filename=tmpFilename;
+		this.filename=filename;
 		this.transitionsFile=transitionsFile;
 		
 	}
@@ -41,15 +41,14 @@ public class Worker {
 		ImportSchemas filesToImportData=new ImportSchemas(filename,transitionsFile);
 		try {
 			filesToImportData.loadDataset();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} 
+		catch (IOException e) {
 			e.printStackTrace();
 		}
 		ArrayList<Schema> allHecSchemas = new ArrayList<Schema>();
 		allHecSchemas=filesToImportData.getAllHecSchemas();
 		ArrayList<TransitionList> allTransitions=filesToImportData.getAllTransitions();
 
-		
 		PPLSchemasConstruction pplSchemas = new PPLSchemasConstruction(allHecSchemas);
 		pplSchemas.makePPLSchemas();
 		allPPLSchemas=pplSchemas.getAllPPLSchemas();
@@ -58,17 +57,17 @@ public class Worker {
 		pplTables.makeAllPPLTables();
 		allTables=pplTables.getAllPPLTables();
 		
-		AtomicChangeConstruction atomicChangesC = new AtomicChangeConstruction(allTransitions);
-		atomicChangesC.makeAtomicChanges();
-		atomicChanges=atomicChangesC.getAtomicChanges();
+		AtomicChangeConstruction atomicChangesConstruction = new AtomicChangeConstruction(allTransitions);
+		atomicChangesConstruction.makeAtomicChanges();
+		atomicChanges=atomicChangesConstruction.getAtomicChanges();
 		
-		TableChangeConstruction tableChangesC = new TableChangeConstruction(atomicChanges, allTables);
-		tableChangesC.makeTableChanges();
-		tableChanges=tableChangesC.getTableChanges();
+		TableChangeConstruction tableChangesConstruction = new TableChangeConstruction(atomicChanges, allTables);
+		tableChangesConstruction.makeTableChanges();
+		tableChanges=tableChangesConstruction.getTableChanges();
 		
-		PPLTransitionConstruction pplTransitionC = new PPLTransitionConstruction(allPPLSchemas, tableChanges);
-		pplTransitionC.makePPLTransitions();
-		allPPLTransitions=pplTransitionC.getAllPPLTransitions();
+		PPLTransitionConstruction pplTransitionConstruction = new PPLTransitionConstruction(allPPLSchemas, tableChanges);
+		pplTransitionConstruction.makePPLTransitions();
+		allPPLTransitions=pplTransitionConstruction.getAllPPLTransitions();
 
 		
 	}

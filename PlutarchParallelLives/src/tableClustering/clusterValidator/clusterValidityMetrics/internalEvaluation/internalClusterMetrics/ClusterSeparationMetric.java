@@ -11,10 +11,8 @@ public class ClusterSeparationMetric implements TotalMetrics {
 
 	
 	public ClusterSeparationMetric(Centroid clusterCentroid,Centroid overallCentroid){
-		
 		this.clusterCentroid=clusterCentroid;
 		this.overallCentroid=overallCentroid;
-		
 	}
 	
 	
@@ -23,23 +21,15 @@ public class ClusterSeparationMetric implements TotalMetrics {
 				
 		clusterSeparation = new Double(0);
 		
-		Double distanceX = null;
-		Double distanceY = null;
-		Double distanceZ = null;
+		Double distanceBirtVersionID = null;
+		Double distanceDeathVersionID = null;
+		Double distanceTotalChanges = null;
 
-		//(x-xi)^2
-		distanceX= new Double(Math.pow((double)(clusterCentroid.getX()-overallCentroid.getX()),2.0));
-		
-		//(y-yi)^2
-		distanceY=new Double(Math.pow((double)(clusterCentroid.getY()-overallCentroid.getY()),2.0));
-		
-		//(z-zi)^2
-		distanceZ=new Double(Math.pow((double)(clusterCentroid.getZ()-overallCentroid.getZ()),2.0));
+		distanceBirtVersionID= new Double(Math.pow((double)(clusterCentroid.getBirtVersionID() - overallCentroid.getBirtVersionID()),2.0));
+		distanceDeathVersionID=new Double(Math.pow((double)(clusterCentroid.getDeathVersionID() - overallCentroid.getDeathVersionID()),2.0));
+		distanceTotalChanges=new Double(Math.pow((double)(clusterCentroid.getTotalChanges()-overallCentroid.getTotalChanges()),2.0));
 
-		//Euclidean Distance
-		clusterSeparation=Math.sqrt(distanceX+distanceY+distanceZ);
-		
-		
+		clusterSeparation=Math.sqrt(distanceBirtVersionID+distanceDeathVersionID+distanceTotalChanges);
 	}
 	
 	@Override

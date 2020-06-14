@@ -10,8 +10,8 @@ public class PPLSchema {
 	private String name;
 	private TreeMap<String, PPLTable> tables;
 
-	public PPLSchema(TreeMap<String, PPLTable> t) {
-		this.tables = t;
+	public PPLSchema(TreeMap<String, PPLTable> tableTreemap) {
+		this.tables = tableTreemap;
 	}	
 	
 	public PPLSchema() {
@@ -23,16 +23,12 @@ public class PPLSchema {
 		this.name = name;
 	}
 
-	public PPLSchema(String tmpName,Schema tmpHecSchema){
-		
-		name=tmpName;
+	public PPLSchema(String tempName,Schema tempHecSchema){
+		this.name=tempName;
 		this.tables = new TreeMap<String, PPLTable>();
-
 	}
 	
-	
 	public String getName() {
-		
 		return name;
 	}
 	
@@ -48,30 +44,23 @@ public class PPLSchema {
 		return name;
 	}
 
-	public int[] getSize() {
-		int attr = 0;
-		for (PPLTable t : this.tables.values()) {
-			attr += t.getSize();
-		}
-		int[] res = {this.tables.size(), attr};
-		return res;
-	}
-
 	public void setTitle(String title) {
 		this.name = title;
 	}
 
 	public PPLTable getTableAt(int i) {
-		int c = 0;
-		if (i >= 0 && i < tables.size()){
-			for (Map.Entry<String, PPLTable> t : tables.entrySet()) {
-				if (c == i) {
-					return t.getValue();
-				}
-				c++;
-			}
+		int helper = 0;
+		if(i < 0 || i >= tables.size()){
+			return null;
 		}
+		
+		for (Map.Entry<String, PPLTable> table : tables.entrySet()) {
+			if (helper == i) {
+				return table.getValue();
+			}
+			helper++;
+		}
+		
 		return null;
 	}
-	
 }

@@ -22,7 +22,7 @@ public class TableService implements ITableService {
 	
 		
 		TableClusteringMainEngine mainEngine = new TableClusteringMainEngine(globalDataKeeper, birthWeight, deathWeight, changeWeight);
-		mainEngine.extractClusters(numberOfClusters); //int numberOfClusters =14;
+		mainEngine.extractClusters(numberOfClusters);
 		mainEngine.print();
 
 		return mainEngine;

@@ -21,13 +21,11 @@ public class TotalEntropyMetric implements TotalMetrics {
 	public void compute() {
 		
 		for(int i=0; i<clusterInfoKeepers.size(); i++){
-			int currClusterSize = clusterInfoKeepers.get(i).getCluster().getNamesOfTables().size();
-			Double currClusterWeight = (double)currClusterSize/wholeDatasetSize;
+			int currentClusterSize = clusterInfoKeepers.get(i).getCluster().getNamesOfTables().size();
+			Double currClusterWeight = (double)currentClusterSize/wholeDatasetSize;
 			Double valueToAdd = currClusterWeight*clusterInfoKeepers.get(i).getClusterEntropy();
-			totalEntropy = totalEntropy+ valueToAdd;
+			totalEntropy = totalEntropy + valueToAdd;
 		}
-		
-		
 	}
 
 	@Override

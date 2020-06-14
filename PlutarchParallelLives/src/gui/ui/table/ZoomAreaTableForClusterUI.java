@@ -88,7 +88,6 @@ public class ZoomAreaTableForClusterUI extends TableUI {
 	}
 
 	private void setTableLeftClickListener() {
-		// listener
 		table.getTableHeader().addMouseListener(new MouseAdapter() {
 		    @Override
 		    public void mouseClicked(MouseEvent e) {
@@ -149,9 +148,9 @@ public class ZoomAreaTableForClusterUI extends TableUI {
 			        	
 		        		String description="";
 		        		if(!table.getColumnName(column).contains("Table name")){
-		        			
+		        			int oldNewVersionNumber = getOldNewVersionNumber(table.getColumnName(column));
 		        			description="Transition "+table.getColumnName(column)+"\n";
-		        			description = description + descriptionHelper.getOldNewVersionDescription(Integer.parseInt(table.getColumnName(column)));
+		        			description = description + descriptionHelper.getOldNewVersionDescription(oldNewVersionNumber);
 		        			description=description+"Table:"+dataConfiguration.getFinalRowsZoomArea()[row][0]+"\n";
 		        			description=description+descriptionHelper.getBirthDeathDescription(dataConfiguration.getFinalRowsZoomArea()[row][0]);
 			        		description=description+"Total Changes For This Phase:"+tmpValue+"\n";
@@ -290,5 +289,14 @@ public class ZoomAreaTableForClusterUI extends TableUI {
 		return rowsZoom;
 	}
 
-
+	private int getOldNewVersionNumber(String name){
+		if(name.contains("Phase")){
+			String[] stringArray = name.split(" ");
+			if(stringArray.length<2){
+				return 0;
+			}
+			name = stringArray[1];
+		}
+		return Integer.parseInt(name);
+	}
 }
